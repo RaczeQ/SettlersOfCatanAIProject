@@ -28,12 +28,31 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.pnlBoardArea = new System.Windows.Forms.Panel();
+            this.SuspendLayout();
+            // 
+            // pnlBoardArea
+            // 
+            this.pnlBoardArea.Location = new System.Drawing.Point(12, 12);
+            this.pnlBoardArea.Name = "pnlBoardArea";
+            this.pnlBoardArea.Size = new System.Drawing.Size(855, 547);
+            this.pnlBoardArea.TabIndex = 0;
+            // 
+            // Board
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "Form1";
+            this.ClientSize = new System.Drawing.Size(1108, 702);
+            this.Controls.Add(this.pnlBoardArea);
+            this.Name = "Board";
+            this.Text = "Settlers of Catan";
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private System.Windows.Forms.Panel pnlBoardArea;
     }
 }
 

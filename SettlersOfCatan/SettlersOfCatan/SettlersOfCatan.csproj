@@ -52,8 +52,18 @@
     <Compile Include="Board.Designer.cs">
       <DependentUpon>Board.cs</DependentUpon>
     </Compile>
+    <Compile Include="Road.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Settlement.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tile.cs" />
+    <EmbeddedResource Include="Board.resx">
+      <DependentUpon>Board.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -75,6 +85,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Images\Ocean.png" />
+    <EmbeddedResource Include="Resources\Images\ocean_surface.jpg" />
+    <EmbeddedResource Include="Resources\Images\outline.png" />
+    <EmbeddedResource Include="Resources\Images\Rock.png" />
+    <EmbeddedResource Include="Resources\Images\TEST TILE2.png" />
+    <EmbeddedResource Include="Resources\Images\Wood.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
