@@ -18,7 +18,7 @@ namespace SettlersOfCatan
 
         private Bitmap image;
         private Bitmap original;
-        private Panel canvas;
+        private Panel container;
 
         private int requiredRoll;
         private int gatherChance = 0;
@@ -33,9 +33,10 @@ namespace SettlersOfCatan
         {
             p.Paint += new System.Windows.Forms.PaintEventHandler(this.draw);
             requiredRoll = collectNumber;
-            this.canvas = p;
+            this.container = p;
             this.position = new Point(0, 0);
             this.size = new Point(0, 0);
+            p.SizeChanged += new EventHandler(SizeChanged);
         }
 
         //Sets this objects drawing image.
@@ -45,8 +46,8 @@ namespace SettlersOfCatan
             original = new Bitmap(imagePath);
             imageAspectRatio = image.Width / image.Height;
             size = new Point(image.Width, image.Height);
-            imageWidthPercentage = (double)image.Width / (double)canvas.Width;
-            imageHeightPercentage = (double)image.Height / (double)canvas.Height;
+            imageWidthPercentage = (double)image.Width / (double)container.Width;
+            imageHeightPercentage = (double)image.Height / (double)container.Height;
         }
 
         //Sets the center* of the object. *Sets the bottom left hand corner actually
@@ -54,8 +55,8 @@ namespace SettlersOfCatan
         {
             position.X = p.X;
             position.Y = p.Y;
-            imageXPercentage = (double)p.X / (double)canvas.Width;
-            imageYPercentage = (double)p.Y / (double)canvas.Height;
+            imageXPercentage = (double)p.X / (double)container.Width;
+            imageYPercentage = (double)p.Y / (double)container.Height;
         }
 
         public void setGatherChance(int num)
@@ -66,6 +67,11 @@ namespace SettlersOfCatan
         public int getGatherChance()
         {
             return gatherChance;
+        }
+
+        private void SizeChanged(Object sender, EventArgs args)
+        {
+            resizeToFit(container.Size.Width, container.Size.Height);
         }
 
         public void resizeToFit(int newScreenWidth, int newScreenHeight)
@@ -92,8 +98,6 @@ namespace SettlersOfCatan
         //Draws this object to it's assigned canvas
         public void draw(object sender, System.Windows.Forms.PaintEventArgs e)
         {
-
-            resizeToFit(canvas.Size.Width, canvas.Size.Height);
 
             e.Graphics.DrawImage(image, position.X, position.Y);
             if (gatherChance != -1)

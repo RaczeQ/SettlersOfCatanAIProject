@@ -18,7 +18,7 @@ namespace SettlersOfCatan
         public static int SPACING = 128; //I require a 1:1 aspect ratio in order for FAR more simple positioning.
         //This variable is used to determine how many pixels tall the triangle of a terrain tile is.
         public static int TILE_TRIANGLE_HEIGHT = 35;
-        public static Image OUTLINE_IMAGE;
+        public static Image OUTLINE_IMAGE = new Bitmap("outline.png");
 
         //Keeps track of what tile indexes are ocean borders for later use.
         int[] oceanBorderInds = { 0, 1, 2, 3, 4, 8, 9, 14, 15, 21, 22, 27, 28, 32, 33, 34, 35, 36 };
@@ -28,23 +28,14 @@ namespace SettlersOfCatan
 
         Random rand = new Random();
         Tile[] boardTiles = new Tile[BOARD_TILE_COUNT];
+        List<Road> roadLocations;
+        List<Settlement> settlementLocations;
         
 
         public Board()
         {
             InitializeComponent();
-
-            OUTLINE_IMAGE = loadImbeddedImage("Resources.Images.outline.png");
-
             BoardSetup();
-        }
-
-        public Image loadImbeddedImage(String pathName)
-        {
-            System.Reflection.Assembly myAssembly = System.Reflection.Assembly.GetExecutingAssembly();
-            Stream myStream = myAssembly.GetManifestResourceStream(pathName);
-            Image im = new Bitmap(myStream);
-            return im;
         }
 
         public void BoardSetup()

@@ -8,12 +8,10 @@ using System.Drawing;
 
 namespace SettlersOfCatan
 {
-    public class Settlement : PictureBox
+    public class Road : PictureBox
     {
-
         Image highlightImage;
-        List<Road> connectedRoads;
-        Control container;
+        List<Settlement> connectedSettlements;
 
         private double imageWidthPercentage = 1;
         private double imageHeightPercentage = 1;
@@ -23,21 +21,23 @@ namespace SettlersOfCatan
 
         int owningPlayer = 0; //0 is no player.
 
-        public Settlement(Point position, int index, Control p, Image highlight)
+        Control container;
+
+        public Road(Point position, int index, Control p, Image highlight)
         {
             p.Controls.Add(this);
+
             Text = index + "";
             Click += click;
             MouseHover += mouseEnter;
             MouseLeave += mouseLeave;
             BringToFront();
-            BackColor = Color.Blue;
+            BackColor = Color.Red;
             BackgroundImageLayout = ImageLayout.Stretch;
             Location = new Point(position.X - 6, position.Y - 6);
             Size = new Size(12, 12);
 
             highlightImage = highlight;
-
             this.container = p;
             container.SizeChanged += new EventHandler(ResizeRoad);
 
@@ -81,15 +81,15 @@ namespace SettlersOfCatan
             this.Location = new Point((int)newPositionX, (int)newPositionY);
         }
 
-        private void mouseLeave(object sender, EventArgs e)
+        private void mouseEnter(object sender, EventArgs e)
         {
-            Settlement p = (Settlement)sender;
+            Road p = (Road)sender;
             p.BackgroundImage = null;
         }
 
-        private void mouseEnter(object sender, EventArgs e)
+        private void mouseLeave(object sender, EventArgs e)
         {
-            Settlement p = (Settlement)sender;
+            Road p = (Road)sender;
             //p.BackgroundImage = highlightImage;
         }
 
@@ -97,11 +97,5 @@ namespace SettlersOfCatan
         {
             //Does nothing yet!
         }
-
-        private void resize()
-        {
-
-        }
-
     }
 }
