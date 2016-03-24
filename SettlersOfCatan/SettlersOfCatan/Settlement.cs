@@ -10,9 +10,10 @@ namespace SettlersOfCatan
 {
     public class Settlement : PictureBox
     {
+        public int id = 0;
+        public Point position;
 
-        Image highlightImage;
-        List<Road> connectedRoads;
+        List<Road> connectedRoads=new List<Road>();
         Control container;
 
         private double imageWidthPercentage = 1;
@@ -23,8 +24,9 @@ namespace SettlersOfCatan
 
         int owningPlayer = 0; //0 is no player.
 
-        public Settlement(Point position, int index, Control p, Image highlight)
+        public Settlement(Point position, int index, Control p)
         {
+            this.position = position;
             p.Controls.Add(this);
             Text = index + "";
             Click += click;
@@ -36,49 +38,7 @@ namespace SettlersOfCatan
             Location = new Point(position.X - 6, position.Y - 6);
             Size = new Size(12, 12);
 
-            highlightImage = highlight;
-
             this.container = p;
-            container.SizeChanged += new EventHandler(ResizeRoad);
-
-            this.LocationChanged += new EventHandler(locationChanged);
-            this.SizeChanged += new EventHandler(sizeChanged);
-
-            imageWidthPercentage = (double)this.Width / (double)container.Width;
-            imageHeightPercentage = (double)this.Height / (double)container.Height;
-            imageXPercentage = (double)this.Location.X / (double)container.Width;
-            imageYPercentage = (double)this.Location.Y / (double)container.Height;
-
-        }
-
-        public void sizeChanged(Object sender, EventArgs args)
-        {
-            imageWidthPercentage = (double)this.Width / (double)container.Width;
-            imageHeightPercentage = (double)this.Height / (double)container.Height;
-        }
-
-        public void locationChanged(Object sender, EventArgs args)
-        {
-            imageXPercentage = (double)this.Location.X / (double)container.Width;
-            imageYPercentage = (double)this.Location.Y / (double)container.Height;
-        }
-
-        public void ResizeRoad(Object sender, EventArgs args)
-        {
-            resizeToFit(container.Size.Width, container.Size.Height);
-        }
-
-        public void resizeToFit(int newScreenWidth, int newScreenHeight)
-        {
-
-            double newWidth = imageWidthPercentage * (double)newScreenWidth;
-            double newHeight = imageHeightPercentage * (double)newScreenHeight;
-
-            double newPositionX = imageXPercentage * (double)newScreenWidth;
-            double newPositionY = imageYPercentage * (double)newScreenHeight;
-
-            this.Size = new Size((int)Math.Round(newWidth), (int)Math.Round(newHeight));
-            this.Location = new Point((int)newPositionX, (int)newPositionY);
         }
 
         private void mouseLeave(object sender, EventArgs e)
@@ -90,7 +50,6 @@ namespace SettlersOfCatan
         private void mouseEnter(object sender, EventArgs e)
         {
             Settlement p = (Settlement)sender;
-            //p.BackgroundImage = highlightImage;
         }
 
         private void click(object sender, EventArgs e)
@@ -103,5 +62,20 @@ namespace SettlersOfCatan
 
         }
 
+        /**
+            Returns true if the current road is already linked.
+          */
+        public bool linkRoad(Road rd)
+        {
+            foreach (Road currentRoad in connectedRoads)
+            {
+                if (rd.id == currentRoad.id)
+                {
+                    return true;
+                }
+            }
+            connectedRoads.Add(rd);
+            return false;
+        }
     }
 }

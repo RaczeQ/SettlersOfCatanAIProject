@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
+using System.Windows.Forms;
+
 
 namespace SettlersOfCatan
 {
-    public class Tile
+    public class Tile : PictureBox, Card
     {
-        private Point position; //Expressed in pixels
-        private Point size; //Expressed in pixels. This value will NEVER change. It is the base size that is used for resizing calculations.
         private double imageAspectRatio = 0;
         public int index = 0;
 
@@ -20,43 +17,42 @@ namespace SettlersOfCatan
         private Bitmap original;
         private Panel container;
 
-        private int requiredRoll;
+        public Tile(Panel p)
+        {
+            container = p;
+            container.Controls.Add(this);
+            this.BackColor = Color.Transparent;
+            this.Visible = true;
+        }
+
+        protected override void OnPaint(PaintEventArgs pe)
+        {
+//            base.OnPaint(pe);
+        }
+    }
+
+    /**
+     */
+    public class TerrainTile : Tile
+    {
+
         private int gatherChance = 0;
+        private Board.ResourceType tileType;
 
-        private double imageWidthPercentage = 1;
-        private double imageHeightPercentage = 1;
+        public List<Settlement> adjascentSettlements;
+        public List<Road> adjascentRoads;
 
-        private double imageXPercentage = 1;
-        private double imageYPercentage = 1;
-
-        public Tile(Panel p, int collectNumber)
+        public TerrainTile(Panel p, Board.ResourceType resourceType, Bitmap image ) : base(p)
         {
-            p.Paint += new System.Windows.Forms.PaintEventHandler(this.draw);
-            requiredRoll = collectNumber;
-            this.container = p;
-            this.position = new Point(0, 0);
-            this.size = new Point(0, 0);
-            p.SizeChanged += new EventHandler(SizeChanged);
-        }
+            this.tileType = resourceType;
+            adjascentSettlements = new List<Settlement>();
+            adjascentRoads = new List<Road>();
 
-        //Sets this objects drawing image.
-        public void setImage(String imagePath)
-        {
-            image = new Bitmap(imagePath);
-            original = new Bitmap(imagePath);
-            imageAspectRatio = image.Width / image.Height;
-            size = new Point(image.Width, image.Height);
-            imageWidthPercentage = (double)image.Width / (double)container.Width;
-            imageHeightPercentage = (double)image.Height / (double)container.Height;
-        }
+            //Atuomatically determine what image we need to display depending on the resource type
+            this.BackgroundImage = image;
+            this.Size = BackgroundImage.Size;
+            this.BackColor = Color.Transparent;
 
-        //Sets the center* of the object. *Sets the bottom left hand corner actually
-        public void setCenter(Point p)
-        {
-            position.X = p.X;
-            position.Y = p.Y;
-            imageXPercentage = (double)p.X / (double)container.Width;
-            imageYPercentage = (double)p.Y / (double)container.Height;
         }
 
         public void setGatherChance(int num)
@@ -68,54 +64,19 @@ namespace SettlersOfCatan
         {
             return gatherChance;
         }
+    }
 
-        private void SizeChanged(Object sender, EventArgs args)
+    /**
+
+     */
+    public class OceanBorderTile : Tile
+    {
+
+        public OceanBorderTile(Panel p) : base(p)
         {
-            resizeToFit(container.Size.Width, container.Size.Height);
-        }
-
-        public void resizeToFit(int newScreenWidth, int newScreenHeight)
-        {
-            //Change the size to fit correctly within the available space.
-            //The size of a tile is based on the size of the drawable area
-            //The horizontal size is simply (tileWidth/oldScreenWidth)*newScreenWidth
-            //The vertical size is a bit more complicated: (tileHeight/oldScreenHeight)*newScreenHeight-(tileTriHeight/oldScreenHeight)*newScreenHeight
-
-            //Then we need to convert the unit into dpi as this is UNFORTUNEATLY what VS wants to use.
-            //Then we apply these numbers to the images and *cross fingers*.
-
-            double newWidth = imageWidthPercentage * (double)newScreenWidth;
-            double newHeight = imageHeightPercentage * (double)newScreenHeight; //Apply the "Meshing" to this as well!!!!
-
-            double newPositionX = imageXPercentage * (double)newScreenWidth;
-            double newPositionY = imageYPercentage * (double)newScreenHeight;
-
-            image = ResizeBitmap(original, (int)Math.Round(newWidth), (int)Math.Round(newHeight));
-            this.position.X = (int)newPositionX;
-            this.position.Y = (int)newPositionY;
-        }
-
-        //Draws this object to it's assigned canvas
-        public void draw(object sender, System.Windows.Forms.PaintEventArgs e)
-        {
-
-            e.Graphics.DrawImage(image, position.X, position.Y);
-            if (gatherChance != -1)
-            {
-                e.Graphics.DrawString(index + "", new Font(new FontFamily("Microsoft Sans Serif"), 12), Brushes.Black, position.X + (size.X / 2), position.Y + (size.Y / 2));
-            }
-        }
-
-        /** This resizes bitmap images and forces a better looking smoothing **/
-        private Bitmap ResizeBitmap(Bitmap b, int nWidth, int nHeight)
-        {
-            Bitmap result = new Bitmap(nWidth, nHeight);
-            using (Graphics g = Graphics.FromImage((Image)result))
-            {
-                g.InterpolationMode = InterpolationMode.NearestNeighbor;
-                g.DrawImage(b, 0, 0, nWidth, nHeight);
-            }
-            return result;
+            this.BackgroundImage = new Bitmap("Resources/Ocean.png");
+            this.Size = BackgroundImage.Size;
+            this.BackColor = Color.Transparent;
         }
     }
 }
