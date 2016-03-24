@@ -13,8 +13,6 @@ namespace SettlersOfCatan.TransparencyFix
 
         protected override void OnDraw()
         {
-            Rectangle rct2 = new Rectangle(0, 0, this.Width, this.Height);
-            this.graphics.DrawRectangle(new Pen(Color.Black), rct2);
             foreach (Control c in Controls)
             {
                 int width = c.Size.Width;
@@ -28,7 +26,7 @@ namespace SettlersOfCatan.TransparencyFix
                 } else
                 {
                     Pen p = new Pen(c.BackColor);
-                    //this.graphics.DrawRectangle(p, rct);
+                    this.graphics.DrawRectangle(p, rct);
                 }
             }
         }

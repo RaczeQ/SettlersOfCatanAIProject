@@ -46,15 +46,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Board.cs">
+    <Compile Include="Forms\Board.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Board.Designer.cs">
+    <Compile Include="Forms\Board.Designer.cs">
       <DependentUpon>Board.cs</DependentUpon>
     </Compile>
     <Compile Include="Card.cs" />
     <Compile Include="Deck.cs" />
     <Compile Include="Dice.cs" />
+    <Compile Include="Forms\MainMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MainMenu.Designer.cs">
+      <DependentUpon>MainMenu.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -71,13 +77,19 @@
     <Compile Include="Tile.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Forms\TradeWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TradeWindow.Designer.cs">
+      <DependentUpon>TradeWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="TransparencyFix\BoardArea.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="TransparencyFix\PanelFix.cs">
       <SubType>Component</SubType>
     </Compile>
-    <EmbeddedResource Include="Board.resx">
+    <EmbeddedResource Include="Forms\Board.resx">
       <DependentUpon>Board.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
