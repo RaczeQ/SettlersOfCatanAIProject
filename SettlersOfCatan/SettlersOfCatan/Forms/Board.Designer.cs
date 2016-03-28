@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pnlBoardArea = new TransparencyFix.BoardArea();
             this.pnlRoadToolTip = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -50,6 +49,12 @@
             this.pictureBox7 = new System.Windows.Forms.PictureBox();
             this.pictureBox8 = new System.Windows.Forms.PictureBox();
             this.pictureBox9 = new System.Windows.Forms.PictureBox();
+            this.pnlGameInfo = new System.Windows.Forms.Panel();
+            this.playerInfoPanel4 = new SettlersOfCatan.PlayerInfoPanel();
+            this.playerInfoPanel3 = new SettlersOfCatan.PlayerInfoPanel();
+            this.playerInfoPanel2 = new SettlersOfCatan.PlayerInfoPanel();
+            this.playerInfoPanel1 = new SettlersOfCatan.PlayerInfoPanel();
+            this.pnlBoardArea = new SettlersOfCatan.TransparencyFix.BoardArea();
             this.pnlRoadToolTip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -65,20 +70,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).BeginInit();
+            this.pnlGameInfo.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // pnlBoardArea
-            // 
-            this.pnlBoardArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlBoardArea.AutoScroll = true;
-            this.pnlBoardArea.BackColor = System.Drawing.Color.White;
-            this.pnlBoardArea.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pnlBoardArea.Location = new System.Drawing.Point(0, 0);
-            this.pnlBoardArea.Name = "pnlBoardArea";
-            this.pnlBoardArea.Size = new System.Drawing.Size(913, 580);
-            this.pnlBoardArea.TabIndex = 0;
             // 
             // pnlRoadToolTip
             // 
@@ -88,7 +81,7 @@
             this.pnlRoadToolTip.Controls.Add(this.label1);
             this.pnlRoadToolTip.Controls.Add(this.pictureBox1);
             this.pnlRoadToolTip.Controls.Add(this.pictureBox2);
-            this.pnlRoadToolTip.Location = new System.Drawing.Point(1017, 97);
+            this.pnlRoadToolTip.Location = new System.Drawing.Point(735, 586);
             this.pnlRoadToolTip.Name = "pnlRoadToolTip";
             this.pnlRoadToolTip.Size = new System.Drawing.Size(128, 60);
             this.pnlRoadToolTip.TabIndex = 1;
@@ -140,7 +133,7 @@
             this.pnlSettlementToolTip.Controls.Add(this.pictureBox4);
             this.pnlSettlementToolTip.Controls.Add(this.pictureBox5);
             this.pnlSettlementToolTip.Controls.Add(this.pictureBox6);
-            this.pnlSettlementToolTip.Location = new System.Drawing.Point(1017, 163);
+            this.pnlSettlementToolTip.Location = new System.Drawing.Point(522, 586);
             this.pnlSettlementToolTip.Name = "pnlSettlementToolTip";
             this.pnlSettlementToolTip.Size = new System.Drawing.Size(207, 60);
             this.pnlSettlementToolTip.TabIndex = 3;
@@ -233,7 +226,7 @@
             this.pnlDevelopmentCardToolTip.Controls.Add(this.pictureBox7);
             this.pnlDevelopmentCardToolTip.Controls.Add(this.pictureBox8);
             this.pnlDevelopmentCardToolTip.Controls.Add(this.pictureBox9);
-            this.pnlDevelopmentCardToolTip.Location = new System.Drawing.Point(1017, 229);
+            this.pnlDevelopmentCardToolTip.Location = new System.Drawing.Point(522, 652);
             this.pnlDevelopmentCardToolTip.Name = "pnlDevelopmentCardToolTip";
             this.pnlDevelopmentCardToolTip.Size = new System.Drawing.Size(194, 60);
             this.pnlDevelopmentCardToolTip.TabIndex = 3;
@@ -295,13 +288,74 @@
             this.pictureBox9.TabIndex = 0;
             this.pictureBox9.TabStop = false;
             // 
+            // pnlGameInfo
+            // 
+            this.pnlGameInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlGameInfo.AutoScroll = true;
+            this.pnlGameInfo.BackColor = System.Drawing.Color.Transparent;
+            this.pnlGameInfo.Controls.Add(this.playerInfoPanel4);
+            this.pnlGameInfo.Controls.Add(this.playerInfoPanel3);
+            this.pnlGameInfo.Controls.Add(this.playerInfoPanel2);
+            this.pnlGameInfo.Controls.Add(this.playerInfoPanel1);
+            this.pnlGameInfo.Location = new System.Drawing.Point(986, 0);
+            this.pnlGameInfo.Name = "pnlGameInfo";
+            this.pnlGameInfo.Size = new System.Drawing.Size(263, 736);
+            this.pnlGameInfo.TabIndex = 5;
+            // 
+            // playerInfoPanel4
+            // 
+            this.playerInfoPanel4.BackColor = System.Drawing.SystemColors.Control;
+            this.playerInfoPanel4.Location = new System.Drawing.Point(9, 436);
+            this.playerInfoPanel4.Name = "playerInfoPanel4";
+            this.playerInfoPanel4.Size = new System.Drawing.Size(251, 145);
+            this.playerInfoPanel4.TabIndex = 0;
+            // 
+            // playerInfoPanel3
+            // 
+            this.playerInfoPanel3.BackColor = System.Drawing.SystemColors.Control;
+            this.playerInfoPanel3.Location = new System.Drawing.Point(9, 291);
+            this.playerInfoPanel3.Name = "playerInfoPanel3";
+            this.playerInfoPanel3.Size = new System.Drawing.Size(251, 145);
+            this.playerInfoPanel3.TabIndex = 0;
+            // 
+            // playerInfoPanel2
+            // 
+            this.playerInfoPanel2.BackColor = System.Drawing.SystemColors.Control;
+            this.playerInfoPanel2.Location = new System.Drawing.Point(9, 146);
+            this.playerInfoPanel2.Name = "playerInfoPanel2";
+            this.playerInfoPanel2.Size = new System.Drawing.Size(251, 145);
+            this.playerInfoPanel2.TabIndex = 0;
+            // 
+            // playerInfoPanel1
+            // 
+            this.playerInfoPanel1.BackColor = System.Drawing.SystemColors.Control;
+            this.playerInfoPanel1.Location = new System.Drawing.Point(9, 1);
+            this.playerInfoPanel1.Name = "playerInfoPanel1";
+            this.playerInfoPanel1.Size = new System.Drawing.Size(251, 145);
+            this.playerInfoPanel1.TabIndex = 0;
+            // 
+            // pnlBoardArea
+            // 
+            this.pnlBoardArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlBoardArea.AutoScroll = true;
+            this.pnlBoardArea.BackColor = System.Drawing.Color.White;
+            this.pnlBoardArea.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pnlBoardArea.Location = new System.Drawing.Point(0, 0);
+            this.pnlBoardArea.Name = "pnlBoardArea";
+            this.pnlBoardArea.Size = new System.Drawing.Size(980, 580);
+            this.pnlBoardArea.TabIndex = 0;
+            // 
             // Board
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::SettlersOfCatan.Properties.Resources.ocean_surface;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1103, 735);
+            this.ClientSize = new System.Drawing.Size(1247, 735);
+            this.Controls.Add(this.pnlGameInfo);
             this.Controls.Add(this.pnlDevelopmentCardToolTip);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.pnlSettlementToolTip);
@@ -309,6 +363,7 @@
             this.Controls.Add(this.pnlBoardArea);
             this.Name = "Board";
             this.Text = "Settlers of Catan";
+            this.Load += new System.EventHandler(this.Board_Load);
             this.pnlRoadToolTip.ResumeLayout(false);
             this.pnlRoadToolTip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -327,13 +382,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).EndInit();
+            this.pnlGameInfo.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private SettlersOfCatan.TransparencyFix.TPanel pnlBoardArea;
         public System.Windows.Forms.Panel pnlRoadToolTip;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox1;
@@ -355,6 +409,12 @@
         private System.Windows.Forms.PictureBox pictureBox9;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.PictureBox pictureBox10;
+        private TransparencyFix.BoardArea pnlBoardArea;
+        private System.Windows.Forms.Panel pnlGameInfo;
+        private PlayerInfoPanel playerInfoPanel4;
+        private PlayerInfoPanel playerInfoPanel3;
+        private PlayerInfoPanel playerInfoPanel2;
+        private PlayerInfoPanel playerInfoPanel1;
     }
 }
 

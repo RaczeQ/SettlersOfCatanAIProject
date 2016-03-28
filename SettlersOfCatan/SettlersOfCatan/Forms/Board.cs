@@ -358,5 +358,10 @@ namespace SettlersOfCatan
         {
             //Testing out getting transparency working?
         }
+
+        private void Board_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
