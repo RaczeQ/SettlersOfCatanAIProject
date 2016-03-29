@@ -34,15 +34,19 @@ namespace SettlersOfCatan
         List<Road> roadLocations = new List<Road>();
         List<Settlement> settlementLocations = new List<Settlement>();
 
+        //This is the distribution of terrain resources for a four player game.
         public Board.ResourceType[] fourPlayerTiles = {
             Board.ResourceType.Ore, Board.ResourceType.Ore, Board.ResourceType.Ore,
             Board.ResourceType.Sheep, Board.ResourceType.Sheep, Board.ResourceType.Sheep, Board.ResourceType.Sheep,
             Board.ResourceType.Wood, Board.ResourceType.Wood, Board.ResourceType.Wood, Board.ResourceType.Wood,
             Board.ResourceType.Wheat, Board.ResourceType.Wheat, Board.ResourceType.Wheat, Board.ResourceType.Wheat,
             Board.ResourceType.Brick, Board.ResourceType.Brick, Board.ResourceType.Brick, Board.ResourceType.Desert };
+        //This is the correctly ordered number chip distribution for a four player game.
+        public int[] fourPlayerNumberChips = { 9,12,11,10,6,11,4,8,5,3,8,3,4,9,10,6,2,5};
+
 
         public Deck terrainTiles;
-
+        public Deck numberChips;
 
 
         public static int BOARD_TILE_COUNT = 37;
@@ -75,58 +79,6 @@ namespace SettlersOfCatan
             //Set up terrain tiles
             distributeTiles();
         }
-        /**
-            Checks if the points are equal.
-         */
-        public bool LocationsEqual(Point p1, Point p2)
-        {
-            return (p1.X==p2.X)&&(p1.Y==p2.Y);
-        }
-
-        /**
-            Used to determine if the distance between two points is less than the provided value.
-            Uses the distance formula A*A - B*B = C*C (Pythagorean theorem)
-         */
-        public bool distanceLessThan(Point p1, Point p2, int distance)
-        {
-            return Math.Sqrt((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y)) < distance;
-        }
-
-        /**
-            This will look in the list of road locations for a road with a *roughly* matching location and return it.
-            We use a distance formula to determine if the position is within our margin of error due to small
-            rounding differences between the different road locations. (4 is a bit much for rounding errors)
-         */
-        public Road findRoadWithPosition(Point pt)
-        {
-            Road r = null;
-
-            foreach (Road road in roadLocations)
-            {
-                if (distanceLessThan(pt, road.position, 4))
-                {
-                    r = road;
-                }
-            }
-            return r;
-        }
-
-        /**
-           This will look in the list of settlement locations for a settlement with a matching location then return it. 
-         */
-        public Settlement findSettlementWithPosition(Point pt)
-        {
-            Settlement s = null;
-            foreach (Settlement settlement in settlementLocations)
-            {
-                //MessageBox.Show(pt.X + " " + pt.Y + settlement.Location.X + " " + settlement.Location.Y);
-                if (LocationsEqual(pt, settlement.position))
-                {
-                    s = settlement;
-                }
-            }
-            return s;
-        }
 
         public void distributeTiles()
         {
@@ -140,7 +92,21 @@ namespace SettlersOfCatan
             }
 
             terrainTiles.shuffleDeck();
-            //
+
+            //Set up the number chip deck. (can be randomized, however, the default is to keep the correct order).
+            numberChips = new Deck(18);
+            foreach (int num in fourPlayerNumberChips)
+            {
+                numberChips.putCard(new NumberChip(num));
+            }
+
+            /*
+                If random number chip order is marked, randomize the number chips deck.
+                    * Replace x with proper condition *
+                if (x) {
+                    numberChips.shuffleDeck();
+                }
+            */
 
             int row = 0;
             int column = 0;
@@ -193,13 +159,11 @@ namespace SettlersOfCatan
 
                 //Determine if this tile is an ocean border.
                 bool ocean = false;
-                int gatherChance = rand.Next(1, 12);
                 for (int f = 0; f < oceanBorderInds.Length; f++)
                 {
                     if (i == oceanBorderInds[f])
                     {
                         ocean = true;
-                        gatherChance = 0;
                     }
                 }
 
@@ -210,9 +174,18 @@ namespace SettlersOfCatan
                     
                     TerrainTile tile = (TerrainTile)terrainTiles.drawTopCard();
                     tile.Location = position;
-                    tile.setGatherChance(gatherChance);
                     tile.index = i;
                     boardTiles[i] = tile;
+                    if (tile.getResourceType() == ResourceType.Desert)
+                    {
+                        //Create a number chip with a value of 0
+                        tile.setNumberChip(new NumberChip(0));
+                        tile.placeThief();
+                    } else
+                    {
+                        //Get the next number chip in line.
+                        tile.setNumberChip((NumberChip)numberChips.drawTopCard());
+                    }
                     
                 } else
                 {
@@ -309,6 +282,59 @@ namespace SettlersOfCatan
                     }
                 }
             }
+        }
+
+        /**
+            Checks if the points are equal.
+         */
+        public bool LocationsEqual(Point p1, Point p2)
+        {
+            return (p1.X == p2.X) && (p1.Y == p2.Y);
+        }
+
+        /**
+            Used to determine if the distance between two points is less than the provided value.
+            Uses the distance formula A*A - B*B = C*C (Pythagorean theorem)
+         */
+        public bool distanceLessThan(Point p1, Point p2, int distance)
+        {
+            return Math.Sqrt((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y)) < distance;
+        }
+
+        /**
+            This will look in the list of road locations for a road with a *roughly* matching location and return it.
+            We use a distance formula to determine if the position is within our margin of error due to small
+            rounding differences between the different road locations. (4 is a bit much for rounding errors)
+         */
+        public Road findRoadWithPosition(Point pt)
+        {
+            Road r = null;
+
+            foreach (Road road in roadLocations)
+            {
+                if (distanceLessThan(pt, road.position, 4))
+                {
+                    r = road;
+                }
+            }
+            return r;
+        }
+
+        /**
+           This will look in the list of settlement locations for a settlement with a matching location then return it. 
+         */
+        public Settlement findSettlementWithPosition(Point pt)
+        {
+            Settlement s = null;
+            foreach (Settlement settlement in settlementLocations)
+            {
+                //MessageBox.Show(pt.X + " " + pt.Y + settlement.Location.X + " " + settlement.Location.Y);
+                if (LocationsEqual(pt, settlement.position))
+                {
+                    s = settlement;
+                }
+            }
+            return s;
         }
 
 

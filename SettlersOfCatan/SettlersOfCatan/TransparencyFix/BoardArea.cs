@@ -13,21 +13,23 @@ namespace SettlersOfCatan.TransparencyFix
 
         protected override void OnDraw()
         {
+
+            Rectangle bak = new Rectangle(Location.X, Location.Y, Width, Height);
+            this.graphics.DrawImage(this.BackgroundImage, bak);
             foreach (Control c in Controls)
             {
-                int width = c.Size.Width;
-                int height = c.Size.Height;
-                int x = c.Location.X;
-                int y = c.Location.Y;
-                Rectangle rct = new Rectangle(x, y, width, height);
-                this.graphics.DrawImage(this.BackgroundImage, rct);
+                bak.Width = c.Size.Width;
+                bak.Height = c.Size.Height;
+                bak.X = c.Location.X;
+                bak.Y = c.Location.Y;
+
                 if (c.BackgroundImage != null)
                 {
-                    this.graphics.DrawImage(c.BackgroundImage, rct);
+                    this.graphics.DrawImage(c.BackgroundImage, bak);
                 } else
                 {
                     Pen p = new Pen(c.BackColor);
-                    this.graphics.DrawRectangle(p, rct);
+                    this.graphics.DrawRectangle(p, bak);
                 }
             }
         }

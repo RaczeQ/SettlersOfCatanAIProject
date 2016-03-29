@@ -10,11 +10,8 @@ namespace SettlersOfCatan
 {
     public class Tile : PictureBox, Card
     {
-        private double imageAspectRatio = 0;
         public int index = 0;
 
-        private Bitmap image;
-        private Bitmap original;
         private Panel container;
 
         public Tile(Panel p)
@@ -36,6 +33,7 @@ namespace SettlersOfCatan
     public class TerrainTile : Tile
     {
 
+        private NumberChip numberChip;
         private int gatherChance = 0;
         private Board.ResourceType tileType;
 
@@ -55,14 +53,38 @@ namespace SettlersOfCatan
 
         }
 
-        public void setGatherChance(int num)
+        public void setNumberChip(NumberChip chip)
         {
-            gatherChance = num;
+            chip.Size = new Size(32, 32);
+            chip.Location = new Point(Board.SPACING / 2-16, Board.SPACING/2-16);
+            this.numberChip = chip;
+            this.gatherChance = chip.getNumber();
+            this.Controls.Add(chip);
         }
 
         public int getGatherChance()
         {
             return gatherChance;
+        }
+
+        public Board.ResourceType getResourceType()
+        {
+            return this.tileType;
+        }
+
+        public void placeThief()
+        {
+            this.numberChip.placeThief();
+        }
+
+        public void removeThief()
+        {
+            this.numberChip.removeThief();
+        }
+
+        public bool isGatherBlocked()
+        {
+            return this.numberChip.isBlocked();
         }
     }
 

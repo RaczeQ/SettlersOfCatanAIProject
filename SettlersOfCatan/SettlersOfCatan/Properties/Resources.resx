@@ -118,52 +118,91 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ocean_surface" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ocean_surface.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Brick_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Brick_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Desert_Tile" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Desert_Tile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Development_Card_Back" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Development_Card_Back.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="_4_Chip" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\4_Chip.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Forest_Tile" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Forest_Tile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Hills_Tile" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Hills_Tile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="_9_Chip" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\9_Chip.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Mountain_Tile" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Mountain_Tile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Wood_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Wood_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Ocean" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Ocean.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="_6_Chip" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\6_Chip.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Ore_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Ore_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\outline.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Pasture_Tile" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Pasture_Tile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Sheep_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Sheep_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="TEST TILE2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TEST TILE2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Wheat_Fields_Tile" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Wheat_Fields_Tile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Wheat_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Wheat_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Wood_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Wood_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Brick_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Brick_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Mountain_Tile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Mountain_Tile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_5_Chip" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\5_Chip.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Pasture_Tile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pasture_Tile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Development_Card_Back" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Development_Card_Back.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_10_Chip" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\10_Chip.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Ocean" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Ocean.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Wheat_Fields_Tile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Wheat_Fields_Tile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_12_Chip" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\12_Chip.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_8_Chip" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\8_Chip.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Sheep_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Sheep_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\outline.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ocean_surface" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ocean_surface.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_3_Chip" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\3_Chip.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_2_chip" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\2_chip.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Desert_Tile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Desert_Tile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Hills_Tile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Hills_Tile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_11_Chip" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\11_Chip.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="main_menu_background" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\main_menu_background.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="thief" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\thief.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_0_Chip" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\0_Chip.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
