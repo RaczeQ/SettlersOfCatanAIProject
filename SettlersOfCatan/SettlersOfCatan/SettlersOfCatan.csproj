@@ -115,6 +115,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\TradeWindow.resx">
+      <DependentUpon>TradeWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PlayerInfoPanel.resx">
       <DependentUpon>PlayerInfoPanel.cs</DependentUpon>
     </EmbeddedResource>
