@@ -342,6 +342,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlBoardArea.AutoScroll = true;
             this.pnlBoardArea.BackColor = System.Drawing.Color.White;
+            this.pnlBoardArea.BackgroundImage = global::SettlersOfCatan.Properties.Resources.ocean_surface;
             this.pnlBoardArea.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pnlBoardArea.Location = new System.Drawing.Point(0, 0);
             this.pnlBoardArea.Name = "pnlBoardArea";

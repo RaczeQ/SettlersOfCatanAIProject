@@ -27,6 +27,7 @@ namespace SettlersOfCatan
 
         String[] tileFileNames = { "Rock.png", "Wood.png" };
         String oceanBorderFileName = "Ocean.png";
+        Player[] players;
 
         Random rand = new Random();
         Tile[] boardTiles = new Tile[BOARD_TILE_COUNT];
@@ -62,8 +63,17 @@ namespace SettlersOfCatan
             {
                 tileImages[i] = new Bitmap("Resources/" + tileImageResourceNames[i]);
             }
+            //Set up player objects and initial player order
+            PlayerInfoPanel[] pinfo = { this.playerInfoPanel1, this.playerInfoPanel2, this.playerInfoPanel3, this.playerInfoPanel4 };
+            players = new Player[4];
+            for (int i = 0; i < players.Count(); i ++)
+            {
+                players[i] = new Player(i);
+                pinfo[i].setPlayerColor(players[i].getPlayerColor());
 
-            BoardSetup();
+            }
+            //Set up terrain tiles
+            distributeTiles();
         }
         /**
             Checks if the points are equal.
@@ -118,7 +128,7 @@ namespace SettlersOfCatan
             return s;
         }
 
-        public void BoardSetup()
+        public void distributeTiles()
         {
 
             //Sets up the terrain tiles deck

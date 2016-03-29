@@ -16,5 +16,12 @@ namespace SettlersOfCatan
         {
             InitializeComponent();
         }
+
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Board b = new Board();
+            b.Show();
+        }
     }
 }

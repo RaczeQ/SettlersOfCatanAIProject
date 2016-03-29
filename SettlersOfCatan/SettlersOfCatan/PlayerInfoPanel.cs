@@ -47,6 +47,11 @@ namespace SettlersOfCatan
             resourcesHidden = false;
         }
 
+        public void setPlayerColor(Color color)
+        {
+            this.pnlPlayerColor.BackColor = color;
+        }
+
         //Each updates the required values
         public void setWood(int count)
         {

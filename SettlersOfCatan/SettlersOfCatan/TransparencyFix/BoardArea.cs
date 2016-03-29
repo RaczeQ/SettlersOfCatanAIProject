@@ -20,6 +20,7 @@ namespace SettlersOfCatan.TransparencyFix
                 int x = c.Location.X;
                 int y = c.Location.Y;
                 Rectangle rct = new Rectangle(x, y, width, height);
+                this.graphics.DrawImage(this.BackgroundImage, rct);
                 if (c.BackgroundImage != null)
                 {
                     this.graphics.DrawImage(c.BackgroundImage, rct);

@@ -63,5 +63,10 @@ namespace SettlersOfCatan
         {
             this.resources.Add(resCard);
         }
+
+        public Color getPlayerColor()
+        {
+            return Player.playerColors[this.playerNumber];
+        }
     }
 }
