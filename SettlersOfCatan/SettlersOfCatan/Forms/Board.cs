@@ -21,19 +21,15 @@ namespace SettlersOfCatan
         public static String[] TILE_NAMES = { "Forest", "Hills", "Mountains", "Farms", "Fields", "Desert" };
         public Bitmap[] tileImages = new Bitmap[6];
         public String[] tileImageResourceNames = { "Forest_Tile.png", "Hills_Tile.png", "Mountain_Tile.png", "Wheat_Fields_Tile.png", "Pasture_Tile.png", "Desert_Tile.png" };
-
         //Keeps track of what tile indexes are ocean borders for later use.
         int[] oceanBorderInds = { 0, 1, 2, 3, 4, 8, 9, 14, 15, 21, 22, 27, 28, 32, 33, 34, 35, 36 };
-
         String[] tileFileNames = { "Rock.png", "Wood.png" };
         String oceanBorderFileName = "Ocean.png";
         Player[] players;
-
         Random rand = new Random();
         Tile[] boardTiles = new Tile[BOARD_TILE_COUNT];
         List<Road> roadLocations = new List<Road>();
         List<Settlement> settlementLocations = new List<Settlement>();
-
         //This is the distribution of terrain resources for a four player game.
         public Board.ResourceType[] fourPlayerTiles = {
             Board.ResourceType.Ore, Board.ResourceType.Ore, Board.ResourceType.Ore,
@@ -43,16 +39,14 @@ namespace SettlersOfCatan
             Board.ResourceType.Brick, Board.ResourceType.Brick, Board.ResourceType.Brick, Board.ResourceType.Desert };
         //This is the correctly ordered number chip distribution for a four player game.
         public int[] fourPlayerNumberChips = { 9,12,11,10,6,11,4,8,5,3,8,3,4,9,10,6,2,5};
-
-
         public Deck terrainTiles;
         public Deck numberChips;
-
-
         public static int BOARD_TILE_COUNT = 37;
         public static int SPACING = 128; //I require a 1:1 aspect ratio in order for FAR more simple positioning.
         //This variable is used to determine how many pixels tall the triangle of a terrain tile is.
         public static int TILE_TRIANGLE_HEIGHT = 35;
+
+        public Player currentPlayer;
 
         public Board()
         {
@@ -72,10 +66,14 @@ namespace SettlersOfCatan
             players = new Player[4];
             for (int i = 0; i < players.Count(); i ++)
             {
-                players[i] = new Player(i);
+                players[i] = new Player(i, pinfo[i]);
+                players[i].giveResource(new ResourceCard(ResourceType.Brick));
+                players[i].giveResource(new ResourceCard(ResourceType.Wood));
                 pinfo[i].setPlayerColor(players[i].getPlayerColor());
+                pinfo[i].setPlayerName(players[i].getPlayerName());
 
             }
+            currentPlayer = players[0];
             //Set up terrain tiles
             distributeTiles();
         }
@@ -252,6 +250,7 @@ namespace SettlersOfCatan
                             roadLocation.MouseEnter += showRoadBuildToolTip;
                             roadLocation.MouseLeave += hideRoadBuildToolTip;
                             roadLocation.id = roadLocations.Count;
+                            roadLocation.Click += this.buildRoad;
                         }
                         t.adjascentRoads.Add(roadLocation);
                     }
@@ -337,6 +336,11 @@ namespace SettlersOfCatan
             return s;
         }
 
+        public void buildRoad(object sender, EventArgs e)
+        {
+            ((Road)sender).buildRoad(this.currentPlayer);
+        }
+
 
         //Tool tip events.
 
@@ -381,23 +385,6 @@ namespace SettlersOfCatan
         public void hideDevelopmentCardToolTip(object sender, EventArgs s)
         {
             this.pnlDevelopmentCardToolTip.Visible = false;
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Dice d = new Dice();
-            ((Button)sender).Text = "" + d.roll();
-        }
-
-
-        public void drawStuff()
-        {
-            //Testing out getting transparency working?
-        }
-
-        private void Board_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

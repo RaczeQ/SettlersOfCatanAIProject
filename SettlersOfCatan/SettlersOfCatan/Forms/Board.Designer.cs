@@ -363,7 +363,6 @@
             this.Controls.Add(this.pnlBoardArea);
             this.Name = "Board";
             this.Text = "Settlers of Catan";
-            this.Load += new System.EventHandler(this.Board_Load);
             this.pnlRoadToolTip.ResumeLayout(false);
             this.pnlRoadToolTip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

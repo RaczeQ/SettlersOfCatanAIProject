@@ -16,40 +16,21 @@ namespace SettlersOfCatan
         List<Road> connectedRoads=new List<Road>();
         Control container;
 
-        private double imageWidthPercentage = 1;
-        private double imageHeightPercentage = 1;
-
-        private double imageXPercentage = 1;
-        private double imageYPercentage = 1;
-
-        int owningPlayer = 0; //0 is no player.
+        Player owningPlayer;
+        bool isCity = false;
 
         public Settlement(Point position, int index, Control p)
         {
             this.position = position;
             p.Controls.Add(this);
-            Text = index + "";
             Click += click;
-            MouseHover += mouseEnter;
-            MouseLeave += mouseLeave;
             BringToFront();
-            BackColor = Color.Blue;
+            BackColor = Color.Black;
             BackgroundImageLayout = ImageLayout.Stretch;
             Location = new Point(position.X - 6, position.Y - 6);
             Size = new Size(12, 12);
 
             this.container = p;
-        }
-
-        private void mouseLeave(object sender, EventArgs e)
-        {
-            Settlement p = (Settlement)sender;
-            p.BackgroundImage = null;
-        }
-
-        private void mouseEnter(object sender, EventArgs e)
-        {
-            Settlement p = (Settlement)sender;
         }
 
         private void click(object sender, EventArgs e)

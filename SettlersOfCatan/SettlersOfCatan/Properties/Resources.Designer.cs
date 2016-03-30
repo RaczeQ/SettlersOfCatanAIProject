@@ -223,6 +223,26 @@ namespace SettlersOfCatan.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap LargestArmy {
+            get {
+                object obj = ResourceManager.GetObject("LargestArmy", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap LongestRoad {
+            get {
+                object obj = ResourceManager.GetObject("LongestRoad", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap main_menu_background {
             get {
                 object obj = ResourceManager.GetObject("main_menu_background", resourceCulture);

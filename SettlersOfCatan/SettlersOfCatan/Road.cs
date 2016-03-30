@@ -15,13 +15,7 @@ namespace SettlersOfCatan
 
         List<Settlement> connectedSettlements=new List<Settlement>();
 
-        private double imageWidthPercentage = 1;
-        private double imageHeightPercentage = 1;
-
-        private double imageXPercentage = 1;
-        private double imageYPercentage = 1;
-
-        int owningPlayer = 0; //0 is no player.
+        Player owningPlayer;
 
         Control container;
 
@@ -29,12 +23,9 @@ namespace SettlersOfCatan
         {
             p.Controls.Add(this);
             this.position = position;
-            Text = index + "";
             Click += click;
-            MouseHover += mouseEnter;
-            MouseLeave += mouseLeave;
             BringToFront();
-            BackColor = Color.Red;
+            BackColor = Color.Black;
             BackgroundImageLayout = ImageLayout.Stretch;
             Location = new Point(position.X - 6, position.Y - 6);
             Size = new Size(12, 12);
@@ -43,20 +34,10 @@ namespace SettlersOfCatan
 
         }
 
-        private void mouseEnter(object sender, EventArgs e)
-        {
-            Road p = (Road)sender;
-            p.BackgroundImage = null;
-        }
-
-        private void mouseLeave(object sender, EventArgs e)
-        {
-            Road p = (Road)sender;
-        }
-
         private void click(object sender, EventArgs e)
         {
             //Does nothing yet!
+            //MessageBox.Show(sender.GetType().ToString());
         }
 
 
@@ -73,6 +54,30 @@ namespace SettlersOfCatan
                 }
             }
             connectedSettlements.Add(set);
+            return false;
+        }
+
+        public bool buildRoad(Player currentPlayer)
+        {
+            if (owningPlayer == null)
+            {
+                if (currentPlayer.getResourceCount(Board.ResourceType.Wood) > 0 && currentPlayer.getResourceCount(Board.ResourceType.Brick) > 0)
+                {
+                    this.owningPlayer = currentPlayer;
+                    this.BackColor = currentPlayer.getPlayerColor();
+                    /*
+                        Take resources from player!
+                     */
+                    return true;
+                } else
+                {
+                    MessageBox.Show("Not enough resources!");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Road is already built there!");
+            }
             return false;
         }
     }

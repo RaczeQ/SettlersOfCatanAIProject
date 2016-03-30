@@ -27,7 +27,7 @@ namespace SettlersOfCatan
         }
 
         //Replaces the value with an asterisk
-        public void HideResources()
+        private void HideResources()
         {
             this.lblBrick.Text = "*";
             this.lblOre.Text = "*";
@@ -37,7 +37,7 @@ namespace SettlersOfCatan
             resourcesHidden = true;
         }
 
-        public void ShowResources()
+        private void ShowResources()
         {
             this.lblBrick.Text = brickCount;
             this.lblOre.Text = oreCount;
@@ -51,6 +51,34 @@ namespace SettlersOfCatan
         {
             this.pnlPlayerColor.BackColor = color;
         }
+
+        public void setPlayerName(String name)
+        {
+            this.lblPlayerColorName.Text = name;
+        }
+
+        public void setLongestRoad(bool value)
+        {
+            this.pbLongestRoad.Visible = value;
+        }
+
+        public void setLargestArmy(bool value)
+        {
+            this.pbLargestArmy.Visible = value;
+        }
+
+        public void setTurn(bool value)
+        {
+            this.lblTurn.Visible = value;
+            if (value)
+            {
+                ShowResources();
+            } else
+            {
+                HideResources();
+            }
+        }
+
 
         //Each updates the required values
         public void setWood(int count)

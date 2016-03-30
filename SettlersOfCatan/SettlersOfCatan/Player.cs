@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SettlersOfCatan
 {
-    class Player
+    public class Player
     {
         //Player colors are red blue white orange green and brown
         public static String[] playerColorNames = { "Red", "Blue", "White", "Orange", "Green", "Brown" };
@@ -16,10 +16,13 @@ namespace SettlersOfCatan
         private int playerNumber = 0;
         private List<ResourceCard> resources;
 
-        public Player(int playerNumber)
+        private PlayerInfoPanel playerGUI;
+
+        public Player(int playerNumber, PlayerInfoPanel gui)
         {
             this.playerNumber = playerNumber;
             resources = new List<ResourceCard>();
+            this.playerGUI = gui;
         }
 
         /**
@@ -56,17 +59,33 @@ namespace SettlersOfCatan
             {
                 resources.Remove(rCard);
             }
+            updateResourceGUI();
             return rCard;
         }
 
         public void giveResource(ResourceCard resCard)
         {
             this.resources.Add(resCard);
+            updateResourceGUI();
+        }
+
+        private void updateResourceGUI()
+        {
+            this.playerGUI.setBrick(getResourceCount(Board.ResourceType.Brick));
+            this.playerGUI.setOre(getResourceCount(Board.ResourceType.Ore));
+            this.playerGUI.setWood(getResourceCount(Board.ResourceType.Wood));
+            this.playerGUI.setWheat(getResourceCount(Board.ResourceType.Wheat));
+            this.playerGUI.setSheep(getResourceCount(Board.ResourceType.Sheep));
         }
 
         public Color getPlayerColor()
         {
             return Player.playerColors[this.playerNumber];
+        }
+
+        public String getPlayerName()
+        {
+            return Player.playerColorNames[this.playerNumber];
         }
     }
 }

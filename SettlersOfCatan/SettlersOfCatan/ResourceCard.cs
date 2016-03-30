@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SettlersOfCatan
 {
-    class ResourceCard
+    public class ResourceCard
     {
 
         private Board.ResourceType resourceType;
