@@ -226,4 +226,40 @@
   <data name="year_of_plenty_card" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\year_of_plenty_card.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="_1_Die_Face_Red" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1_Die_Face_Red.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_1_Die_Face_Yellow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1_Die_Face_Yellow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_2_Die_Face_Red" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\2_Die_Face_Red.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_2_Die_Face_Yellow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\2_Die_Face_Yellow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_3_Die_Face_Red" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\3_Die_Face_Red.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_3_Die_Face_Yellow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\3_Die_Face_Yellow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_4_Die_Face_Red" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\4_Die_Face_Red.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_4_Die_Face_Yellow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\4_Die_Face_Yellow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_5_Die_Face_Red" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\5_Die_Face_Red.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_5_Die_Face_Yellow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\5_Die_Face_Yellow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_6_Die_Face_Red" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\6_Die_Face_Red.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_6_Die_Face_Yellow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\6_Die_Face_Yellow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

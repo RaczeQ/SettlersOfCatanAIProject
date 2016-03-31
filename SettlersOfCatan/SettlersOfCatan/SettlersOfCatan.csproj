@@ -54,6 +54,12 @@
     <Compile Include="DevelopmentCard.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Dice.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Dice.Designer.cs">
+      <DependentUpon>Dice.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Board.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -62,7 +68,6 @@
     </Compile>
     <Compile Include="Card.cs" />
     <Compile Include="Deck.cs" />
-    <Compile Include="Dice.cs" />
     <Compile Include="Forms\MainMenu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,8 +115,14 @@
     <Compile Include="TransparencyFix\PanelFix.cs">
       <SubType>Component</SubType>
     </Compile>
+    <EmbeddedResource Include="Dice.resx">
+      <DependentUpon>Dice.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Board.resx">
       <DependentUpon>Board.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Road.resx">
+      <DependentUpon>Road.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -321,6 +332,66 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\year_of_plenty_card.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1_Die_Face_Red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1_Die_Face_Yellow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\2_Die_Face_Red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\2_Die_Face_Yellow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\3_Die_Face_Red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\3_Die_Face_Yellow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\4_Die_Face_Red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\4_Die_Face_Yellow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\5_Die_Face_Red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\5_Die_Face_Yellow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\6_Die_Face_Red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\6_Die_Face_Yellow.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

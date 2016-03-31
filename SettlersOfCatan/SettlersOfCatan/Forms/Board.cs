@@ -18,6 +18,7 @@ namespace SettlersOfCatan
     {
         public static Bank TheBank = new Bank();
 
+        public enum GameState {  Setup, PlayerTurn};
         public enum ResourceType { Wood=0, Brick, Ore, Wheat, Sheep, Desert};
         public String[] RESOURCE_NAMES = { "Wood", "Brick", "Ore", "Wheat", "Sheep", "NoResource" };
         public static String[] TILE_NAMES = { "Forest", "Hills", "Mountains", "Farms", "Fields", "Desert" };
@@ -27,7 +28,6 @@ namespace SettlersOfCatan
         //Keeps track of what tile indexes are ocean borders for later use.
         int[] oceanBorderInds = { 0, 1, 2, 3, 4, 8, 9, 14, 15, 21, 22, 27, 28, 32, 33, 34, 35, 36 };
         String[] tileFileNames = { "Rock.png", "Wood.png" };
-        String oceanBorderFileName = "Ocean.png";
         Random rand = new Random();
         Tile[] boardTiles = new Tile[BOARD_TILE_COUNT];
         List<Road> roadLocations = new List<Road>();
@@ -53,7 +53,7 @@ namespace SettlersOfCatan
 
         Player[] players;
         public Player currentPlayer;
-
+        public static GameState currentGameState;
         public Board()
         {
             InitializeComponent();
@@ -81,6 +81,8 @@ namespace SettlersOfCatan
 
             }
             currentPlayer = players[0];
+
+            currentGameState = GameState.Setup;
 
             distributeTiles();
         }
@@ -228,11 +230,13 @@ namespace SettlersOfCatan
                         Settlement settlementLocation = findSettlementWithPosition(settlementPoints[ind]);
                         if (settlementLocation == null)
                         {
-                            settlementLocation = new Settlement(settlementPoints[ind], i, this.pnlBoardArea);
+                            settlementLocation = new Settlement(settlementPoints[ind], i);
                             settlementLocations.Add(settlementLocation);
                             settlementLocation.MouseEnter += showSettlementBuildToolTip;
                             settlementLocation.MouseLeave += hideSettlementBuildToolTip;
                             settlementLocation.id = settlementLocations.Count;
+                            pnlBoardArea.Controls.Add(settlementLocation);
+                            settlementLocation.BringToFront();
                         }
                         t.adjascentSettlements.Add(settlementLocation);
                     }
@@ -252,12 +256,14 @@ namespace SettlersOfCatan
                         Road roadLocation = findRoadWithPosition(roadPoint);
                         if (roadLocation == null)
                         {
-                            roadLocation = new Road(roadPoint, i, this.pnlBoardArea);
-                            roadLocations.Add(roadLocation);
+                            roadLocation = new Road(roadPoint, i);
+                            pnlBoardArea.Controls.Add(roadLocation);
                             roadLocation.MouseEnter += showRoadBuildToolTip;
                             roadLocation.MouseLeave += hideRoadBuildToolTip;
                             roadLocation.id = roadLocations.Count;
                             roadLocation.Click += this.buildRoad;
+                            roadLocations.Add(roadLocation);
+                            roadLocation.BringToFront();
                         }
                         t.adjascentRoads.Add(roadLocation);
                     }
@@ -288,6 +294,24 @@ namespace SettlersOfCatan
                     }
                 }
             }
+        }
+
+        /*
+            Controls the player setup process.
+         */
+        public void playerSetupUpdate()
+        {
+            /*
+                Dice Roll
+             */
+
+            /*
+                Settlement and road process
+             */
+
+            /*
+                First resource gather process.
+             */
         }
 
         /**
@@ -348,7 +372,18 @@ namespace SettlersOfCatan
          */
         public void buildRoad(object sender, EventArgs e)
         {
-            ((Road)sender).buildRoad(this.currentPlayer);
+            bool takeResources = false;
+            if (currentGameState == GameState.PlayerTurn)
+            {
+                takeResources = true;
+            }
+            bool success = ((Road)sender).buildRoad(this.currentPlayer, takeResources);
+            //For the game start thingey....
+        }
+
+        public void buildSettlement(object sender, EventArgs e)
+        {
+
         }
 
 
@@ -356,11 +391,14 @@ namespace SettlersOfCatan
 
         public void showRoadBuildToolTip(object sender, EventArgs e)
         {
-            Point loc = ((PictureBox)sender).Location;
-            loc.X += 32;
-            loc.Y += 32;
-            this.pnlRoadToolTip.Location = loc;
-            this.pnlRoadToolTip.Visible = true;
+            if (Board.currentGameState == GameState.PlayerTurn)
+            {
+                Point loc = ((PictureBox)sender).Location;
+                loc.X += 32;
+                loc.Y += 32;
+                this.pnlRoadToolTip.Location = loc;
+                this.pnlRoadToolTip.Visible = true;
+            }
         }
 
         public void hideRoadBuildToolTip(object sender, EventArgs e)
@@ -370,11 +408,14 @@ namespace SettlersOfCatan
 
         public void showSettlementBuildToolTip(object sender, EventArgs s)
         {
-            Point loc = ((PictureBox)sender).Location;
-            loc.X += 32;
-            loc.Y += 32;
-            this.pnlSettlementToolTip.Location = loc;
-            this.pnlSettlementToolTip.Visible = true;
+            if (Board.currentGameState == GameState.PlayerTurn)
+            {
+                Point loc = ((PictureBox)sender).Location;
+                loc.X += 32;
+                loc.Y += 32;
+                this.pnlSettlementToolTip.Location = loc;
+                this.pnlSettlementToolTip.Visible = true;
+            }
         }
 
         public void hideSettlementBuildToolTip(object sender, EventArgs s)
@@ -385,11 +426,14 @@ namespace SettlersOfCatan
 
         public void showDevelopmentCardToolTip(object sender, EventArgs s)
         {
-            Point loc = ((PictureBox)sender).Parent.Location;
-            loc.X += ((PictureBox)sender).Width;
-            loc.Y += ((PictureBox)sender).Location.Y;
-            this.pnlDevelopmentCardToolTip.Location = loc;
-            this.pnlDevelopmentCardToolTip.Visible = true;
+            if (Board.currentGameState == GameState.PlayerTurn)
+            {
+                Point loc = ((PictureBox)sender).Parent.Location;
+                loc.X += ((PictureBox)sender).Width;
+                loc.Y += ((PictureBox)sender).Location.Y;
+                this.pnlDevelopmentCardToolTip.Location = loc;
+                this.pnlDevelopmentCardToolTip.Visible = true;
+            }
         }
 
         public void hideDevelopmentCardToolTip(object sender, EventArgs s)

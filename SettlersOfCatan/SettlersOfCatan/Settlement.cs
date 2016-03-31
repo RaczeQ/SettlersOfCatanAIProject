@@ -13,34 +13,30 @@ namespace SettlersOfCatan
         public int id = 0;
         public Point position;
 
-        List<Road> connectedRoads=new List<Road>();
-        Control container;
+        private List<Road> connectedRoads=new List<Road>();
 
-        Player owningPlayer;
-        bool isCity = false;
+        private Player owningPlayer;
+        private bool isCity = false;
 
-        public Settlement(Point position, int index, Control p)
+        public Settlement(Point position, int index)
         {
             this.position = position;
-            p.Controls.Add(this);
-            Click += click;
-            BringToFront();
             BackColor = Color.Black;
             BackgroundImageLayout = ImageLayout.Stretch;
             Location = new Point(position.X - 6, position.Y - 6);
             Size = new Size(12, 12);
-
-            this.container = p;
         }
 
-        private void click(object sender, EventArgs e)
+
+        public Player getOwningPlayer()
         {
-            //Does nothing yet!
+            return this.owningPlayer;
         }
 
-        private void resize()
-        {
 
+        public List<Road> getConnectedRoads()
+        {
+            return connectedRoads;
         }
 
         /**

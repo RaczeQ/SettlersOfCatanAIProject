@@ -50,10 +50,12 @@
             this.pictureBox8 = new System.Windows.Forms.PictureBox();
             this.pictureBox9 = new System.Windows.Forms.PictureBox();
             this.pnlGameInfo = new System.Windows.Forms.Panel();
+            this.lstGameEvents = new System.Windows.Forms.ListBox();
             this.playerInfoPanel4 = new SettlersOfCatan.Player();
             this.playerInfoPanel3 = new SettlersOfCatan.Player();
             this.playerInfoPanel2 = new SettlersOfCatan.Player();
             this.playerInfoPanel1 = new SettlersOfCatan.Player();
+            this.dice1 = new SettlersOfCatan.Dice();
             this.pnlBoardArea = new SettlersOfCatan.TransparencyFix.BoardArea();
             this.pnlRoadToolTip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -81,7 +83,7 @@
             this.pnlRoadToolTip.Controls.Add(this.label1);
             this.pnlRoadToolTip.Controls.Add(this.pictureBox1);
             this.pnlRoadToolTip.Controls.Add(this.pictureBox2);
-            this.pnlRoadToolTip.Location = new System.Drawing.Point(735, 586);
+            this.pnlRoadToolTip.Location = new System.Drawing.Point(696, 586);
             this.pnlRoadToolTip.Name = "pnlRoadToolTip";
             this.pnlRoadToolTip.Size = new System.Drawing.Size(128, 60);
             this.pnlRoadToolTip.TabIndex = 1;
@@ -133,7 +135,7 @@
             this.pnlSettlementToolTip.Controls.Add(this.pictureBox4);
             this.pnlSettlementToolTip.Controls.Add(this.pictureBox5);
             this.pnlSettlementToolTip.Controls.Add(this.pictureBox6);
-            this.pnlSettlementToolTip.Location = new System.Drawing.Point(522, 586);
+            this.pnlSettlementToolTip.Location = new System.Drawing.Point(483, 586);
             this.pnlSettlementToolTip.Name = "pnlSettlementToolTip";
             this.pnlSettlementToolTip.Size = new System.Drawing.Size(207, 60);
             this.pnlSettlementToolTip.TabIndex = 3;
@@ -197,10 +199,11 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox1.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox1.Controls.Add(this.dice1);
             this.groupBox1.Controls.Add(this.pbBuildDevelopmentCard);
             this.groupBox1.Location = new System.Drawing.Point(12, 585);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(324, 138);
+            this.groupBox1.Size = new System.Drawing.Size(465, 138);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox1";
@@ -226,7 +229,7 @@
             this.pnlDevelopmentCardToolTip.Controls.Add(this.pictureBox7);
             this.pnlDevelopmentCardToolTip.Controls.Add(this.pictureBox8);
             this.pnlDevelopmentCardToolTip.Controls.Add(this.pictureBox9);
-            this.pnlDevelopmentCardToolTip.Location = new System.Drawing.Point(522, 652);
+            this.pnlDevelopmentCardToolTip.Location = new System.Drawing.Point(830, 585);
             this.pnlDevelopmentCardToolTip.Name = "pnlDevelopmentCardToolTip";
             this.pnlDevelopmentCardToolTip.Size = new System.Drawing.Size(194, 60);
             this.pnlDevelopmentCardToolTip.TabIndex = 3;
@@ -303,6 +306,16 @@
             this.pnlGameInfo.Size = new System.Drawing.Size(263, 736);
             this.pnlGameInfo.TabIndex = 5;
             // 
+            // lstGameEvents
+            // 
+            this.lstGameEvents.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lstGameEvents.FormattingEnabled = true;
+            this.lstGameEvents.Location = new System.Drawing.Point(484, 588);
+            this.lstGameEvents.Name = "lstGameEvents";
+            this.lstGameEvents.Size = new System.Drawing.Size(491, 134);
+            this.lstGameEvents.TabIndex = 6;
+            // 
             // playerInfoPanel4
             // 
             this.playerInfoPanel4.BackColor = System.Drawing.SystemColors.Control;
@@ -335,6 +348,13 @@
             this.playerInfoPanel1.Size = new System.Drawing.Size(251, 244);
             this.playerInfoPanel1.TabIndex = 0;
             // 
+            // dice1
+            // 
+            this.dice1.Location = new System.Drawing.Point(317, 14);
+            this.dice1.Name = "dice1";
+            this.dice1.Size = new System.Drawing.Size(142, 118);
+            this.dice1.TabIndex = 5;
+            // 
             // pnlBoardArea
             // 
             this.pnlBoardArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -355,6 +375,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1247, 735);
+            this.Controls.Add(this.lstGameEvents);
             this.Controls.Add(this.pnlGameInfo);
             this.Controls.Add(this.pnlDevelopmentCardToolTip);
             this.Controls.Add(this.groupBox1);
@@ -414,6 +435,8 @@
         private Player playerInfoPanel3;
         private Player playerInfoPanel2;
         private Player playerInfoPanel1;
+        private Dice dice1;
+        private System.Windows.Forms.ListBox lstGameEvents;
     }
 }
 
