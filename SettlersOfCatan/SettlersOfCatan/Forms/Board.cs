@@ -16,27 +16,32 @@ namespace SettlersOfCatan
 {
     public partial class Board : Form
     {
+        public static Bank TheBank = new Bank();
+
         public enum ResourceType { Wood=0, Brick, Ore, Wheat, Sheep, Desert};
         public String[] RESOURCE_NAMES = { "Wood", "Brick", "Ore", "Wheat", "Sheep", "NoResource" };
         public static String[] TILE_NAMES = { "Forest", "Hills", "Mountains", "Farms", "Fields", "Desert" };
         public Bitmap[] tileImages = new Bitmap[6];
         public String[] tileImageResourceNames = { "Forest_Tile.png", "Hills_Tile.png", "Mountain_Tile.png", "Wheat_Fields_Tile.png", "Pasture_Tile.png", "Desert_Tile.png" };
+
         //Keeps track of what tile indexes are ocean borders for later use.
         int[] oceanBorderInds = { 0, 1, 2, 3, 4, 8, 9, 14, 15, 21, 22, 27, 28, 32, 33, 34, 35, 36 };
         String[] tileFileNames = { "Rock.png", "Wood.png" };
         String oceanBorderFileName = "Ocean.png";
-        Player[] players;
         Random rand = new Random();
         Tile[] boardTiles = new Tile[BOARD_TILE_COUNT];
         List<Road> roadLocations = new List<Road>();
         List<Settlement> settlementLocations = new List<Settlement>();
         //This is the distribution of terrain resources for a four player game.
-        public Board.ResourceType[] fourPlayerTiles = {
-            Board.ResourceType.Ore, Board.ResourceType.Ore, Board.ResourceType.Ore,
-            Board.ResourceType.Sheep, Board.ResourceType.Sheep, Board.ResourceType.Sheep, Board.ResourceType.Sheep,
-            Board.ResourceType.Wood, Board.ResourceType.Wood, Board.ResourceType.Wood, Board.ResourceType.Wood,
-            Board.ResourceType.Wheat, Board.ResourceType.Wheat, Board.ResourceType.Wheat, Board.ResourceType.Wheat,
-            Board.ResourceType.Brick, Board.ResourceType.Brick, Board.ResourceType.Brick, Board.ResourceType.Desert };
+        public static Board.ResourceType[] fourPlayerTiles = 
+            {
+                Board.ResourceType.Ore, Board.ResourceType.Ore, Board.ResourceType.Ore,
+                Board.ResourceType.Sheep, Board.ResourceType.Sheep, Board.ResourceType.Sheep, Board.ResourceType.Sheep,
+                Board.ResourceType.Wood, Board.ResourceType.Wood, Board.ResourceType.Wood, Board.ResourceType.Wood,
+                Board.ResourceType.Wheat, Board.ResourceType.Wheat, Board.ResourceType.Wheat, Board.ResourceType.Wheat,
+                Board.ResourceType.Brick, Board.ResourceType.Brick, Board.ResourceType.Brick, Board.ResourceType.Desert
+            };
+
         //This is the correctly ordered number chip distribution for a four player game.
         public int[] fourPlayerNumberChips = { 9,12,11,10,6,11,4,8,5,3,8,3,4,9,10,6,2,5};
         public Deck terrainTiles;
@@ -46,6 +51,7 @@ namespace SettlersOfCatan
         //This variable is used to determine how many pixels tall the triangle of a terrain tile is.
         public static int TILE_TRIANGLE_HEIGHT = 35;
 
+        Player[] players;
         public Player currentPlayer;
 
         public Board()
@@ -62,19 +68,20 @@ namespace SettlersOfCatan
                 tileImages[i] = new Bitmap("Resources/" + tileImageResourceNames[i]);
             }
             //Set up player objects and initial player order
-            PlayerInfoPanel[] pinfo = { this.playerInfoPanel1, this.playerInfoPanel2, this.playerInfoPanel3, this.playerInfoPanel4 };
             players = new Player[4];
+            players[0] = playerInfoPanel1;
+            players[1] = playerInfoPanel2;
+            players[2] = playerInfoPanel3;
+            players[3] = playerInfoPanel4;
             for (int i = 0; i < players.Count(); i ++)
             {
-                players[i] = new Player(i, pinfo[i]);
                 players[i].giveResource(new ResourceCard(ResourceType.Brick));
                 players[i].giveResource(new ResourceCard(ResourceType.Wood));
-                pinfo[i].setPlayerColor(players[i].getPlayerColor());
-                pinfo[i].setPlayerName(players[i].getPlayerName());
+                players[i].setPlayerNumber(i);
 
             }
             currentPlayer = players[0];
-            //Set up terrain tiles
+
             distributeTiles();
         }
 
@@ -336,6 +343,9 @@ namespace SettlersOfCatan
             return s;
         }
 
+        /*
+            Used to call the road build function in road while providing the current player.
+         */
         public void buildRoad(object sender, EventArgs e)
         {
             ((Road)sender).buildRoad(this.currentPlayer);

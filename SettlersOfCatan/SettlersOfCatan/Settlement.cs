@@ -58,5 +58,24 @@ namespace SettlersOfCatan
             connectedRoads.Add(rd);
             return false;
         }
+
+        /*
+            Conditions must apply: 
+            no other player's settlement must be present at this location or, within 1 road's distance.
+                if a settlement exists player must have required resources: 
+            must have required resources: Brick, Wood, Wheat, Sheep
+
+         */
+        public bool buildRoad(Player currentPlayer)
+        {
+            if (owningPlayer == null)
+            {
+                //Build settlement
+            } else
+            {
+                //Upgrade the settlement to city
+            }
+            return false;
+        }
     }
 }

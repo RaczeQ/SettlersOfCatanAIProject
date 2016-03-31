@@ -40,8 +40,8 @@
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.pictureBox6 = new System.Windows.Forms.PictureBox();
-            this.pbBuildDevelopmentCard = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.pbBuildDevelopmentCard = new System.Windows.Forms.PictureBox();
             this.pnlDevelopmentCardToolTip = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
             this.pictureBox10 = new System.Windows.Forms.PictureBox();
@@ -50,10 +50,10 @@
             this.pictureBox8 = new System.Windows.Forms.PictureBox();
             this.pictureBox9 = new System.Windows.Forms.PictureBox();
             this.pnlGameInfo = new System.Windows.Forms.Panel();
-            this.playerInfoPanel4 = new SettlersOfCatan.PlayerInfoPanel();
-            this.playerInfoPanel3 = new SettlersOfCatan.PlayerInfoPanel();
-            this.playerInfoPanel2 = new SettlersOfCatan.PlayerInfoPanel();
-            this.playerInfoPanel1 = new SettlersOfCatan.PlayerInfoPanel();
+            this.playerInfoPanel4 = new SettlersOfCatan.Player();
+            this.playerInfoPanel3 = new SettlersOfCatan.Player();
+            this.playerInfoPanel2 = new SettlersOfCatan.Player();
+            this.playerInfoPanel1 = new SettlersOfCatan.Player();
             this.pnlBoardArea = new SettlersOfCatan.TransparencyFix.BoardArea();
             this.pnlRoadToolTip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -63,8 +63,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbBuildDevelopmentCard)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbBuildDevelopmentCard)).BeginInit();
             this.pnlDevelopmentCardToolTip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
@@ -193,17 +193,6 @@
             this.pictureBox6.TabIndex = 0;
             this.pictureBox6.TabStop = false;
             // 
-            // pbBuildDevelopmentCard
-            // 
-            this.pbBuildDevelopmentCard.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pbBuildDevelopmentCard.Image = global::SettlersOfCatan.Properties.Resources.Development_Card_Back;
-            this.pbBuildDevelopmentCard.Location = new System.Drawing.Point(6, 19);
-            this.pbBuildDevelopmentCard.Name = "pbBuildDevelopmentCard";
-            this.pbBuildDevelopmentCard.Size = new System.Drawing.Size(67, 113);
-            this.pbBuildDevelopmentCard.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbBuildDevelopmentCard.TabIndex = 4;
-            this.pbBuildDevelopmentCard.TabStop = false;
-            // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -215,6 +204,17 @@
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox1";
+            // 
+            // pbBuildDevelopmentCard
+            // 
+            this.pbBuildDevelopmentCard.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pbBuildDevelopmentCard.Image = global::SettlersOfCatan.Properties.Resources.Development_Card_Back;
+            this.pbBuildDevelopmentCard.Location = new System.Drawing.Point(8, 29);
+            this.pbBuildDevelopmentCard.Name = "pbBuildDevelopmentCard";
+            this.pbBuildDevelopmentCard.Size = new System.Drawing.Size(64, 92);
+            this.pbBuildDevelopmentCard.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbBuildDevelopmentCard.TabIndex = 4;
+            this.pbBuildDevelopmentCard.TabStop = false;
             // 
             // pnlDevelopmentCardToolTip
             // 
@@ -306,25 +306,25 @@
             // playerInfoPanel4
             // 
             this.playerInfoPanel4.BackColor = System.Drawing.SystemColors.Control;
-            this.playerInfoPanel4.Location = new System.Drawing.Point(9, 436);
+            this.playerInfoPanel4.Location = new System.Drawing.Point(9, 733);
             this.playerInfoPanel4.Name = "playerInfoPanel4";
-            this.playerInfoPanel4.Size = new System.Drawing.Size(251, 145);
+            this.playerInfoPanel4.Size = new System.Drawing.Size(251, 244);
             this.playerInfoPanel4.TabIndex = 0;
             // 
             // playerInfoPanel3
             // 
             this.playerInfoPanel3.BackColor = System.Drawing.SystemColors.Control;
-            this.playerInfoPanel3.Location = new System.Drawing.Point(9, 291);
+            this.playerInfoPanel3.Location = new System.Drawing.Point(9, 489);
             this.playerInfoPanel3.Name = "playerInfoPanel3";
-            this.playerInfoPanel3.Size = new System.Drawing.Size(251, 145);
+            this.playerInfoPanel3.Size = new System.Drawing.Size(251, 244);
             this.playerInfoPanel3.TabIndex = 0;
             // 
             // playerInfoPanel2
             // 
             this.playerInfoPanel2.BackColor = System.Drawing.SystemColors.Control;
-            this.playerInfoPanel2.Location = new System.Drawing.Point(9, 146);
+            this.playerInfoPanel2.Location = new System.Drawing.Point(9, 245);
             this.playerInfoPanel2.Name = "playerInfoPanel2";
-            this.playerInfoPanel2.Size = new System.Drawing.Size(251, 145);
+            this.playerInfoPanel2.Size = new System.Drawing.Size(251, 244);
             this.playerInfoPanel2.TabIndex = 0;
             // 
             // playerInfoPanel1
@@ -332,7 +332,7 @@
             this.playerInfoPanel1.BackColor = System.Drawing.SystemColors.Control;
             this.playerInfoPanel1.Location = new System.Drawing.Point(9, 1);
             this.playerInfoPanel1.Name = "playerInfoPanel1";
-            this.playerInfoPanel1.Size = new System.Drawing.Size(251, 145);
+            this.playerInfoPanel1.Size = new System.Drawing.Size(251, 244);
             this.playerInfoPanel1.TabIndex = 0;
             // 
             // pnlBoardArea
@@ -373,8 +373,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbBuildDevelopmentCard)).EndInit();
             this.groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pbBuildDevelopmentCard)).EndInit();
             this.pnlDevelopmentCardToolTip.ResumeLayout(false);
             this.pnlDevelopmentCardToolTip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).EndInit();
@@ -410,10 +410,10 @@
         private System.Windows.Forms.PictureBox pictureBox10;
         private TransparencyFix.BoardArea pnlBoardArea;
         private System.Windows.Forms.Panel pnlGameInfo;
-        private PlayerInfoPanel playerInfoPanel4;
-        private PlayerInfoPanel playerInfoPanel3;
-        private PlayerInfoPanel playerInfoPanel2;
-        private PlayerInfoPanel playerInfoPanel1;
+        private Player playerInfoPanel4;
+        private Player playerInfoPanel3;
+        private Player playerInfoPanel2;
+        private Player playerInfoPanel1;
     }
 }
 

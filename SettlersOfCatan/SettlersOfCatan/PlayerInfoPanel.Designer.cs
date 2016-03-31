@@ -1,6 +1,6 @@
 ﻿namespace SettlersOfCatan
 {
-    partial class PlayerInfoPanel
+    partial class Player
     {
         /// <summary> 
         /// Required designer variable.
@@ -47,6 +47,7 @@
             this.pbLongestRoad = new System.Windows.Forms.PictureBox();
             this.pbLargestArmy = new System.Windows.Forms.PictureBox();
             this.lblTurn = new System.Windows.Forms.Label();
+            this.pnlDevCards = new System.Windows.Forms.Panel();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.pnlPlayerColor.SuspendLayout();
@@ -243,18 +244,27 @@
             this.lblTurn.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblTurn.Visible = false;
             // 
-            // PlayerInfoPanel
+            // pnlDevCards
+            // 
+            this.pnlDevCards.AutoScroll = true;
+            this.pnlDevCards.Location = new System.Drawing.Point(5, 144);
+            this.pnlDevCards.Name = "pnlDevCards";
+            this.pnlDevCards.Size = new System.Drawing.Size(242, 97);
+            this.pnlDevCards.TabIndex = 9;
+            // 
+            // Player
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.pnlDevCards);
             this.Controls.Add(this.lblTurn);
             this.Controls.Add(this.pbLargestArmy);
             this.Controls.Add(this.pbLongestRoad);
             this.Controls.Add(this.pnlPlayerColor);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBox1);
-            this.Name = "PlayerInfoPanel";
-            this.Size = new System.Drawing.Size(251, 145);
+            this.Name = "Player";
+            this.Size = new System.Drawing.Size(251, 244);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.panel1.ResumeLayout(false);
@@ -288,5 +298,6 @@
         private System.Windows.Forms.PictureBox pbLongestRoad;
         private System.Windows.Forms.PictureBox pbLargestArmy;
         private System.Windows.Forms.Label lblTurn;
+        private System.Windows.Forms.Panel pnlDevCards;
     }
 }

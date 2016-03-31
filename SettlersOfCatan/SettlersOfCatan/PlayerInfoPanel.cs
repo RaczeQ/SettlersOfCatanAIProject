@@ -10,8 +10,122 @@ using System.Windows.Forms;
 
 namespace SettlersOfCatan
 {
-    public partial class PlayerInfoPanel : UserControl
+    public partial class Player : UserControl
     {
+
+        public static String[] playerColorNames = { "Red", "Blue", "White", "Orange", "Green", "Brown" };
+        public static Color[] playerColors = { Color.Red, Color.Blue, Color.White, Color.Orange, Color.Green, Color.Brown };
+
+        private int playerNumber = 0;
+        private List<ResourceCard> resources;
+        private bool activePlayer = false;
+        private List<DevelopmentCard> onHandDevelopmentCards;
+
+
+        public Player()
+        {
+            InitializeComponent();
+            resources = new List<ResourceCard>();
+            onHandDevelopmentCards = new List<DevelopmentCard>();
+        }
+
+        public void setPlayerNumber(int number)
+        {
+            this.setPlayerColor(playerColors[number]);
+            this.setPlayerName(playerColorNames[number]);
+        }
+
+        public void giveDevelopmentCard(DevelopmentCard card)
+        {
+            onHandDevelopmentCards.Add(card);
+            updateDevelopmentCards();
+        }
+
+        public DevelopmentCard takeDevelopmentCard(DevelopmentCard.DevCardType cardType)
+        {
+            DevelopmentCard theCard = null;
+            foreach (DevelopmentCard c in onHandDevelopmentCards) 
+            {
+                if (c.getType() == cardType)
+                {
+                    theCard = c;
+                }
+            }
+            onHandDevelopmentCards.Remove(theCard);
+            updateDevelopmentCards();
+            return theCard;
+        }
+
+        public void updateDevelopmentCards()
+        {
+
+            this.pnlDevCards.Controls.Clear();
+
+            int row = 0;
+            int col = 0;
+            for (int i = 0; i < onHandDevelopmentCards.Count; i++)
+            {
+                DevelopmentCard devC = onHandDevelopmentCards[i];
+                pnlDevCards.Controls.Add(devC);
+                devC.Location = new Point(col * devC.Width, row * devC.Height);
+                col++;
+                if (col > 2)
+                {
+                    col = 0;
+                    row++;
+                }
+            }
+        }
+
+        /**
+            Gets the number of the specified resource type.
+         */
+        public int getResourceCount(Board.ResourceType type)
+        {
+            int count = 0;
+            foreach (ResourceCard res in resources)
+            {
+                if (res.getResourceType() == type)
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        /**
+            Gets a resource card witht the matching type from the player's
+            deck. If no available card exists null is returned.
+         */
+        public ResourceCard takeResource(Board.ResourceType type)
+        {
+            ResourceCard rCard = null;
+            foreach (ResourceCard res in resources)
+            {
+                if (res.getResourceType() == type)
+                {
+                    rCard = res;
+                }
+            }
+            if (rCard != null)
+            {
+                resources.Remove(rCard);
+            }
+            updateResourceGUI();
+            return rCard;
+        }
+
+        public void giveResource(ResourceCard resCard)
+        {
+            this.resources.Add(resCard);
+            updateResourceGUI();
+        }
+
+        public Color getPlayerColor()
+        {
+            return playerColors[playerNumber];
+        }
+
 
         private String wheatCount = "0";
         private String sheepCount = "0";
@@ -20,11 +134,6 @@ namespace SettlersOfCatan
         private String oreCount = "0";
 
         bool resourcesHidden = false;
-
-        public PlayerInfoPanel()
-        {
-            InitializeComponent();
-        }
 
         //Replaces the value with an asterisk
         private void HideResources()
@@ -70,6 +179,7 @@ namespace SettlersOfCatan
         public void setTurn(bool value)
         {
             this.lblTurn.Visible = value;
+            activePlayer = value;
             if (value)
             {
                 ShowResources();
@@ -79,9 +189,17 @@ namespace SettlersOfCatan
             }
         }
 
+        private void updateResourceGUI()
+        {
+            this.setBrick(getResourceCount(Board.ResourceType.Brick));
+            this.setOre(getResourceCount(Board.ResourceType.Ore));
+            this.setWood(getResourceCount(Board.ResourceType.Wood));
+            this.setWheat(getResourceCount(Board.ResourceType.Wheat));
+            this.setSheep(getResourceCount(Board.ResourceType.Sheep));
+        }
 
         //Each updates the required values
-        public void setWood(int count)
+        private void setWood(int count)
         {
             lblWood.Text = count + "";
             woodCount = count + "";
@@ -91,7 +209,7 @@ namespace SettlersOfCatan
             }
         }
 
-        public void setWheat(int count)
+        private void setWheat(int count)
         {
             lblWheat.Text = count + "";
             wheatCount = count + "";
@@ -101,7 +219,7 @@ namespace SettlersOfCatan
             }
         }
 
-        public void setSheep(int count)
+        private void setSheep(int count)
         {
             lblSheep.Text = count + "";
             sheepCount = count + "";
@@ -111,7 +229,7 @@ namespace SettlersOfCatan
             }
         }
 
-        public void setBrick(int count)
+        private void setBrick(int count)
         {
             lblBrick.Text = count + "";
             brickCount = count + "";
@@ -121,7 +239,7 @@ namespace SettlersOfCatan
             }
         }
 
-        public void setOre(int count)
+        private void setOre(int count)
         {
             lblOre.Text = count + "";
             oreCount = count + "";

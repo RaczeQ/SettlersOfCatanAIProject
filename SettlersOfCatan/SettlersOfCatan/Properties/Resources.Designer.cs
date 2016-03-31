@@ -223,6 +223,16 @@ namespace SettlersOfCatan.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap knight_card {
+            get {
+                object obj = ResourceManager.GetObject("knight_card", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap LargestArmy {
             get {
                 object obj = ResourceManager.GetObject("LargestArmy", resourceCulture);
@@ -246,6 +256,16 @@ namespace SettlersOfCatan.Properties {
         internal static System.Drawing.Bitmap main_menu_background {
             get {
                 object obj = ResourceManager.GetObject("main_menu_background", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap monopoly_card {
+            get {
+                object obj = ResourceManager.GetObject("monopoly_card", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -313,6 +333,16 @@ namespace SettlersOfCatan.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap road_building_card {
+            get {
+                object obj = ResourceManager.GetObject("road_building_card", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Sheep_Icon {
             get {
                 object obj = ResourceManager.GetObject("Sheep_Icon", resourceCulture);
@@ -343,6 +373,16 @@ namespace SettlersOfCatan.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap victory_point_card {
+            get {
+                object obj = ResourceManager.GetObject("victory_point_card", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Wheat_Fields_Tile {
             get {
                 object obj = ResourceManager.GetObject("Wheat_Fields_Tile", resourceCulture);
@@ -366,6 +406,16 @@ namespace SettlersOfCatan.Properties {
         internal static System.Drawing.Bitmap Wood_Icon {
             get {
                 object obj = ResourceManager.GetObject("Wood_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap year_of_plenty_card {
+            get {
+                object obj = ResourceManager.GetObject("year_of_plenty_card", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

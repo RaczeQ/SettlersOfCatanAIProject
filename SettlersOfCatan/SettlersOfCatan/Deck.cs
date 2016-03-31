@@ -28,6 +28,11 @@ namespace SettlersOfCatan
             cardsInDeck.Add(c);
         }
 
+        public int cardCount()
+        {
+            return cardsInDeck.Count();
+        }
+
         /*
 
             Draw a card from the top of the deck. (last index)

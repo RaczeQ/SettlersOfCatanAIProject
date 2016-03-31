@@ -50,6 +50,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bank.cs" />
+    <Compile Include="DevelopmentCard.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\Board.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -68,7 +72,6 @@
     <Compile Include="NumberChip.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Player.cs" />
     <Compile Include="PlayerInfoPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -293,6 +296,31 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\LongestRoad.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\knight_card.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\monopoly_card.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\road_building_card.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\victory_point_card.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\year_of_plenty_card.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
