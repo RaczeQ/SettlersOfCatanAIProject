@@ -18,7 +18,7 @@ namespace SettlersOfCatan
     {
         public static Bank TheBank = new Bank();
 
-        public enum GameState {  Setup, PlayerTurn};
+        public enum GameState {  Setup, DiceRoll, TieBreaker, PlayerOrder, FirstSettlement, PlayerTurn};
         public enum ResourceType { Wood=0, Brick, Ore, Wheat, Sheep, Desert};
         public String[] RESOURCE_NAMES = { "Wood", "Brick", "Ore", "Wheat", "Sheep", "NoResource" };
         public static String[] TILE_NAMES = { "Forest", "Hills", "Mountains", "Farms", "Fields", "Desert" };
@@ -51,9 +51,14 @@ namespace SettlersOfCatan
         //This variable is used to determine how many pixels tall the triangle of a terrain tile is.
         public static int TILE_TRIANGLE_HEIGHT = 35;
 
-        Player[] players;
+        Player[] playerPanels;
+        Player[] playerOrder;
+        public Player firstPlayer;
+        int[] playerRolls = new int[4];
         public Player currentPlayer;
         public static GameState currentGameState;
+
+
         public Board()
         {
             InitializeComponent();
@@ -68,23 +73,29 @@ namespace SettlersOfCatan
                 tileImages[i] = new Bitmap("Resources/" + tileImageResourceNames[i]);
             }
             //Set up player objects and initial player order
-            players = new Player[4];
-            players[0] = playerInfoPanel1;
-            players[1] = playerInfoPanel2;
-            players[2] = playerInfoPanel3;
-            players[3] = playerInfoPanel4;
-            for (int i = 0; i < players.Count(); i ++)
+            playerOrder = new Player[4];
+            playerPanels = new Player[4];
+            playerPanels[0] = playerInfoPanel1;
+            playerPanels[1] = playerInfoPanel2;
+            playerPanels[2] = playerInfoPanel3;
+            playerPanels[3] = playerInfoPanel4;
+            for (int i = 0; i < playerPanels.Count(); i ++)
             {
-                players[i].giveResource(new ResourceCard(ResourceType.Brick));
-                players[i].giveResource(new ResourceCard(ResourceType.Wood));
-                players[i].setPlayerNumber(i);
+                playerPanels[i].giveResource(new ResourceCard(ResourceType.Brick));
+                playerPanels[i].giveResource(new ResourceCard(ResourceType.Wood));
+                playerPanels[i].setPlayerNumber(i);
 
             }
-            currentPlayer = players[0];
+            currentPlayer = playerPanels[0];
 
             currentGameState = GameState.Setup;
 
             distributeTiles();
+
+            //Add the update event to all applicable controls
+            boardUpdate(this, new EventArgs());
+            this.dice.Click += boardUpdate;
+
         }
 
         public void distributeTiles()
@@ -297,21 +308,128 @@ namespace SettlersOfCatan
         }
 
         /*
-            Controls the player setup process.
+            This function controls the flow of the game.
+            Any control that changes the state of the game has this function added to it's click event.
          */
-        public void playerSetupUpdate()
+        public void boardUpdate(Object sender, EventArgs e)
         {
-            /*
-                Dice Roll
-             */
+            //MessageBox.Show(sender.GetType().ToString());
+            switch (currentGameState)
+            {
+                case GameState.Setup:
+                    addEventText("Welcome to the world of Catan!");
+                    currentGameState = GameState.DiceRoll;
+                    break;
+                case GameState.DiceRoll:
+                    //This will only be executed if the sending object is dice.
+                    if (sender is Dice)
+                    {
+                        Player p = this.currentPlayer;
+                        //Cast the sender object as dice.
+                        int roll = ((Dice)sender).getRollValue();
+                        addEventText(p.getPlayerName() + " rolled a " + roll + ".");
+                        //Check if the last roll (previous player's roll) is less than the current. (first will always be greater).
+                        this.playerRolls[p.getPlayerNumber()] = roll;
+                        //If the current player is the last player in the list.
+                        if (currentPlayer.getPlayerNumber() >= playerPanels.Count()-1)
+                        {
+                            //Check for a tie
+                            bool matchedHigh = false;
+                            int high = 0;
+                            for (int i = 0; i < playerOrder.Count(); i ++)
+                            {
+                                //Pick the greater number.
+                                if (high == playerRolls[i])
+                                {
+                                    matchedHigh = true;
+                                } else if (high < playerRolls[i])
+                                {
+                                    matchedHigh = false;
+                                    high = playerRolls[i];
+                                }
+                            }
+                            if (matchedHigh == true)
+                            {
+                                addEventText("There was a tie between: ");
+                                //We have a tie here!
+                                currentGameState = GameState.PlayerOrder;
+                                //What players roll to break the tie?
+                                int ct = 0;
+                                for (int i = 0; i < playerOrder.Count(); i ++ )
+                                {
+                                    //Get the players with rolls equal to high
+                                    if (playerRolls[i] == high)
+                                    {
+                                        addEventText(playerPanels[i].getPlayerName() + "");
+                                        ct++;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                //All is good carry on.
+                                currentGameState = GameState.PlayerOrder;
+                            }
 
-            /*
-                Settlement and road process
-             */
+                            boardUpdate(sender, e);
+                            break;
+                        }
 
-            /*
-                First resource gather process.
-             */
+                        currentPlayer = playerPanels[p.getPlayerNumber() + 1];
+                    }
+                    break;
+                case GameState.TieBreaker:
+
+                    break;
+                case GameState.PlayerOrder:
+                    //Determine the winner of the roll.
+                    int highn = 0;
+                    for (int i = 0; i < playerOrder.Count(); i ++ )
+                    {
+                        if (highn < playerRolls[i])
+                        {
+                            highn = playerRolls[i];
+                            playerOrder[0] = playerPanels[i];
+                        }
+                    }
+                    addEventText(playerOrder[0].getPlayerName() + " won the roll and is the first player.");
+                    this.firstPlayer = playerOrder[0];
+                    //Add players to turn order...
+                    //Add the remainder of the players in order to the list.
+                    int fp = playerOrder[0].getPlayerNumber();
+
+                    for (int i = 0; i < playerOrder.Count(); i++)
+                    {
+                        playerOrder[i] = playerPanels[fp];
+                        addEventText("Player " + i + ": " + playerPanels[fp].getPlayerName());
+                        fp++;
+                        if (fp == playerOrder.Count())
+                        {
+                            fp = 0;
+                        }
+                    }
+                    //Move to the next setup state.
+                    firstPlayer.setTurn(true);
+                    addEventText(playerOrder[0].getPlayerName() + " please place your first settlement.");
+                    currentGameState = GameState.FirstSettlement;
+                    break;
+                case GameState.FirstSettlement:
+                    //Allow each player to place a settlement
+                    break;
+                case GameState.PlayerTurn:
+                    break;
+            }
+            if (currentGameState == GameState.Setup)
+            {
+
+                /*
+                    Settlement and road process
+                 */
+
+                /*
+                    First resource gather process.
+                 */
+            }
         }
 
         /**
@@ -439,6 +557,16 @@ namespace SettlersOfCatan
         public void hideDevelopmentCardToolTip(object sender, EventArgs s)
         {
             this.pnlDevelopmentCardToolTip.Visible = false;
+        }
+
+        /**
+            Adds the text to the events list box and scrolls it to the bottom, then hides the blue highlight bar.
+         */
+        public void addEventText(String text)
+        {
+            this.lstGameEvents.Items.Add(text);
+            this.lstGameEvents.SelectedIndex = this.lstGameEvents.Items.Count - 1;
+            this.lstGameEvents.SelectedIndex =  -1;
         }
     }
 }

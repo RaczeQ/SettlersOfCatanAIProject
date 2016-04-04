@@ -33,6 +33,7 @@ namespace SettlersOfCatan
         {
             this.setPlayerColor(playerColors[number]);
             this.setPlayerName(playerColorNames[number]);
+            this.playerNumber = number;
         }
 
         public void giveDevelopmentCard(DevelopmentCard card)
@@ -126,7 +127,15 @@ namespace SettlersOfCatan
             return playerColors[playerNumber];
         }
 
+        public int getPlayerNumber()
+        {
+            return this.playerNumber;
+        }
 
+        public String getPlayerName()
+        {
+            return playerColorNames[this.playerNumber];
+        }
         private String wheatCount = "0";
         private String sheepCount = "0";
         private String woodCount = "0";

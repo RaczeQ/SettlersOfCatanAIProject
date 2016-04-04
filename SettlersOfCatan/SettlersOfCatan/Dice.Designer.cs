@@ -44,7 +44,7 @@
             this.pbYellowDie.Size = new System.Drawing.Size(64, 64);
             this.pbYellowDie.TabIndex = 0;
             this.pbYellowDie.TabStop = false;
-            this.pbYellowDie.Click += new System.EventHandler(this.Dice_Click);
+            this.pbYellowDie.Click += new System.EventHandler(this.childClicked);
             // 
             // pbRedDie
             // 
@@ -54,7 +54,7 @@
             this.pbRedDie.Size = new System.Drawing.Size(64, 64);
             this.pbRedDie.TabIndex = 0;
             this.pbRedDie.TabStop = false;
-            this.pbRedDie.Click += new System.EventHandler(this.Dice_Click);
+            this.pbRedDie.Click += new System.EventHandler(this.childClicked);
             // 
             // lblInstructions
             // 
@@ -64,6 +64,7 @@
             this.lblInstructions.Size = new System.Drawing.Size(63, 13);
             this.lblInstructions.TabIndex = 1;
             this.lblInstructions.Text = "Click to Roll";
+            this.lblInstructions.Click += new System.EventHandler(this.childClicked);
             // 
             // lblRollValue
             // 
@@ -74,6 +75,7 @@
             this.lblRollValue.Size = new System.Drawing.Size(18, 18);
             this.lblRollValue.TabIndex = 2;
             this.lblRollValue.Text = "2";
+            this.lblRollValue.Click += new System.EventHandler(this.childClicked);
             // 
             // Dice
             // 
@@ -86,8 +88,8 @@
             this.Name = "Dice";
             this.Size = new System.Drawing.Size(142, 118);
             this.Load += new System.EventHandler(this.Dice_Load);
-            this.Click += new System.EventHandler(this.Dice_Click);
             this.EnabledChanged += new System.EventHandler(this.Dice_Enable);
+            this.Click += new System.EventHandler(this.Dice_Click);
             ((System.ComponentModel.ISupportInitialize)(this.pbYellowDie)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbRedDie)).EndInit();
             this.ResumeLayout(false);

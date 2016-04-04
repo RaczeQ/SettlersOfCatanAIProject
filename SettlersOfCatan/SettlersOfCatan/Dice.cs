@@ -28,6 +28,7 @@ namespace SettlersOfCatan
         private int diceValue1 = 0;
         private int diceValue2 = 0;
         private Random diceRandomizer;
+        private int lastRollValue = 0;
 
         /*
             Gives a realistic dice value by generating two random numbers and adding them.
@@ -35,6 +36,7 @@ namespace SettlersOfCatan
          */
         public int roll()
         {
+            lastRollValue = getRollValue();
             diceValue1 = diceRandomizer.Next(1, 7);
             diceValue2 = diceRandomizer.Next(1, 7);
             return diceValue1 + diceValue2;
@@ -45,11 +47,21 @@ namespace SettlersOfCatan
             return diceValue1 + diceValue2;
         }
 
+        public int getLastRollValue()
+        {
+            return lastRollValue;
+        }
+
         private void Dice_Enable(object sender, EventArgs e)
         {
             this.lblInstructions.Visible = this.Enabled;
             this.pbRedDie.Visible = this.Enabled;
             this.pbYellowDie.Visible = this.Enabled;
+        }
+
+        private void childClicked(object sender, EventArgs e)
+        {
+            this.OnClick(e);
         }
 
         private void Dice_Click(object sender, EventArgs e)
