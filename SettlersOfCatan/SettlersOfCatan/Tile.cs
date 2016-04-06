@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace SettlersOfCatan
 {
-    public class Tile : PictureBox, Card
+    public abstract class Tile : PictureBox, Card
     {
         public int index = 0;
 
@@ -26,6 +26,8 @@ namespace SettlersOfCatan
         {
 //            base.OnPaint(pe);
         }
+
+        public abstract string toString();
     }
 
     /**
@@ -62,6 +64,28 @@ namespace SettlersOfCatan
             this.Controls.Add(chip);
         }
 
+        public void distributeResource()
+        {
+            if (tileType != Board.ResourceType.Desert)
+            {
+                foreach (Settlement set in adjascentSettlements)
+                {
+                    if (set.getOwningPlayer() != null)
+                    {
+                        ResourceCard rc = Board.TheBank.giveResource(tileType);
+                        if (rc != null)
+                        {
+                            set.getOwningPlayer().giveResource(rc);
+                        }
+                        else
+                        {
+                            MessageBox.Show("No more resources to give!");
+                        }
+                    }
+                }
+            }
+        }
+
         public int getGatherChance()
         {
             return gatherChance;
@@ -86,6 +110,22 @@ namespace SettlersOfCatan
         {
             return this.numberChip.isBlocked();
         }
+
+        public override String toString()
+        {
+            String str = "Terrain Tile ID: " + index + " Settlements: ( ";
+            foreach (Settlement s in adjascentSettlements)
+            {
+                str += s.id + ", ";
+            }
+            str += ") Roads: ( ";
+            foreach (Road r in adjascentRoads)
+            {
+                str += r.id + ", ";
+            }
+            str += " )";
+            return str;
+        }
     }
 
     /**
@@ -99,6 +139,11 @@ namespace SettlersOfCatan
             this.BackgroundImage = new Bitmap("Resources/Ocean.png");
             this.Size = BackgroundImage.Size;
             this.BackColor = Color.Transparent;
+        }
+
+        public override string toString()
+        {
+            return "";
         }
     }
 }

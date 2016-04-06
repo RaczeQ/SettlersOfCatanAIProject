@@ -10,10 +10,10 @@ namespace SettlersOfCatan
 {
     public class Road : PictureBox
     {
-        public int id;
+        public int id = 0;
         public Point position;
 
-        List<Settlement> connectedSettlements=new List<Settlement>();
+        List<Settlement> connectedSettlements = new List<Settlement>();
 
         private Player owningPlayer;
 
@@ -30,6 +30,17 @@ namespace SettlersOfCatan
         public Player getOwningPlayer()
         {
             return this.owningPlayer;
+        }
+
+        public String toString()
+        {
+            String str = "Road ID: " + this.id + " Connected Settlements: (";
+            foreach (Settlement r in connectedSettlements)
+            {
+                str += "Settlement ID: " + r.id + ", ";
+            }
+            str += " )";
+            return str;
         }
 
 

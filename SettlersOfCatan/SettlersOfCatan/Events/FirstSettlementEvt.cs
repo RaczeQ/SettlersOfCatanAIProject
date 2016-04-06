@@ -69,7 +69,6 @@ namespace SettlersOfCatan.Events
             bool firstPass = !(playerNum+1>theBoard.playerPanels.Count());
             //Determine what player is placing the settlement || road.
             Player p = theBoard.playerOrder[playerTurnOrder[playerNum]];
-
             //Determine what the player is trying to do.
             if (sender is Settlement)
             {
@@ -83,7 +82,7 @@ namespace SettlersOfCatan.Events
                     }
                 } else
                 {
-                    theBoard.addEventText("You have already built your settlement.");
+                    theBoard.addEventText("You may not place any more roads.");
                 }
             }
             else if (sender is Road)
@@ -98,7 +97,7 @@ namespace SettlersOfCatan.Events
                     }
                 } else
                 {
-                    theBoard.addEventText("You have already built your road.");
+                    theBoard.addEventText("You may not place any more settlements.");
                 }
             } else
             {
@@ -115,8 +114,9 @@ namespace SettlersOfCatan.Events
                     endExecution();
                 } else
                 {
+                    firstPass = !(playerNum + 1 > theBoard.playerPanels.Count());
                     theBoard.addEventText("Player " + theBoard.playerOrder[playerTurnOrder[playerNum]].getPlayerName() 
-                        + " please place your " + (!firstPass? "first" : "second" ) + " settlement and road.");
+                        + " please place your " + (firstPass? "first" : "second" ) + " settlement and road.");
                 }
             }
 
@@ -132,6 +132,8 @@ namespace SettlersOfCatan.Events
             {
                 st.Click -= executeUpdate;
             }
+
+            theBoard.eventEnded();
 
         }
 

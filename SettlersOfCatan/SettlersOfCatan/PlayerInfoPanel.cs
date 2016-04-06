@@ -144,6 +144,7 @@ namespace SettlersOfCatan
         {
             this.resources.Add(resCard);
             updateResourceGUI();
+            //MessageBox.Show("Player " + this.getPlayerName() + " got " + Board.RESOURCE_NAMES[(int)resCard.getResourceType()] + ".");
         }
 
         public Color getPlayerColor()

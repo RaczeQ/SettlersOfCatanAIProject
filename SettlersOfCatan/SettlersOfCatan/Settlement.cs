@@ -27,6 +27,16 @@ namespace SettlersOfCatan
             Size = new Size(12, 12);
         }
 
+        public String toString()
+        {
+            String str = "Settlement ID: " + this.id + " Connected Roads: (";
+            foreach (Road r in connectedRoads)
+            {
+                str += "Road ID: " + r.id + ", "; 
+            }
+            str += " )";
+            return str;
+        }
 
         public Player getOwningPlayer()
         {
@@ -65,22 +75,23 @@ namespace SettlersOfCatan
          */
         private bool checkForOtherSettlement()
         {
-            MessageBox.Show(connectedRoads.Count() + "");
+            bool allow = true;
             foreach (Road cRoad in connectedRoads)
             {
                 foreach(Settlement cSet in cRoad.getConnectedSettlements())
                 {
-                    MessageBox.Show("Hello?");
                     if (cSet != this)
                     {
-                        if (cSet.owningPlayer == null)
+                        if (cSet.owningPlayer != null)
                         {
-                            return true;
+
+                            //MessageBox.Show("There is no player at the location!")
+                            allow = false;
                         }
                     }
                 }
             }
-            return false;
+            return allow;
         }
 
         private bool playerHasRequiredSetResources(Player p)

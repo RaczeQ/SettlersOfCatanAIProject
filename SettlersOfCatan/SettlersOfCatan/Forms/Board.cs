@@ -19,16 +19,16 @@ namespace SettlersOfCatan
         public static Bank TheBank = new Bank();
 
         public enum ResourceType { Wood=0, Brick, Ore, Wheat, Sheep, Desert};
-        public String[] RESOURCE_NAMES = { "Wood", "Brick", "Ore", "Wheat", "Sheep", "NoResource" };
+        public static String[] RESOURCE_NAMES = { "Wood", "Brick", "Ore", "Wheat", "Sheep", "NoResource" };
         public static String[] TILE_NAMES = { "Forest", "Hills", "Mountains", "Farms", "Fields", "Desert" };
         public Bitmap[] tileImages = new Bitmap[6];
         public String[] tileImageResourceNames = { "Forest_Tile.png", "Hills_Tile.png", "Mountain_Tile.png", "Wheat_Fields_Tile.png", "Pasture_Tile.png", "Desert_Tile.png" };
 
         //Keeps track of what tile indexes are ocean borders for later use.
-        int[] oceanBorderInds = { 0, 1, 2, 3, 4, 8, 9, 14, 15, 21, 22, 27, 28, 32, 33, 34, 35, 36 };
+        private int[] oceanBorderInds = { 0, 1, 2, 3, 4, 8, 9, 14, 15, 21, 22, 27, 28, 32, 33, 34, 35, 36 };
         String[] tileFileNames = { "Rock.png", "Wood.png" };
-        Random rand = new Random();
-        Tile[] boardTiles = new Tile[BOARD_TILE_COUNT];
+        private Random rand = new Random();
+        public Tile[] boardTiles = new Tile[BOARD_TILE_COUNT];
         public List<Road> roadLocations = new List<Road>();
         public List<Settlement> settlementLocations = new List<Settlement>();
         //This is the distribution of terrain resources for a four player game.
@@ -54,7 +54,7 @@ namespace SettlersOfCatan
         public Player[] playerOrder; //The players in the order of first player.
         public Player firstPlayer;
         public Player currentPlayer;
-        public enum GameState { Setup, FirstDiceRoll, FirstSettlement, PlayerTurn };
+        public enum GameState { Setup, FirstDiceRoll, FirstSettlement, FirstResources, PlayerTurn };
         public static Event currentGameEvent;
         public GameState currentGameState;
 
@@ -80,10 +80,7 @@ namespace SettlersOfCatan
             playerPanels[3] = playerInfoPanel4;
             for (int i = 0; i < playerPanels.Count(); i ++)
             {
-                playerPanels[i].giveResource(new ResourceCard(ResourceType.Brick));
-                playerPanels[i].giveResource(new ResourceCard(ResourceType.Wood));
                 playerPanels[i].setPlayerNumber(i);
-
             }
             currentPlayer = playerPanels[0];
 
@@ -110,8 +107,18 @@ namespace SettlersOfCatan
                         }
                     }
                     addEventText("First roads and settlements setup.");
+                    currentGameState = GameState.FirstSettlement;
                     currentGameEvent = new FirstSettlementEvt();
                     currentGameEvent.beginExecution(this);
+                    break;
+                case GameState.FirstSettlement:
+                    //We are finished placing settlements
+                    currentGameState = GameState.FirstResources;
+                    currentGameEvent = new DistributeResourcesEvt();
+                    currentGameEvent.beginExecution(this);
+                    break;
+                case GameState.FirstResources:
+                    //We can finally move to the gameplay loop.
                     break;
             }
         }
@@ -256,17 +263,18 @@ namespace SettlersOfCatan
                     settlementPoints[4] = new Point(position.X + (SPACING / 2), position.Y + SPACING);
                     settlementPoints[5] = new Point(position.X, position.Y + SPACING - TILE_TRIANGLE_HEIGHT);
 
-                    for (int ind= 0;ind < 6;ind++)
+                    foreach (Point setPoint in settlementPoints)
                     {
                         //We check if this settlement location has already been created.
-                        Settlement settlementLocation = findSettlementWithPosition(settlementPoints[ind]);
+                        Settlement settlementLocation = findSettlementWithPosition(setPoint);
+                        //If not already created we need to make a new location
                         if (settlementLocation == null)
                         {
-                            settlementLocation = new Settlement(settlementPoints[ind], i);
-                            settlementLocations.Add(settlementLocation);
+                            settlementLocation = new Settlement(setPoint, 0);
                             settlementLocation.MouseEnter += showSettlementBuildToolTip;
                             settlementLocation.MouseLeave += hideSettlementBuildToolTip;
                             settlementLocation.id = settlementLocations.Count;
+                            settlementLocations.Add(settlementLocation);
                             pnlBoardArea.Controls.Add(settlementLocation);
                             settlementLocation.BringToFront();
                         }
@@ -288,7 +296,7 @@ namespace SettlersOfCatan
                         Road roadLocation = findRoadWithPosition(roadPoint);
                         if (roadLocation == null)
                         {
-                            roadLocation = new Road(roadPoint, i);
+                            roadLocation = new Road(roadPoint, 0);
                             pnlBoardArea.Controls.Add(roadLocation);
                             roadLocation.MouseEnter += showRoadBuildToolTip;
                             roadLocation.MouseLeave += hideRoadBuildToolTip;
@@ -325,9 +333,39 @@ namespace SettlersOfCatan
                     }
                 }
             }
+        }
 
+        public void debugSaveBoardData()
+        {
             MessageBox.Show(this.settlementLocations.Count() + "");
             MessageBox.Show(this.roadLocations.Count() + "");
+            try
+            {
+                StreamWriter write = new StreamWriter("datastructure.txt");
+                write.WriteLine("Tiles: ");
+                foreach (Tile t in boardTiles) 
+                {
+                    if (t is TerrainTile)
+                    {
+                        write.WriteLine(t.toString());
+                    }
+                }
+                write.WriteLine("Settlements: ");
+                foreach (Settlement s in settlementLocations)
+                {
+                    write.WriteLine(s.toString());
+                }
+                write.WriteLine("Roads: ");
+                foreach (Road s in roadLocations)
+                {
+                    write.WriteLine(s.toString());
+                }
+                write.Close();
+            }
+            catch (IOException e)
+            {
+                MessageBox.Show("There was an I/O issue.");
+            }
         }
 
         /**
@@ -450,6 +488,7 @@ namespace SettlersOfCatan
         private void btnSetupBoard_Click(object sender, EventArgs e)
         {
             distributeTiles();
+            //debugSaveBoardData();
             this.btnSetupBoard.Hide();
             this.currentGameState = GameState.FirstDiceRoll;
             currentGameEvent = new FirstPlayerEvt();
