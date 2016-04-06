@@ -55,6 +55,49 @@ namespace SettlersOfCatan
             return false;
         }
 
+        private bool upgrade(Player currentPlayer)
+        {
+            return false;
+        }
+
+        /**
+            Only returns true if no settlement is within 1 location of this settlement.
+         */
+        private bool checkForOtherSettlement()
+        {
+            MessageBox.Show(connectedRoads.Count() + "");
+            foreach (Road cRoad in connectedRoads)
+            {
+                foreach(Settlement cSet in cRoad.getConnectedSettlements())
+                {
+                    MessageBox.Show("Hello?");
+                    if (cSet != this)
+                    {
+                        if (cSet.owningPlayer == null)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        private bool playerHasRequiredSetResources(Player p)
+        {
+            return (p.getResourceCount(Board.ResourceType.Brick) > 0 &&
+                p.getResourceCount(Board.ResourceType.Wood) > 0 &&
+                p.getResourceCount(Board.ResourceType.Wheat) > 0 &&
+                p.getResourceCount(Board.ResourceType.Sheep) > 0);
+        }
+
+        private bool playerHasRequiredCityResources(Player p)
+        {
+            return (
+                p.getResourceCount(Board.ResourceType.Wheat) > 1 &&
+                p.getResourceCount(Board.ResourceType.Ore) > 2
+                );
+        }
         /*
             Conditions must apply: 
             no other player's settlement must be present at this location or, within 1 road's distance.
@@ -62,16 +105,69 @@ namespace SettlersOfCatan
             must have required resources: Brick, Wood, Wheat, Sheep
 
          */
-        public bool buildRoad(Player currentPlayer)
+        public bool buildSettlement(Player currentPlayer, bool takeResources)
         {
             if (owningPlayer == null)
             {
                 //Build settlement
+                //Check if there is another city within 1 spot!+
+                if (playerHasRequiredSetResources(currentPlayer) && takeResources || !takeResources)
+                {
+                    if (checkForOtherSettlement())
+                    {
+                        this.owningPlayer = currentPlayer;
+                        this.BackColor = owningPlayer.getPlayerColor();
+                        return true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("You cannot build here. This location is too close to another settlement.");
+                        return false;
+                    }
+                } else
+                {
+                    MessageBox.Show("You do not have the required resources to build a settlement.");
+                    return false;
+                }
             } else
             {
                 //Upgrade the settlement to city
+                if (currentPlayer == owningPlayer)
+                {
+                    //We upgrade
+                    if (takeResources)
+                    {
+                        //Upgrade the settlement
+                        if (!isCity)
+                        {
+                            if (playerHasRequiredCityResources(currentPlayer))
+                            {
+                                this.isCity = true;
+                                return true;
+                            } else
+                            {
+                                MessageBox.Show("You do not have the required resources to upgrade this settlement.");
+                                return false;
+                            }
+                        } else
+                        {
+                            MessageBox.Show("You cannot upgrade a city any further.");
+                            return false;
+                        }
+                    } else
+                    {
+                        //Do not upgrade the settlement
+                        MessageBox.Show("You cannot build a settlement on top of another settlement.");
+                        return false;
+                    }
+                    
+                } else
+                {
+                    //We don't upgrade
+                    MessageBox.Show("Player " + owningPlayer.getPlayerName() + " already has a settlement here.");
+                    return false;
+                }
             }
-            return false;
         }
     }
 }

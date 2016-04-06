@@ -41,9 +41,10 @@
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.btnTrade = new System.Windows.Forms.Button();
+            this.btnBankTrade = new System.Windows.Forms.Button();
+            this.btnEndTurn = new System.Windows.Forms.Button();
+            this.btnPlayerTrade = new System.Windows.Forms.Button();
+            this.dice = new SettlersOfCatan.Dice();
             this.pbBuildDevelopmentCard = new System.Windows.Forms.PictureBox();
             this.pnlDevelopmentCardToolTip = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
@@ -53,13 +54,13 @@
             this.pictureBox8 = new System.Windows.Forms.PictureBox();
             this.pictureBox9 = new System.Windows.Forms.PictureBox();
             this.pnlGameInfo = new System.Windows.Forms.Panel();
-            this.lstGameEvents = new System.Windows.Forms.ListBox();
             this.playerInfoPanel4 = new SettlersOfCatan.Player();
             this.playerInfoPanel3 = new SettlersOfCatan.Player();
             this.playerInfoPanel2 = new SettlersOfCatan.Player();
             this.playerInfoPanel1 = new SettlersOfCatan.Player();
-            this.dice = new SettlersOfCatan.Dice();
+            this.lstGameEvents = new System.Windows.Forms.ListBox();
             this.pnlBoardArea = new SettlersOfCatan.TransparencyFix.BoardArea();
+            this.btnSetupBoard = new System.Windows.Forms.Button();
             this.pnlRoadToolTip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -202,9 +203,10 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
-            this.groupBox1.Controls.Add(this.button1);
-            this.groupBox1.Controls.Add(this.button2);
-            this.groupBox1.Controls.Add(this.btnTrade);
+            this.groupBox1.Controls.Add(this.btnSetupBoard);
+            this.groupBox1.Controls.Add(this.btnBankTrade);
+            this.groupBox1.Controls.Add(this.btnEndTurn);
+            this.groupBox1.Controls.Add(this.btnPlayerTrade);
             this.groupBox1.Controls.Add(this.dice);
             this.groupBox1.Controls.Add(this.pbBuildDevelopmentCard);
             this.groupBox1.Location = new System.Drawing.Point(12, 585);
@@ -214,32 +216,39 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox1";
             // 
-            // button1
+            // btnBankTrade
             // 
-            this.button1.Location = new System.Drawing.Point(78, 63);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(122, 23);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "Trade With Bank";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnBankTrade.Location = new System.Drawing.Point(78, 63);
+            this.btnBankTrade.Name = "btnBankTrade";
+            this.btnBankTrade.Size = new System.Drawing.Size(122, 23);
+            this.btnBankTrade.TabIndex = 8;
+            this.btnBankTrade.Text = "Trade With Bank";
+            this.btnBankTrade.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // btnEndTurn
             // 
-            this.button2.Location = new System.Drawing.Point(78, 97);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(122, 23);
-            this.button2.TabIndex = 7;
-            this.button2.Text = "End Turn";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnEndTurn.Location = new System.Drawing.Point(78, 97);
+            this.btnEndTurn.Name = "btnEndTurn";
+            this.btnEndTurn.Size = new System.Drawing.Size(122, 23);
+            this.btnEndTurn.TabIndex = 7;
+            this.btnEndTurn.Text = "End Turn";
+            this.btnEndTurn.UseVisualStyleBackColor = true;
             // 
-            // btnTrade
+            // btnPlayerTrade
             // 
-            this.btnTrade.Location = new System.Drawing.Point(78, 29);
-            this.btnTrade.Name = "btnTrade";
-            this.btnTrade.Size = new System.Drawing.Size(122, 23);
-            this.btnTrade.TabIndex = 6;
-            this.btnTrade.Text = "Trade WIth Player";
-            this.btnTrade.UseVisualStyleBackColor = true;
+            this.btnPlayerTrade.Location = new System.Drawing.Point(78, 29);
+            this.btnPlayerTrade.Name = "btnPlayerTrade";
+            this.btnPlayerTrade.Size = new System.Drawing.Size(122, 23);
+            this.btnPlayerTrade.TabIndex = 6;
+            this.btnPlayerTrade.Text = "Trade WIth Player";
+            this.btnPlayerTrade.UseVisualStyleBackColor = true;
+            // 
+            // dice
+            // 
+            this.dice.Location = new System.Drawing.Point(317, 14);
+            this.dice.Name = "dice";
+            this.dice.Size = new System.Drawing.Size(142, 118);
+            this.dice.TabIndex = 5;
             // 
             // pbBuildDevelopmentCard
             // 
@@ -339,17 +348,6 @@
             this.pnlGameInfo.Size = new System.Drawing.Size(286, 736);
             this.pnlGameInfo.TabIndex = 5;
             // 
-            // lstGameEvents
-            // 
-            this.lstGameEvents.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lstGameEvents.FormattingEnabled = true;
-            this.lstGameEvents.Location = new System.Drawing.Point(484, 588);
-            this.lstGameEvents.Name = "lstGameEvents";
-            this.lstGameEvents.ScrollAlwaysVisible = true;
-            this.lstGameEvents.Size = new System.Drawing.Size(519, 134);
-            this.lstGameEvents.TabIndex = 6;
-            // 
             // playerInfoPanel4
             // 
             this.playerInfoPanel4.BackColor = System.Drawing.SystemColors.Control;
@@ -382,12 +380,16 @@
             this.playerInfoPanel1.Size = new System.Drawing.Size(251, 244);
             this.playerInfoPanel1.TabIndex = 0;
             // 
-            // dice
+            // lstGameEvents
             // 
-            this.dice.Location = new System.Drawing.Point(317, 14);
-            this.dice.Name = "dice";
-            this.dice.Size = new System.Drawing.Size(142, 118);
-            this.dice.TabIndex = 5;
+            this.lstGameEvents.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lstGameEvents.FormattingEnabled = true;
+            this.lstGameEvents.Location = new System.Drawing.Point(484, 588);
+            this.lstGameEvents.Name = "lstGameEvents";
+            this.lstGameEvents.ScrollAlwaysVisible = true;
+            this.lstGameEvents.Size = new System.Drawing.Size(519, 134);
+            this.lstGameEvents.TabIndex = 6;
             // 
             // pnlBoardArea
             // 
@@ -402,6 +404,16 @@
             this.pnlBoardArea.Name = "pnlBoardArea";
             this.pnlBoardArea.Size = new System.Drawing.Size(1005, 580);
             this.pnlBoardArea.TabIndex = 0;
+            // 
+            // btnSetupBoard
+            // 
+            this.btnSetupBoard.Location = new System.Drawing.Point(206, 29);
+            this.btnSetupBoard.Name = "btnSetupBoard";
+            this.btnSetupBoard.Size = new System.Drawing.Size(104, 23);
+            this.btnSetupBoard.TabIndex = 9;
+            this.btnSetupBoard.Text = "Set Up Board";
+            this.btnSetupBoard.UseVisualStyleBackColor = true;
+            this.btnSetupBoard.Click += new System.EventHandler(this.btnSetupBoard_Click);
             // 
             // Board
             // 
@@ -455,7 +467,6 @@
         private System.Windows.Forms.PictureBox pictureBox5;
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.PictureBox pictureBox6;
-        private System.Windows.Forms.PictureBox pbBuildDevelopmentCard;
         private System.Windows.Forms.GroupBox groupBox1;
         public System.Windows.Forms.Panel pnlDevelopmentCardToolTip;
         private System.Windows.Forms.Label label6;
@@ -470,11 +481,13 @@
         private Player playerInfoPanel3;
         private Player playerInfoPanel2;
         private Player playerInfoPanel1;
-        private Dice dice;
         private System.Windows.Forms.ListBox lstGameEvents;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button btnTrade;
+        public System.Windows.Forms.Button btnBankTrade;
+        public System.Windows.Forms.Button btnEndTurn;
+        public System.Windows.Forms.Button btnPlayerTrade;
+        public Dice dice;
+        public System.Windows.Forms.PictureBox pbBuildDevelopmentCard;
+        private System.Windows.Forms.Button btnSetupBoard;
     }
 }
 

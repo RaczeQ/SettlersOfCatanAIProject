@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
-
+using SettlersOfCatan.Events;
 using System.Reflection;
 using System.IO;
 
@@ -18,7 +18,6 @@ namespace SettlersOfCatan
     {
         public static Bank TheBank = new Bank();
 
-        public enum GameState {  Setup, DiceRoll, TieBreaker, PlayerOrder, FirstSettlement, PlayerTurn};
         public enum ResourceType { Wood=0, Brick, Ore, Wheat, Sheep, Desert};
         public String[] RESOURCE_NAMES = { "Wood", "Brick", "Ore", "Wheat", "Sheep", "NoResource" };
         public static String[] TILE_NAMES = { "Forest", "Hills", "Mountains", "Farms", "Fields", "Desert" };
@@ -30,8 +29,8 @@ namespace SettlersOfCatan
         String[] tileFileNames = { "Rock.png", "Wood.png" };
         Random rand = new Random();
         Tile[] boardTiles = new Tile[BOARD_TILE_COUNT];
-        List<Road> roadLocations = new List<Road>();
-        List<Settlement> settlementLocations = new List<Settlement>();
+        public List<Road> roadLocations = new List<Road>();
+        public List<Settlement> settlementLocations = new List<Settlement>();
         //This is the distribution of terrain resources for a four player game.
         public static Board.ResourceType[] fourPlayerTiles = 
             {
@@ -51,13 +50,13 @@ namespace SettlersOfCatan
         //This variable is used to determine how many pixels tall the triangle of a terrain tile is.
         public static int TILE_TRIANGLE_HEIGHT = 35;
 
-        Player[] playerPanels;
-        Player[] playerOrder;
+        public Player[] playerPanels; //A list of the player panels in the original order.
+        public Player[] playerOrder; //The players in the order of first player.
         public Player firstPlayer;
-        int[] playerRolls = new int[4];
         public Player currentPlayer;
-        public static GameState currentGameState;
-
+        public enum GameState { Setup, FirstDiceRoll, FirstSettlement, PlayerTurn };
+        public static Event currentGameEvent;
+        public GameState currentGameState;
 
         public Board()
         {
@@ -88,16 +87,38 @@ namespace SettlersOfCatan
             }
             currentPlayer = playerPanels[0];
 
-            currentGameState = GameState.Setup;
-
-            distributeTiles();
-
-            //Add the update event to all applicable controls
-            boardUpdate(this, new EventArgs());
-            this.dice.Click += boardUpdate;
+            addEventText("Welcome to catan. When you are ready, click on Set Up Board to begin.");
 
         }
+        //Runs when an event has sucessfully resolved.
+        public void eventEnded()
+        {
+            switch (this.currentGameState)
+            {
+                case GameState.FirstDiceRoll:
+                    //Move to the next stage
 
+                    //Re order the players so the firstPlayer is the first item in the playerOrder list.
+                    int fp = firstPlayer.getPlayerNumber();
+                    for (int i = 0; i < playerOrder.Count(); i ++ )
+                    {
+                        playerOrder[i] = playerPanels[fp];
+                        fp++;
+                        if (fp == playerPanels.Count())
+                        {
+                            fp = 0;
+                        }
+                    }
+                    addEventText("First roads and settlements setup.");
+                    currentGameEvent = new FirstSettlementEvt();
+                    currentGameEvent.beginExecution(this);
+                    break;
+            }
+        }
+
+        /*
+            Creates the data structures used for the board's tiles.
+         */
         public void distributeTiles()
         {
 
@@ -272,7 +293,6 @@ namespace SettlersOfCatan
                             roadLocation.MouseEnter += showRoadBuildToolTip;
                             roadLocation.MouseLeave += hideRoadBuildToolTip;
                             roadLocation.id = roadLocations.Count;
-                            roadLocation.Click += this.buildRoad;
                             roadLocations.Add(roadLocation);
                             roadLocation.BringToFront();
                         }
@@ -305,131 +325,9 @@ namespace SettlersOfCatan
                     }
                 }
             }
-        }
 
-        /*
-            This function controls the flow of the game.
-            Any control that changes the state of the game has this function added to it's click event.
-         */
-        public void boardUpdate(Object sender, EventArgs e)
-        {
-            //MessageBox.Show(sender.GetType().ToString());
-            switch (currentGameState)
-            {
-                case GameState.Setup:
-                    addEventText("Welcome to the world of Catan!");
-                    currentGameState = GameState.DiceRoll;
-                    break;
-                case GameState.DiceRoll:
-                    //This will only be executed if the sending object is dice.
-                    if (sender is Dice)
-                    {
-                        Player p = this.currentPlayer;
-                        //Cast the sender object as dice.
-                        int roll = ((Dice)sender).getRollValue();
-                        addEventText(p.getPlayerName() + " rolled a " + roll + ".");
-                        //Check if the last roll (previous player's roll) is less than the current. (first will always be greater).
-                        this.playerRolls[p.getPlayerNumber()] = roll;
-                        //If the current player is the last player in the list.
-                        if (currentPlayer.getPlayerNumber() >= playerPanels.Count()-1)
-                        {
-                            //Check for a tie
-                            bool matchedHigh = false;
-                            int high = 0;
-                            for (int i = 0; i < playerOrder.Count(); i ++)
-                            {
-                                //Pick the greater number.
-                                if (high == playerRolls[i])
-                                {
-                                    matchedHigh = true;
-                                } else if (high < playerRolls[i])
-                                {
-                                    matchedHigh = false;
-                                    high = playerRolls[i];
-                                }
-                            }
-                            if (matchedHigh == true)
-                            {
-                                addEventText("There was a tie between: ");
-                                //We have a tie here!
-                                currentGameState = GameState.PlayerOrder;
-                                //What players roll to break the tie?
-                                int ct = 0;
-                                for (int i = 0; i < playerOrder.Count(); i ++ )
-                                {
-                                    //Get the players with rolls equal to high
-                                    if (playerRolls[i] == high)
-                                    {
-                                        addEventText(playerPanels[i].getPlayerName() + "");
-                                        ct++;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                //All is good carry on.
-                                currentGameState = GameState.PlayerOrder;
-                            }
-
-                            boardUpdate(sender, e);
-                            break;
-                        }
-
-                        currentPlayer = playerPanels[p.getPlayerNumber() + 1];
-                    }
-                    break;
-                case GameState.TieBreaker:
-
-                    break;
-                case GameState.PlayerOrder:
-                    //Determine the winner of the roll.
-                    int highn = 0;
-                    for (int i = 0; i < playerOrder.Count(); i ++ )
-                    {
-                        if (highn < playerRolls[i])
-                        {
-                            highn = playerRolls[i];
-                            playerOrder[0] = playerPanels[i];
-                        }
-                    }
-                    addEventText(playerOrder[0].getPlayerName() + " won the roll and is the first player.");
-                    this.firstPlayer = playerOrder[0];
-                    //Add players to turn order...
-                    //Add the remainder of the players in order to the list.
-                    int fp = playerOrder[0].getPlayerNumber();
-
-                    for (int i = 0; i < playerOrder.Count(); i++)
-                    {
-                        playerOrder[i] = playerPanels[fp];
-                        addEventText("Player " + i + ": " + playerPanels[fp].getPlayerName());
-                        fp++;
-                        if (fp == playerOrder.Count())
-                        {
-                            fp = 0;
-                        }
-                    }
-                    //Move to the next setup state.
-                    firstPlayer.setTurn(true);
-                    addEventText(playerOrder[0].getPlayerName() + " please place your first settlement.");
-                    currentGameState = GameState.FirstSettlement;
-                    break;
-                case GameState.FirstSettlement:
-                    //Allow each player to place a settlement
-                    break;
-                case GameState.PlayerTurn:
-                    break;
-            }
-            if (currentGameState == GameState.Setup)
-            {
-
-                /*
-                    Settlement and road process
-                 */
-
-                /*
-                    First resource gather process.
-                 */
-            }
+            MessageBox.Show(this.settlementLocations.Count() + "");
+            MessageBox.Show(this.roadLocations.Count() + "");
         }
 
         /**
@@ -485,31 +383,11 @@ namespace SettlersOfCatan
             return s;
         }
 
-        /*
-            Used to call the road build function in road while providing the current player.
-         */
-        public void buildRoad(object sender, EventArgs e)
-        {
-            bool takeResources = false;
-            if (currentGameState == GameState.PlayerTurn)
-            {
-                takeResources = true;
-            }
-            bool success = ((Road)sender).buildRoad(this.currentPlayer, takeResources);
-            //For the game start thingey....
-        }
-
-        public void buildSettlement(object sender, EventArgs e)
-        {
-
-        }
-
-
         //Tool tip events.
 
         public void showRoadBuildToolTip(object sender, EventArgs e)
         {
-            if (Board.currentGameState == GameState.PlayerTurn)
+            if (true)
             {
                 Point loc = ((PictureBox)sender).Location;
                 loc.X += 32;
@@ -526,7 +404,7 @@ namespace SettlersOfCatan
 
         public void showSettlementBuildToolTip(object sender, EventArgs s)
         {
-            if (Board.currentGameState == GameState.PlayerTurn)
+            if (true)
             {
                 Point loc = ((PictureBox)sender).Location;
                 loc.X += 32;
@@ -544,7 +422,7 @@ namespace SettlersOfCatan
 
         public void showDevelopmentCardToolTip(object sender, EventArgs s)
         {
-            if (Board.currentGameState == GameState.PlayerTurn)
+            if (true)
             {
                 Point loc = ((PictureBox)sender).Parent.Location;
                 loc.X += ((PictureBox)sender).Width;
@@ -567,6 +445,15 @@ namespace SettlersOfCatan
             this.lstGameEvents.Items.Add(text);
             this.lstGameEvents.SelectedIndex = this.lstGameEvents.Items.Count - 1;
             this.lstGameEvents.SelectedIndex =  -1;
+        }
+
+        private void btnSetupBoard_Click(object sender, EventArgs e)
+        {
+            distributeTiles();
+            this.btnSetupBoard.Hide();
+            this.currentGameState = GameState.FirstDiceRoll;
+            currentGameEvent = new FirstPlayerEvt();
+            currentGameEvent.beginExecution(this);
         }
     }
 }

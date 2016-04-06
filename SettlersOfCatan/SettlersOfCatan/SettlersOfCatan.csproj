@@ -60,6 +60,11 @@
     <Compile Include="Dice.Designer.cs">
       <DependentUpon>Dice.cs</DependentUpon>
     </Compile>
+    <Compile Include="Events\Event.cs" />
+    <Compile Include="Events\FirstPlayerEvt.cs" />
+    <Compile Include="Events\FirstSettlementEvt.cs" />
+    <Compile Include="Events\RoadBuildEvt.cs" />
+    <Compile Include="Events\SettlementBuildEvt.cs" />
     <Compile Include="Forms\Board.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -20,6 +20,8 @@ namespace SettlersOfCatan
         private List<ResourceCard> resources;
         private bool activePlayer = false;
         private List<DevelopmentCard> onHandDevelopmentCards;
+        private List<Settlement> settlements;
+        private List<Road> roads;
 
 
         public Player()
@@ -27,6 +29,28 @@ namespace SettlersOfCatan
             InitializeComponent();
             resources = new List<ResourceCard>();
             onHandDevelopmentCards = new List<DevelopmentCard>();
+            settlements = new List<Settlement>();
+            roads = new List<Road>();
+        }
+
+        public void addSettlement(Settlement s)
+        {
+            this.settlements.Add(s);
+        }
+
+        public void addRoad(Road r)
+        {
+            this.roads.Add(r);
+        }
+
+        public int getSettlementCount()
+        {
+            return this.settlements.Count;
+        }
+
+        public int getRoadCount()
+        {
+            return this.roads.Count;
         }
 
         public void setPlayerNumber(int number)

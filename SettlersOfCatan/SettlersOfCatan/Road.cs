@@ -49,6 +49,11 @@ namespace SettlersOfCatan
             return false;
         }
 
+        public List<Settlement> getConnectedSettlements()
+        {
+            return this.connectedSettlements;
+        }
+
         /**
             This algorithm is for checking if the player is able to build a road.
             Conditions for true:
@@ -86,50 +91,42 @@ namespace SettlersOfCatan
             return false;
         }
 
+        public bool playerHasRequiredResources(Player p)
+        {
+            return p.getResourceCount(Board.ResourceType.Wood) > 0 && p.getResourceCount(Board.ResourceType.Brick) > 0;
+        }
+
         /**
             Add condition:
-                Must have either a road or a settlement with matching player number.
+                Must have either a road or a settlement with matching player.
          */
         public bool buildRoad(Player currentPlayer, bool takeResources)
         {
             if (owningPlayer == null)
             {
-                if (
-                    (takeResources && (currentPlayer.getResourceCount(Board.ResourceType.Wood) > 0 && currentPlayer.getResourceCount(Board.ResourceType.Brick) > 0)) 
-                    || takeResources == false
-                    )
+                if (!takeResources || takeResources && playerHasRequiredResources(currentPlayer))
                 {
                     if (checkForConnection(currentPlayer))
                     {
                         this.owningPlayer = currentPlayer;
                         this.BackColor = currentPlayer.getPlayerColor();
-                        if (takeResources)
-                        {
-                            /*
-                                Take resources from player!
-                             */
-                        }
                         return true;
+                    } else
+                    {
+                        MessageBox.Show("There is no connection to either a settlement or road at this location.");
+                        return false;
                     }
                 } else
                 {
                     MessageBox.Show("Not enough resources!");
+                    return false;
                 }
             }
             else
             {
-                MessageBox.Show("Road is already built there!");
+                MessageBox.Show("There is already a road built at that location.");
+                return false;
             }
-            return false;
-        }
-
-        private void InitializeComponent()
-        {
-            ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
-            this.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
-            this.ResumeLayout(false);
-
         }
     }
 }
