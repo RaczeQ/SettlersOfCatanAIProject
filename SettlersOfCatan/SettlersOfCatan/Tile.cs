@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace SettlersOfCatan
 {
+    [Serializable]
     public abstract class Tile : PictureBox, Card
     {
         public int index = 0;
@@ -32,6 +33,7 @@ namespace SettlersOfCatan
 
     /**
      */
+    [Serializable]
     public class TerrainTile : Tile
     {
 
@@ -86,6 +88,18 @@ namespace SettlersOfCatan
             }
         }
 
+        public bool hasSettlement(Settlement findSettlement)
+        {
+            foreach (Settlement lookSettlement in adjascentSettlements)
+            {
+                if (lookSettlement == findSettlement)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public int getGatherChance()
         {
             return gatherChance;
@@ -111,6 +125,11 @@ namespace SettlersOfCatan
             return this.numberChip.isBlocked();
         }
 
+        public NumberChip getNumberChip()
+        {
+            return this.numberChip;
+        }
+
         public override String toString()
         {
             String str = "Terrain Tile ID: " + index + " Settlements: ( ";
@@ -131,6 +150,7 @@ namespace SettlersOfCatan
     /**
 
      */
+    [Serializable]
     public class OceanBorderTile : Tile
     {
 

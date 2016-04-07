@@ -17,38 +17,23 @@ namespace SettlersOfCatan.Events
         Then each player gets awared resources, which is not covered by this event!!!
 
      */
+    
     class FirstSettlementEvt : Event
     {
         Board theBoard;
+        EvtOwnr owner;
         public int playerNum;
 
         public List<int> playerTurnOrder;
 
-        public FirstSettlementEvt()
-        {
-        }
-
-        public void beginExecution(Board b)
+        public void beginExecution(Board b, EvtOwnr evt)
         {
             theBoard = b;
+            owner = evt;
             //We don't need any of these controls (we can safely assume no other controls will be available.
-            theBoard.btnPlayerTrade.Enabled = false;
-            theBoard.btnBankTrade.Enabled = false;
-            theBoard.btnEndTurn.Enabled = false;
-            theBoard.pbBuildDevelopmentCard.Enabled = false;
-            theBoard.dice.Enabled = false;
-
-            foreach (Road rd in theBoard.roadLocations)
-            {
-                rd.Click += executeUpdate;
-            }
-            foreach (Settlement st in theBoard.settlementLocations)
-            {
-                st.Click += executeUpdate;
-            }
-
             playerTurnOrder = new List<int>();
             int num = -1;
+            enableEventObjects();
             for (int i = 0; i < theBoard.playerOrder.Count()*2; i ++)
             {
                 if (i < theBoard.playerOrder.Count())
@@ -124,6 +109,26 @@ namespace SettlersOfCatan.Events
         public void endExecution()
         {
 
+            disableEventObjects();
+            owner.subeventEnded();
+
+        }
+
+        public void enableEventObjects()
+        {
+            foreach (Road rd in theBoard.roadLocations)
+            {
+                rd.Click += executeUpdate;
+            }
+            foreach (Settlement st in theBoard.settlementLocations)
+            {
+                st.Click += executeUpdate;
+            }
+
+        }
+
+        public void disableEventObjects()
+        {
             foreach (Road rd in theBoard.roadLocations)
             {
                 rd.Click -= executeUpdate;
@@ -132,10 +137,6 @@ namespace SettlersOfCatan.Events
             {
                 st.Click -= executeUpdate;
             }
-
-            theBoard.eventEnded();
-
         }
-
     }
 }

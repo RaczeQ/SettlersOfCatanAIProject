@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace SettlersOfCatan
 {
+    [Serializable]
     public class NumberChip : PictureBox, Card
     {
         private int numberValue = 0;
@@ -32,7 +33,14 @@ namespace SettlersOfCatan
         public void removeThief()
         {
             this.blocked = false;
-            this.BackgroundImage = new Bitmap("Resources/" + numberValue + "_Chip.png");
+            if (numberValue != 0)
+            {
+                this.BackgroundImage = new Bitmap("Resources/" + numberValue + "_Chip.png");
+            }
+            else
+            {
+                this.BackgroundImage = null;
+            }
         }
 
         public bool isBlocked()

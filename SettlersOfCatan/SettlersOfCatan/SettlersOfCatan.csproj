@@ -60,13 +60,21 @@
     <Compile Include="Dice.Designer.cs">
       <DependentUpon>Dice.cs</DependentUpon>
     </Compile>
-    <Compile Include="Events\DistributeResourcesEvt.cs" />
+    <Compile Include="Events\BankTradeEvt.cs" />
+    <Compile Include="Events\DiceRollEvt.cs" />
+    <Compile Include="Events\EvtOwnr.cs" />
+    <Compile Include="Events\FirstResourcesEvt.cs" />
     <Compile Include="Events\EmpyEvt.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\FirstPlayerEvt.cs" />
     <Compile Include="Events\FirstSettlementEvt.cs" />
+    <Compile Include="Events\HarborTrade.cs" />
+    <Compile Include="Events\PlayerTradeEvt.cs" />
+    <Compile Include="Events\PlayerTurnEvt.cs" />
     <Compile Include="Events\RoadBuildEvt.cs" />
     <Compile Include="Events\SettlementBuildEvt.cs" />
+    <Compile Include="Events\ThiefEvt.cs" />
+    <Compile Include="Exeptions.cs" />
     <Compile Include="Forms\Board.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,6 +130,7 @@
     <Compile Include="TransparencyFix\PanelFix.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UserMessages.cs" />
     <EmbeddedResource Include="Dice.resx">
       <DependentUpon>Dice.cs</DependentUpon>
     </EmbeddedResource>
@@ -131,6 +140,7 @@
     <EmbeddedResource Include="Road.resx">
       <DependentUpon>Road.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -111,7 +111,7 @@
             this.pan_player_onhand.Controls.Add(this.oh_brick);
             this.pan_player_onhand.Controls.Add(this.oh_wood);
             this.pan_player_onhand.Location = new System.Drawing.Point(29, 38);
-            this.pan_player_onhand.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pan_player_onhand.Margin = new System.Windows.Forms.Padding(2);
             this.pan_player_onhand.Name = "pan_player_onhand";
             this.pan_player_onhand.Size = new System.Drawing.Size(65, 179);
             this.pan_player_onhand.TabIndex = 0;
@@ -129,7 +129,7 @@
             // oh_sheep
             // 
             this.oh_sheep.Location = new System.Drawing.Point(11, 139);
-            this.oh_sheep.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.oh_sheep.Margin = new System.Windows.Forms.Padding(2);
             this.oh_sheep.Name = "oh_sheep";
             this.oh_sheep.Size = new System.Drawing.Size(41, 22);
             this.oh_sheep.TabIndex = 4;
@@ -138,7 +138,7 @@
             // oh_wheat
             // 
             this.oh_wheat.Location = new System.Drawing.Point(11, 113);
-            this.oh_wheat.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.oh_wheat.Margin = new System.Windows.Forms.Padding(2);
             this.oh_wheat.Name = "oh_wheat";
             this.oh_wheat.Size = new System.Drawing.Size(41, 22);
             this.oh_wheat.TabIndex = 3;
@@ -147,7 +147,7 @@
             // oh_ore
             // 
             this.oh_ore.Location = new System.Drawing.Point(11, 87);
-            this.oh_ore.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.oh_ore.Margin = new System.Windows.Forms.Padding(2);
             this.oh_ore.Name = "oh_ore";
             this.oh_ore.Size = new System.Drawing.Size(41, 22);
             this.oh_ore.TabIndex = 2;
@@ -156,7 +156,7 @@
             // oh_brick
             // 
             this.oh_brick.Location = new System.Drawing.Point(11, 61);
-            this.oh_brick.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.oh_brick.Margin = new System.Windows.Forms.Padding(2);
             this.oh_brick.Name = "oh_brick";
             this.oh_brick.Size = new System.Drawing.Size(41, 22);
             this.oh_brick.TabIndex = 1;
@@ -165,7 +165,7 @@
             // oh_wood
             // 
             this.oh_wood.Location = new System.Drawing.Point(11, 35);
-            this.oh_wood.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.oh_wood.Margin = new System.Windows.Forms.Padding(2);
             this.oh_wood.Name = "oh_wood";
             this.oh_wood.Size = new System.Drawing.Size(41, 22);
             this.oh_wood.TabIndex = 0;
@@ -187,7 +187,7 @@
             this.pan_player_offer.Controls.Add(this.offer_brick);
             this.pan_player_offer.Controls.Add(this.offer_wood);
             this.pan_player_offer.Location = new System.Drawing.Point(97, 38);
-            this.pan_player_offer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pan_player_offer.Margin = new System.Windows.Forms.Padding(2);
             this.pan_player_offer.Name = "pan_player_offer";
             this.pan_player_offer.Size = new System.Drawing.Size(81, 179);
             this.pan_player_offer.TabIndex = 1;
@@ -250,7 +250,7 @@
             // offer_sheep
             // 
             this.offer_sheep.Location = new System.Drawing.Point(9, 138);
-            this.offer_sheep.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.offer_sheep.Margin = new System.Windows.Forms.Padding(2);
             this.offer_sheep.Name = "offer_sheep";
             this.offer_sheep.Size = new System.Drawing.Size(41, 22);
             this.offer_sheep.TabIndex = 9;
@@ -259,7 +259,7 @@
             // offer_wheat
             // 
             this.offer_wheat.Location = new System.Drawing.Point(9, 112);
-            this.offer_wheat.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.offer_wheat.Margin = new System.Windows.Forms.Padding(2);
             this.offer_wheat.Name = "offer_wheat";
             this.offer_wheat.Size = new System.Drawing.Size(41, 22);
             this.offer_wheat.TabIndex = 8;
@@ -268,7 +268,7 @@
             // offer_ore
             // 
             this.offer_ore.Location = new System.Drawing.Point(9, 86);
-            this.offer_ore.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.offer_ore.Margin = new System.Windows.Forms.Padding(2);
             this.offer_ore.Name = "offer_ore";
             this.offer_ore.Size = new System.Drawing.Size(41, 22);
             this.offer_ore.TabIndex = 7;
@@ -277,7 +277,7 @@
             // offer_brick
             // 
             this.offer_brick.Location = new System.Drawing.Point(9, 60);
-            this.offer_brick.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.offer_brick.Margin = new System.Windows.Forms.Padding(2);
             this.offer_brick.Name = "offer_brick";
             this.offer_brick.Size = new System.Drawing.Size(41, 22);
             this.offer_brick.TabIndex = 6;
@@ -286,7 +286,7 @@
             // offer_wood
             // 
             this.offer_wood.Location = new System.Drawing.Point(9, 34);
-            this.offer_wood.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.offer_wood.Margin = new System.Windows.Forms.Padding(2);
             this.offer_wood.Name = "offer_wood";
             this.offer_wood.Size = new System.Drawing.Size(41, 22);
             this.offer_wood.TabIndex = 5;
@@ -308,7 +308,7 @@
             this.pan_tradee_offer.Controls.Add(this.lbl_tradee_wood);
             this.pan_tradee_offer.Controls.Add(this.tradee_offer_wood);
             this.pan_tradee_offer.Location = new System.Drawing.Point(251, 38);
-            this.pan_tradee_offer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pan_tradee_offer.Margin = new System.Windows.Forms.Padding(2);
             this.pan_tradee_offer.Name = "pan_tradee_offer";
             this.pan_tradee_offer.Size = new System.Drawing.Size(82, 179);
             this.pan_tradee_offer.TabIndex = 2;
@@ -335,7 +335,7 @@
             // tradee_offer_sheep
             // 
             this.tradee_offer_sheep.Location = new System.Drawing.Point(9, 138);
-            this.tradee_offer_sheep.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tradee_offer_sheep.Margin = new System.Windows.Forms.Padding(2);
             this.tradee_offer_sheep.Name = "tradee_offer_sheep";
             this.tradee_offer_sheep.Size = new System.Drawing.Size(41, 22);
             this.tradee_offer_sheep.TabIndex = 9;
@@ -353,7 +353,7 @@
             // tradee_offer_wheat
             // 
             this.tradee_offer_wheat.Location = new System.Drawing.Point(9, 112);
-            this.tradee_offer_wheat.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tradee_offer_wheat.Margin = new System.Windows.Forms.Padding(2);
             this.tradee_offer_wheat.Name = "tradee_offer_wheat";
             this.tradee_offer_wheat.Size = new System.Drawing.Size(41, 22);
             this.tradee_offer_wheat.TabIndex = 8;
@@ -371,7 +371,7 @@
             // tradee_offer_ore
             // 
             this.tradee_offer_ore.Location = new System.Drawing.Point(9, 86);
-            this.tradee_offer_ore.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tradee_offer_ore.Margin = new System.Windows.Forms.Padding(2);
             this.tradee_offer_ore.Name = "tradee_offer_ore";
             this.tradee_offer_ore.Size = new System.Drawing.Size(41, 22);
             this.tradee_offer_ore.TabIndex = 7;
@@ -389,7 +389,7 @@
             // tradee_offer_brick
             // 
             this.tradee_offer_brick.Location = new System.Drawing.Point(9, 60);
-            this.tradee_offer_brick.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tradee_offer_brick.Margin = new System.Windows.Forms.Padding(2);
             this.tradee_offer_brick.Name = "tradee_offer_brick";
             this.tradee_offer_brick.Size = new System.Drawing.Size(41, 22);
             this.tradee_offer_brick.TabIndex = 6;
@@ -407,7 +407,7 @@
             // tradee_offer_wood
             // 
             this.tradee_offer_wood.Location = new System.Drawing.Point(9, 34);
-            this.tradee_offer_wood.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tradee_offer_wood.Margin = new System.Windows.Forms.Padding(2);
             this.tradee_offer_wood.Name = "tradee_offer_wood";
             this.tradee_offer_wood.Size = new System.Drawing.Size(41, 22);
             this.tradee_offer_wood.TabIndex = 5;
@@ -424,7 +424,7 @@
             this.pan_tradee_onhand.Controls.Add(this.tradee_oh_brick);
             this.pan_tradee_onhand.Controls.Add(this.tradee_oh_wood);
             this.pan_tradee_onhand.Location = new System.Drawing.Point(336, 38);
-            this.pan_tradee_onhand.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pan_tradee_onhand.Margin = new System.Windows.Forms.Padding(2);
             this.pan_tradee_onhand.Name = "pan_tradee_onhand";
             this.pan_tradee_onhand.Size = new System.Drawing.Size(65, 179);
             this.pan_tradee_onhand.TabIndex = 1;
@@ -442,7 +442,7 @@
             // tradee_oh_sheep
             // 
             this.tradee_oh_sheep.Location = new System.Drawing.Point(10, 139);
-            this.tradee_oh_sheep.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tradee_oh_sheep.Margin = new System.Windows.Forms.Padding(2);
             this.tradee_oh_sheep.Name = "tradee_oh_sheep";
             this.tradee_oh_sheep.Size = new System.Drawing.Size(41, 22);
             this.tradee_oh_sheep.TabIndex = 9;
@@ -451,7 +451,7 @@
             // tradee_oh_wheat
             // 
             this.tradee_oh_wheat.Location = new System.Drawing.Point(10, 113);
-            this.tradee_oh_wheat.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tradee_oh_wheat.Margin = new System.Windows.Forms.Padding(2);
             this.tradee_oh_wheat.Name = "tradee_oh_wheat";
             this.tradee_oh_wheat.Size = new System.Drawing.Size(41, 22);
             this.tradee_oh_wheat.TabIndex = 8;
@@ -460,7 +460,7 @@
             // tradee_oh_ore
             // 
             this.tradee_oh_ore.Location = new System.Drawing.Point(10, 87);
-            this.tradee_oh_ore.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tradee_oh_ore.Margin = new System.Windows.Forms.Padding(2);
             this.tradee_oh_ore.Name = "tradee_oh_ore";
             this.tradee_oh_ore.Size = new System.Drawing.Size(41, 22);
             this.tradee_oh_ore.TabIndex = 7;
@@ -469,7 +469,7 @@
             // tradee_oh_brick
             // 
             this.tradee_oh_brick.Location = new System.Drawing.Point(10, 61);
-            this.tradee_oh_brick.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tradee_oh_brick.Margin = new System.Windows.Forms.Padding(2);
             this.tradee_oh_brick.Name = "tradee_oh_brick";
             this.tradee_oh_brick.Size = new System.Drawing.Size(41, 22);
             this.tradee_oh_brick.TabIndex = 6;
@@ -478,7 +478,7 @@
             // tradee_oh_wood
             // 
             this.tradee_oh_wood.Location = new System.Drawing.Point(10, 35);
-            this.tradee_oh_wood.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tradee_oh_wood.Margin = new System.Windows.Forms.Padding(2);
             this.tradee_oh_wood.Name = "tradee_oh_wood";
             this.tradee_oh_wood.Size = new System.Drawing.Size(41, 22);
             this.tradee_oh_wood.TabIndex = 5;
@@ -487,7 +487,7 @@
             // arrowRight
             // 
             this.arrowRight.Location = new System.Drawing.Point(181, 73);
-            this.arrowRight.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.arrowRight.Margin = new System.Windows.Forms.Padding(2);
             this.arrowRight.Name = "arrowRight";
             this.arrowRight.Size = new System.Drawing.Size(67, 32);
             this.arrowRight.TabIndex = 3;
@@ -496,7 +496,7 @@
             // arrowLeft
             // 
             this.arrowLeft.Location = new System.Drawing.Point(181, 148);
-            this.arrowLeft.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.arrowLeft.Margin = new System.Windows.Forms.Padding(2);
             this.arrowLeft.Name = "arrowLeft";
             this.arrowLeft.Size = new System.Drawing.Size(67, 32);
             this.arrowLeft.TabIndex = 4;
@@ -527,17 +527,18 @@
             // btnCancel
             // 
             this.btnCancel.Location = new System.Drawing.Point(29, 233);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(84, 25);
             this.btnCancel.TabIndex = 7;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnAccept
             // 
             this.btnAccept.Location = new System.Drawing.Point(316, 233);
-            this.btnAccept.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnAccept.Margin = new System.Windows.Forms.Padding(2);
             this.btnAccept.Name = "btnAccept";
             this.btnAccept.Size = new System.Drawing.Size(84, 25);
             this.btnAccept.TabIndex = 8;
@@ -549,6 +550,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(431, 265);
+            this.ControlBox = false;
             this.Controls.Add(this.btnAccept);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.label6);
@@ -559,7 +561,10 @@
             this.Controls.Add(this.pan_tradee_offer);
             this.Controls.Add(this.pan_player_offer);
             this.Controls.Add(this.pan_player_onhand);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(2);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "TradeWindow";
             this.Text = "TradeWindow";
             this.pan_player_onhand.ResumeLayout(false);

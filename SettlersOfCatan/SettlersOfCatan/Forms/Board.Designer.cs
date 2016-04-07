@@ -41,6 +41,7 @@
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnSetupBoard = new System.Windows.Forms.Button();
             this.btnBankTrade = new System.Windows.Forms.Button();
             this.btnEndTurn = new System.Windows.Forms.Button();
             this.btnPlayerTrade = new System.Windows.Forms.Button();
@@ -60,7 +61,6 @@
             this.playerInfoPanel1 = new SettlersOfCatan.Player();
             this.lstGameEvents = new System.Windows.Forms.ListBox();
             this.pnlBoardArea = new SettlersOfCatan.TransparencyFix.BoardArea();
-            this.btnSetupBoard = new System.Windows.Forms.Button();
             this.pnlRoadToolTip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -215,6 +215,16 @@
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox1";
+            // 
+            // btnSetupBoard
+            // 
+            this.btnSetupBoard.Location = new System.Drawing.Point(206, 29);
+            this.btnSetupBoard.Name = "btnSetupBoard";
+            this.btnSetupBoard.Size = new System.Drawing.Size(104, 23);
+            this.btnSetupBoard.TabIndex = 9;
+            this.btnSetupBoard.Text = "Set Up Board";
+            this.btnSetupBoard.UseVisualStyleBackColor = true;
+            this.btnSetupBoard.Click += new System.EventHandler(this.btnSetupBoard_Click);
             // 
             // btnBankTrade
             // 
@@ -404,16 +414,6 @@
             this.pnlBoardArea.Name = "pnlBoardArea";
             this.pnlBoardArea.Size = new System.Drawing.Size(1005, 580);
             this.pnlBoardArea.TabIndex = 0;
-            // 
-            // btnSetupBoard
-            // 
-            this.btnSetupBoard.Location = new System.Drawing.Point(206, 29);
-            this.btnSetupBoard.Name = "btnSetupBoard";
-            this.btnSetupBoard.Size = new System.Drawing.Size(104, 23);
-            this.btnSetupBoard.TabIndex = 9;
-            this.btnSetupBoard.Text = "Set Up Board";
-            this.btnSetupBoard.UseVisualStyleBackColor = true;
-            this.btnSetupBoard.Click += new System.EventHandler(this.btnSetupBoard_Click);
             // 
             // Board
             // 

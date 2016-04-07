@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace SettlersOfCatan
 {
+    [Serializable]
     public partial class Dice : UserControl
     {
         private String resourcePath = "Resources/";

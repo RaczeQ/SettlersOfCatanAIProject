@@ -8,6 +8,7 @@ using System.Drawing;
 
 namespace SettlersOfCatan
 {
+    [Serializable]
     public class Settlement : PictureBox
     {
         public int id = 0;

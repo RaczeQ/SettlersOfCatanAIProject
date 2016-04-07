@@ -11,10 +11,13 @@ using System.Windows.Forms;
 using SettlersOfCatan.Events;
 using System.Reflection;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
 
 namespace SettlersOfCatan
 {
-    public partial class Board : Form
+    [Serializable]
+    public partial class Board : Form, EvtOwnr
     {
         public static Bank TheBank = new Bank();
 
@@ -52,11 +55,24 @@ namespace SettlersOfCatan
 
         public Player[] playerPanels; //A list of the player panels in the original order.
         public Player[] playerOrder; //The players in the order of first player.
+        public int turnCounter = 0;
         public Player firstPlayer;
         public Player currentPlayer;
-        public enum GameState { Setup, FirstDiceRoll, FirstSettlement, FirstResources, PlayerTurn };
+        public enum GameState { Setup, FirstDiceRoll, FirstSettlement, FirstResources, DiceRoll, PlayerTurn };
         public static Event currentGameEvent;
         public GameState currentGameState;
+
+
+        /*
+            Thief movement options.
+         */
+        public static bool THIEF_MUST_MOVE = true;
+        public static bool THIEF_CANNOT_GO_HOME = true; //(back to the desert)
+
+        /*
+            Board setup options.
+         */
+        public static bool RANDOM_NUMBER_CHITS = false;
 
         public Board()
         {
@@ -87,8 +103,9 @@ namespace SettlersOfCatan
             addEventText("Welcome to catan. When you are ready, click on Set Up Board to begin.");
 
         }
+
         //Runs when an event has sucessfully resolved.
-        public void eventEnded()
+        public void subeventEnded()
         {
             switch (this.currentGameState)
             {
@@ -106,19 +123,38 @@ namespace SettlersOfCatan
                             fp = 0;
                         }
                     }
-                    addEventText("First roads and settlements setup.");
                     currentGameState = GameState.FirstSettlement;
                     currentGameEvent = new FirstSettlementEvt();
-                    currentGameEvent.beginExecution(this);
+                    currentGameEvent.beginExecution(this ,this);
                     break;
                 case GameState.FirstSettlement:
                     //We are finished placing settlements
                     currentGameState = GameState.FirstResources;
-                    currentGameEvent = new DistributeResourcesEvt();
-                    currentGameEvent.beginExecution(this);
+                    currentGameEvent = new FirstResourcesEvt();
+                    currentGameEvent.beginExecution(this, this);
                     break;
                 case GameState.FirstResources:
                     //We can finally move to the gameplay loop.
+                    currentPlayer = firstPlayer;
+                    addEventText(UserMessages.PlayerDiceRollPrompt(currentPlayer));
+                    currentGameState = GameState.DiceRoll;
+                    currentGameEvent = new DiceRollEvt();
+                    currentGameEvent.beginExecution(this, this);
+                    break;
+                case GameState.DiceRoll:
+                    //Run the player turn event.
+                    currentGameState = GameState.PlayerTurn;
+                    currentGameEvent = new PlayerTurnEvt();
+                    currentGameEvent.beginExecution(this, this);
+                    break;
+                case GameState.PlayerTurn:
+                    //Increment to the next player and start the dice roll event.
+                    turnCounter = (turnCounter == playerPanels.Count() - 1) ? 0 : turnCounter + 1;
+                    currentPlayer = playerOrder[turnCounter];
+                    addEventText(UserMessages.PlayerDiceRollPrompt(currentPlayer));
+                    currentGameState = GameState.DiceRoll;
+                    currentGameEvent = new DiceRollEvt();
+                    currentGameEvent.beginExecution(this, this);
                     break;
             }
         }
@@ -492,7 +528,7 @@ namespace SettlersOfCatan
             this.btnSetupBoard.Hide();
             this.currentGameState = GameState.FirstDiceRoll;
             currentGameEvent = new FirstPlayerEvt();
-            currentGameEvent.beginExecution(this);
+            currentGameEvent.beginExecution(this, this);
         }
     }
 }

@@ -16,6 +16,7 @@ namespace SettlersOfCatan.Events
     {
 
         public Board theBoard;
+        EvtOwnr owner;
         //int[] playerRolls = new int[4];
 
         public List<Player> playersToRoll;
@@ -23,29 +24,20 @@ namespace SettlersOfCatan.Events
         int rollPosition = 0;
         public int state = 0;
 
-        public FirstPlayerEvt()
-        {
-            
-        }
-
-        public void beginExecution(Board b)
+        public void beginExecution(Board b, EvtOwnr evt)
         {
             theBoard = b;
+            owner = evt;
             //Locks down all but the needed controls.
             //Adds the onExecuteUpdate to the controls that need it.
-            theBoard.dice.Click += executeUpdate;
-            theBoard.btnPlayerTrade.Enabled = false;
-            theBoard.btnBankTrade.Enabled = false;
-            theBoard.btnEndTurn.Enabled = false;
-            theBoard.pbBuildDevelopmentCard.Enabled = false;
-
+            enableEventObjects();
             playersToRoll = new List<Player>();
             playerRolls = new List<int>();
             foreach (Player p in b.playerPanels)
             {
                 playersToRoll.Add(p);
             }
-            theBoard.addEventText("Player " + playersToRoll[0].getPlayerName() + " please roll the dice.");
+            theBoard.addEventText(UserMessages.PlayerDiceRollPrompt(playersToRoll[0]));
         }
 
         public void executeUpdate(Object sender, EventArgs e)
@@ -56,7 +48,7 @@ namespace SettlersOfCatan.Events
                 case 0:
                     Player p = playersToRoll[rollPosition];
                     int roll = theBoard.dice.getRollValue();
-                    theBoard.addEventText("Player " + p.getPlayerName() + " rolled " + (roll==8||roll==11? "an " : "a ") + roll + ".");
+                    theBoard.addEventText(UserMessages.PlayerRolledANumber(p, roll));
                     playerRolls.Add(roll);
                     rollPosition++;
                     if (rollPosition >= playersToRoll.Count)
@@ -66,7 +58,7 @@ namespace SettlersOfCatan.Events
                     } else
                     {
                         p = playersToRoll[rollPosition];
-                        theBoard.addEventText("Player " + p.getPlayerName() + " please roll the dice.");
+                        theBoard.addEventText(UserMessages.PlayerDiceRollPrompt(p));
                     }
                     break;
                 case 1:
@@ -90,7 +82,7 @@ namespace SettlersOfCatan.Events
 
                     if (tieDetected)
                     {
-                        theBoard.addEventText("There was a tie between:");
+                        theBoard.addEventText(UserMessages.THERE_WAS_A_TIE);
                         //There was a tie. Reset all things for another roll...
                         List<Player> newPlayers = new List<Player>();
                         for (int ind = 0; ind < playersToRoll.Count; ind++)
@@ -106,13 +98,12 @@ namespace SettlersOfCatan.Events
                         playersToRoll.Clear();
                         playersToRoll = newPlayers;
                         state = 0;
-                        theBoard.addEventText("");
-                        theBoard.addEventText("Player " + playersToRoll[0].getPlayerName() + " please roll the dice.");
+                        theBoard.addEventText(UserMessages.PlayerDiceRollPrompt(playersToRoll[0]));
                     } else
                     {
                         //All was good the first player is *drumroll*
                         theBoard.firstPlayer = playersToRoll[playerInd];
-                        theBoard.addEventText("Congrats player " + theBoard.firstPlayer.getPlayerName() + " you won the roll and are the first player!");
+                        theBoard.addEventText(UserMessages.PlayerWinsDiceRoll(theBoard.firstPlayer));
                         endExecution();
                     }
                     break;
@@ -123,10 +114,23 @@ namespace SettlersOfCatan.Events
 
         public void endExecution()
         {
-            //Completes the cleanup and removes the event from the controls it used.
+            disableEventObjects();
+            owner.subeventEnded();
+        }
+
+        public void disableEventObjects()
+        {
             theBoard.dice.Click -= executeUpdate;
             theBoard.dice.Enabled = false;
-            theBoard.eventEnded();
+        }
+
+        public void enableEventObjects()
+        {
+            theBoard.dice.Click += executeUpdate;
+            theBoard.btnPlayerTrade.Enabled = false;
+            theBoard.btnBankTrade.Enabled = false;
+            theBoard.btnEndTurn.Enabled = false;
+            theBoard.pbBuildDevelopmentCard.Enabled = false;
         }
 
     }

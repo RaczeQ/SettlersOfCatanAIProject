@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace SettlersOfCatan
 {
+    [Serializable]
     public class Bank
     {
 

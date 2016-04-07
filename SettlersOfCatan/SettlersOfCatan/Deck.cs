@@ -9,6 +9,7 @@ namespace SettlersOfCatan
     /*
         Deck represents a stack of cards.
      */
+    [Serializable]
     public class Deck
     {
         Random cardRandom;

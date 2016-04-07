@@ -6,16 +6,18 @@ using System.Threading.Tasks;
 
 namespace SettlersOfCatan.Events
 {
-    class DistributeResourcesEvt : Event
+    class FirstResourcesEvt : Event
     {
 
         Board theBoard;
+        EvtOwnr owner;
 
-        public void beginExecution(Board b)
+        public void beginExecution(Board b, EvtOwnr evt)
         {
             //Since this event does not depend on user input we can safely turn
             // off all controls.
             theBoard = b;
+            owner = evt;
             executeUpdate(this, new EventArgs());
         }
 
@@ -34,7 +36,17 @@ namespace SettlersOfCatan.Events
 
         public void endExecution()
         {
-            theBoard.eventEnded();
+            theBoard.subeventEnded();
+        }
+
+        public void enableEventObjects()
+        {
+
+        }
+
+        public void disableEventObjects()
+        {
+
         }
 
     }

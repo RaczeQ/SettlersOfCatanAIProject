@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace SettlersOfCatan
 {
+    [Serializable]
     public partial class Player : UserControl
     {
 
@@ -22,6 +23,7 @@ namespace SettlersOfCatan
         private List<DevelopmentCard> onHandDevelopmentCards;
         private List<Settlement> settlements;
         private List<Road> roads;
+        private Random rand;
 
 
         public Player()
@@ -31,6 +33,7 @@ namespace SettlersOfCatan
             onHandDevelopmentCards = new List<DevelopmentCard>();
             settlements = new List<Settlement>();
             roads = new List<Road>();
+            rand = new Random();
         }
 
         public void addSettlement(Settlement s)
@@ -145,6 +148,22 @@ namespace SettlersOfCatan
             this.resources.Add(resCard);
             updateResourceGUI();
             //MessageBox.Show("Player " + this.getPlayerName() + " got " + Board.RESOURCE_NAMES[(int)resCard.getResourceType()] + ".");
+        }
+
+        public ResourceCard takeRandomResource()
+        {
+            ResourceCard rCard = null;
+            if (resources.Count > 0)
+            {
+                int num = rand.Next(0, resources.Count);
+                rCard = resources[num];
+                resources.Remove(rCard);
+            } else
+            {
+                return null;
+            }
+            updateResourceGUI();
+            return rCard;
         }
 
         public Color getPlayerColor()
@@ -282,5 +301,6 @@ namespace SettlersOfCatan
                 lblOre.Text = "*";
             }
         }
+
     }
 }

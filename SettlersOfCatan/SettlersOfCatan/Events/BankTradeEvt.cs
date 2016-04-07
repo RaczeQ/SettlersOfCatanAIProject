@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SettlersOfCatan.Events
 {
-    class EmpyEvt : Event
+    class BankTradeEvt : Event
     {
         public void beginExecution(Board board, EvtOwnr evt)
         {
