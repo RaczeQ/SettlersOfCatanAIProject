@@ -71,6 +71,11 @@ namespace SettlersOfCatan
             return false;
         }
 
+        public bool city()
+        {
+            return this.isCity;
+        }
+
         /**
             Only returns true if no settlement is within 1 location of this settlement.
          */
@@ -117,68 +122,39 @@ namespace SettlersOfCatan
             must have required resources: Brick, Wood, Wheat, Sheep
 
          */
-        public bool buildSettlement(Player currentPlayer, bool takeResources)
+        public void buildSettlement(Player currentPlayer, bool takeResources)
         {
+
             if (owningPlayer == null)
             {
-                //Build settlement
-                //Check if there is another city within 1 spot!+
-                if (playerHasRequiredSetResources(currentPlayer) && takeResources || !takeResources)
+                if (!playerHasRequiredSetResources(currentPlayer) && takeResources)
                 {
-                    if (checkForOtherSettlement())
-                    {
-                        this.owningPlayer = currentPlayer;
-                        this.BackColor = owningPlayer.getPlayerColor();
-                        return true;
-                    }
-                    else
-                    {
-                        MessageBox.Show("You cannot build here. This location is too close to another settlement.");
-                        return false;
-                    }
-                } else
-                {
-                    MessageBox.Show("You do not have the required resources to build a settlement.");
-                    return false;
+                    throw new BuildError(BuildError.NOT_ENOUGH_RESOURCES);
                 }
+                if (!checkForOtherSettlement())
+                {
+                    throw new BuildError(BuildError.SETTLEMENT_TOO_CLOSE);
+                }
+
+                this.owningPlayer = currentPlayer;
+                this.BackColor = owningPlayer.getPlayerColor();
+            }
+            else if (owningPlayer == currentPlayer)
+            {
+                if (!playerHasRequiredCityResources(currentPlayer))
+                {
+                    throw new BuildError(BuildError.NOT_ENOUGH_RESOURCES);
+                }
+
+                if (isCity)
+                {
+                    throw new BuildError(BuildError.IS_CITY);
+                }
+
+                this.isCity = true;
             } else
             {
-                //Upgrade the settlement to city
-                if (currentPlayer == owningPlayer)
-                {
-                    //We upgrade
-                    if (takeResources)
-                    {
-                        //Upgrade the settlement
-                        if (!isCity)
-                        {
-                            if (playerHasRequiredCityResources(currentPlayer))
-                            {
-                                this.isCity = true;
-                                return true;
-                            } else
-                            {
-                                MessageBox.Show("You do not have the required resources to upgrade this settlement.");
-                                return false;
-                            }
-                        } else
-                        {
-                            MessageBox.Show("You cannot upgrade a city any further.");
-                            return false;
-                        }
-                    } else
-                    {
-                        //Do not upgrade the settlement
-                        MessageBox.Show("You cannot build a settlement on top of another settlement.");
-                        return false;
-                    }
-                    
-                } else
-                {
-                    //We don't upgrade
-                    MessageBox.Show("Player " + owningPlayer.getPlayerName() + " already has a settlement here.");
-                    return false;
-                }
+                throw new BuildError(BuildError.LocationOwnedBy(owningPlayer));
             }
         }
     }

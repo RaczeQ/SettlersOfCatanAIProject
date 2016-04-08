@@ -32,6 +32,32 @@ namespace SettlersOfCatan.Events
                         theBoard.addEventText(UserMessages.PlayerEndedTurn(theBoard.currentPlayer));
                         endExecution();
                     }
+                    if (sender is Settlement)
+                    {
+                        Settlement location = (Settlement)sender;
+                        try
+                        {
+                            //Try to build the settlement/upgrade city.
+                            ((Settlement)sender).buildSettlement(theBoard.currentPlayer, true);
+                            //Take resources
+                            if (location.city())
+                            {
+                                //take city resources
+                                Board.TheBank.takePayment(theBoard.currentPlayer, Bank.CITY_COST);
+                            } else
+                            {
+                                //take settlement resources
+                                Board.TheBank.takePayment(theBoard.currentPlayer, Bank.SETTLEMENT_COST);
+                            }
+                        } catch (BuildError be)
+                        {
+                            theBoard.addEventText(be.Message);
+                        }
+
+                    } else if (sender is Road)
+                    {
+
+                    }
                     break;
                 case State.Trade:
                     //This should be unreachable.
@@ -94,6 +120,15 @@ namespace SettlersOfCatan.Events
             theBoard.btnEndTurn.Enabled = true;
             theBoard.btnBankTrade.Click += bankTrade;
             theBoard.btnPlayerTrade.Click += playerTrade;
+            theBoard.btnEndTurn.Click += executeUpdate;
+            foreach (Road rd in theBoard.roadLocations)
+            {
+                rd.Click += executeUpdate;
+            }
+            foreach (Settlement st in theBoard.settlementLocations)
+            {
+                st.Click += executeUpdate;
+            }
         }
 
         public void disableEventObjects()
@@ -103,6 +138,15 @@ namespace SettlersOfCatan.Events
             theBoard.btnEndTurn.Enabled = false;
             theBoard.btnBankTrade.Click -= bankTrade;
             theBoard.btnPlayerTrade.Click -= playerTrade;
+            theBoard.btnEndTurn.Click -= executeUpdate;
+            foreach (Road rd in theBoard.roadLocations)
+            {
+                rd.Click -= executeUpdate;
+            }
+            foreach (Settlement st in theBoard.settlementLocations)
+            {
+                st.Click -= executeUpdate;
+            }
         }
     }
 }

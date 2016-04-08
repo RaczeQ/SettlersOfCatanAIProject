@@ -34,6 +34,16 @@ namespace SettlersOfCatan
             "Resources/monopoly_card.png" };
         public static Bitmap[] devCardImages = new Bitmap[6];
 
+        public static Board.ResourceType[] CITY_COST = 
+            {
+                Board.ResourceType.Wheat, Board.ResourceType.Wheat, Board.ResourceType.Ore,
+                Board.ResourceType.Ore, Board.ResourceType.Ore
+            };
+        public static Board.ResourceType[] SETTLEMENT_COST = 
+            {
+                Board.ResourceType.Brick, Board.ResourceType.Wood, Board.ResourceType.Wheat, Board.ResourceType.Sheep
+            };
+
         public Deck developmentCards;
         private List<ResourceCard> resources;
 
@@ -95,6 +105,14 @@ namespace SettlersOfCatan
             this.resources.Add(rc);
         }
 
+
+        public void takePayment(Player p, Board.ResourceType[] paymentList)
+        {
+            foreach (Board.ResourceType resType in paymentList)
+            {
+                this.resources.Add(p.takeResource(resType));
+            }
+        }
 
     }
 }

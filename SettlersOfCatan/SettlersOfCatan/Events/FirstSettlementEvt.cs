@@ -57,22 +57,26 @@ namespace SettlersOfCatan.Events
             //Determine what the player is trying to do.
             if (sender is Settlement)
             {
-                //Build a settlement.
+                //Check if the player has any more settlements they are allowed to build.
                 if ((firstPass && p.getSettlementCount() < 1) || (!firstPass && p.getSettlementCount() < 2))
                 {
-                    if (((Settlement)sender).buildSettlement(p, false))
+                    try
                     {
+                        ((Settlement)sender).buildSettlement(p, false);
                         p.addSettlement((Settlement)sender);
-                        theBoard.addEventText(p.getPlayerName() + " placed a Settlement.");
+                        theBoard.addEventText(UserMessages.PlayerPlacedASettlement(p));
+                    } catch(BuildError be)
+                    {
+                        theBoard.addEventText(be.Message);
                     }
                 } else
                 {
-                    theBoard.addEventText("You may not place any more roads.");
+                    theBoard.addEventText("You may not place any more settlements.");
                 }
             }
             else if (sender is Road)
             {
-                //Build a settlement.
+                //Check if the player is allowed to build another road.
                 if ((firstPass && p.getRoadCount() < 1) || (!firstPass && p.getRoadCount() < 2))
                 {
                     if (((Road)sender).buildRoad(p, false))
@@ -82,7 +86,7 @@ namespace SettlersOfCatan.Events
                     }
                 } else
                 {
-                    theBoard.addEventText("You may not place any more settlements.");
+                    theBoard.addEventText("You may not place any more roads.");
                 }
             } else
             {
