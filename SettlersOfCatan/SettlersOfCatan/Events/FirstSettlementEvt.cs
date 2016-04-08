@@ -79,10 +79,14 @@ namespace SettlersOfCatan.Events
                 //Check if the player is allowed to build another road.
                 if ((firstPass && p.getRoadCount() < 1) || (!firstPass && p.getRoadCount() < 2))
                 {
-                    if (((Road)sender).buildRoad(p, false))
+                    try
                     {
+                        ((Road)sender).buildRoad(p, false);
                         p.addRoad((Road)sender);
-                        theBoard.addEventText(p.getPlayerName() + " placed a Road.");
+                        theBoard.addEventText(UserMessages.PlayerPlacedARoad(p));
+                    } catch (BuildError be)
+                    {
+                        theBoard.addEventText(be.Message);
                     }
                 } else
                 {

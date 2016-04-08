@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace SettlersOfCatan.Events
 {
-    
-    class RoadBuildEvt
+    public interface EvtOwnr
     {
+        void subeventEnded();
     }
 }

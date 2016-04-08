@@ -103,42 +103,31 @@ namespace SettlersOfCatan
             return false;
         }
 
-        public bool playerHasRequiredResources(Player p)
-        {
-            return p.getResourceCount(Board.ResourceType.Wood) > 0 && p.getResourceCount(Board.ResourceType.Brick) > 0;
-        }
-
         /**
             Add condition:
                 Must have either a road or a settlement with matching player.
          */
-        public bool buildRoad(Player currentPlayer, bool takeResources)
+        public void buildRoad(Player currentPlayer, bool takeResources)
         {
-            if (owningPlayer == null)
+
+            if (owningPlayer != null)
             {
-                if (!takeResources || takeResources && playerHasRequiredResources(currentPlayer))
-                {
-                    if (checkForConnection(currentPlayer))
-                    {
-                        this.owningPlayer = currentPlayer;
-                        this.BackColor = currentPlayer.getPlayerColor();
-                        return true;
-                    } else
-                    {
-                        MessageBox.Show("There is no connection to either a settlement or road at this location.");
-                        return false;
-                    }
-                } else
-                {
-                    MessageBox.Show("Not enough resources!");
-                    return false;
-                }
+                throw new BuildError(BuildError.LocationOwnedBy(owningPlayer));
             }
-            else
+
+            if (takeResources && !Bank.hasPayment(currentPlayer, Bank.ROAD_COST))
             {
-                MessageBox.Show("There is already a road built at that location.");
-                return false;
+                throw new BuildError(BuildError.NOT_ENOUGH_RESOURCES);
             }
+
+            if (!checkForConnection(currentPlayer))
+            {
+                throw new BuildError(BuildError.NO_CONNECTED_ROAD);
+            }
+
+
+            this.owningPlayer = currentPlayer;
+            this.BackColor = currentPlayer.getPlayerColor();
         }
     }
 }

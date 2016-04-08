@@ -100,21 +100,6 @@ namespace SettlersOfCatan
             return allow;
         }
 
-        private bool playerHasRequiredSetResources(Player p)
-        {
-            return (p.getResourceCount(Board.ResourceType.Brick) > 0 &&
-                p.getResourceCount(Board.ResourceType.Wood) > 0 &&
-                p.getResourceCount(Board.ResourceType.Wheat) > 0 &&
-                p.getResourceCount(Board.ResourceType.Sheep) > 0);
-        }
-
-        private bool playerHasRequiredCityResources(Player p)
-        {
-            return (
-                p.getResourceCount(Board.ResourceType.Wheat) > 1 &&
-                p.getResourceCount(Board.ResourceType.Ore) > 2
-                );
-        }
         /*
             Conditions must apply: 
             no other player's settlement must be present at this location or, within 1 road's distance.
@@ -127,7 +112,7 @@ namespace SettlersOfCatan
 
             if (owningPlayer == null)
             {
-                if (!playerHasRequiredSetResources(currentPlayer) && takeResources)
+                if (!Bank.hasPayment(currentPlayer, Bank.SETTLEMENT_COST) && takeResources)
                 {
                     throw new BuildError(BuildError.NOT_ENOUGH_RESOURCES);
                 }
@@ -141,7 +126,7 @@ namespace SettlersOfCatan
             }
             else if (owningPlayer == currentPlayer)
             {
-                if (!playerHasRequiredCityResources(currentPlayer))
+                if (!Bank.hasPayment(currentPlayer, Bank.CITY_COST))
                 {
                     throw new BuildError(BuildError.NOT_ENOUGH_RESOURCES);
                 }

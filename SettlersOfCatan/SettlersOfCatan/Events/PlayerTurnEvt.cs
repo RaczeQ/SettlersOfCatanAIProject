@@ -44,10 +44,12 @@ namespace SettlersOfCatan.Events
                             {
                                 //take city resources
                                 Board.TheBank.takePayment(theBoard.currentPlayer, Bank.CITY_COST);
+                                theBoard.addEventText(UserMessages.PlayerPlacedASettlement(theBoard.currentPlayer));
                             } else
                             {
                                 //take settlement resources
                                 Board.TheBank.takePayment(theBoard.currentPlayer, Bank.SETTLEMENT_COST);
+                                theBoard.addEventText(UserMessages.PlayerBuiltACity(theBoard.currentPlayer));
                             }
                         } catch (BuildError be)
                         {
@@ -56,11 +58,51 @@ namespace SettlersOfCatan.Events
 
                     } else if (sender is Road)
                     {
-
+                        //Try to build the road
+                        try
+                        {
+                            ((Road)sender).buildRoad(theBoard.currentPlayer, true);
+                            //Take the resources.
+                            Board.TheBank.takePayment(theBoard.currentPlayer, Bank.ROAD_COST);
+                            theBoard.addEventText(UserMessages.PlayerPlacedARoad(theBoard.currentPlayer));
+                        } catch (BuildError be)
+                        {
+                            theBoard.addEventText(be.Message);
+                        }
+                    } else if (sender == theBoard.pbBuildDevelopmentCard)
+                    {
+                        //We want to give the player a development card.
+                        try
+                        {
+                            theBoard.currentPlayer.giveDevelopmentCard(Board.TheBank.purchaseDevelopmentCard(theBoard.currentPlayer));
+                            Board.TheBank.takePayment(theBoard.currentPlayer, Bank.DEV_CARD_COST);
+                            theBoard.addEventText(UserMessages.PlayerPurchasedADevCard(theBoard.currentPlayer));
+                        } catch (BuildError be)
+                        {
+                            theBoard.addEventText(be.Message);
+                        }
+                    } else if (sender is DevelopmentCard)
+                    {
+                        DevelopmentCard card = (DevelopmentCard)sender;
+                        switch (card.getType())
+                        {
+                            case DevelopmentCard.DevCardType.Road:
+                                RoadBuildingEvt evt = new RoadBuildingEvt();
+                                evt.beginExecution(theBoard, this);
+                                disableEventObjects();
+                                Board.TheBank.developmentCards.putCardBottom(theBoard.currentPlayer.takeDevelopmentCard(card.getType()));
+                                break;
+                            case DevelopmentCard.DevCardType.Plenty:
+                                YearOfPlentyEvt yr = new YearOfPlentyEvt();
+                                yr.beginExecution(theBoard, this);
+                                disableEventObjects();
+                                Board.TheBank.developmentCards.putCardBottom(theBoard.currentPlayer.takeDevelopmentCard(card.getType()));
+                                break;
+                        }
                     }
                     break;
                 case State.Trade:
-                    //This should be unreachable.
+                    //Should not be able to reach this statement.
                     break;
 
             }
@@ -71,6 +113,7 @@ namespace SettlersOfCatan.Events
             disableEventObjects();
             tradeWindow = new TradeWindow();
             tradeWindow.loadBankTrade();
+            tradeWindow.Closing += onTradeEnded;
             currentState = State.Trade;
             tradeWindow.Show();
         }
@@ -80,6 +123,7 @@ namespace SettlersOfCatan.Events
             disableEventObjects();
             tradeWindow = new TradeWindow();
             tradeWindow.loadHarborTrade();
+            tradeWindow.Closing += onTradeEnded;
             currentState = State.Trade;
             tradeWindow.Show();
         }
@@ -121,6 +165,7 @@ namespace SettlersOfCatan.Events
             theBoard.btnBankTrade.Click += bankTrade;
             theBoard.btnPlayerTrade.Click += playerTrade;
             theBoard.btnEndTurn.Click += executeUpdate;
+            theBoard.pbBuildDevelopmentCard.Click += executeUpdate;
             foreach (Road rd in theBoard.roadLocations)
             {
                 rd.Click += executeUpdate;
@@ -129,6 +174,7 @@ namespace SettlersOfCatan.Events
             {
                 st.Click += executeUpdate;
             }
+            theBoard.enableToolTips();
         }
 
         public void disableEventObjects()
@@ -139,6 +185,7 @@ namespace SettlersOfCatan.Events
             theBoard.btnBankTrade.Click -= bankTrade;
             theBoard.btnPlayerTrade.Click -= playerTrade;
             theBoard.btnEndTurn.Click -= executeUpdate;
+            theBoard.pbBuildDevelopmentCard.Click -= executeUpdate;
             foreach (Road rd in theBoard.roadLocations)
             {
                 rd.Click -= executeUpdate;
@@ -147,6 +194,10 @@ namespace SettlersOfCatan.Events
             {
                 st.Click -= executeUpdate;
             }
+            theBoard.pnlDevelopmentCardToolTip.Enabled = false;
+            theBoard.pnlRoadToolTip.Enabled = false;
+            theBoard.pnlSettlementToolTip.Enabled = false;
+            theBoard.disableToolTips();
         }
     }
 }

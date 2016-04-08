@@ -71,9 +71,9 @@
     <Compile Include="Events\HarborTrade.cs" />
     <Compile Include="Events\PlayerTradeEvt.cs" />
     <Compile Include="Events\PlayerTurnEvt.cs" />
-    <Compile Include="Events\RoadBuildEvt.cs" />
-    <Compile Include="Events\SettlementBuildEvt.cs" />
+    <Compile Include="Events\RoadBuildingEvt.cs" />
     <Compile Include="Events\ThiefEvt.cs" />
+    <Compile Include="Events\YearOfPlentyEvt.cs" />
     <Compile Include="Exeptions.cs" />
     <Compile Include="Forms\Board.cs">
       <SubType>Form</SubType>
@@ -411,6 +411,9 @@
     <None Include="Resources\6_Die_Face_Yellow.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Error.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

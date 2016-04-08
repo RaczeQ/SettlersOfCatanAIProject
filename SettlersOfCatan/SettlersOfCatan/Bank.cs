@@ -43,6 +43,14 @@ namespace SettlersOfCatan
             {
                 Board.ResourceType.Brick, Board.ResourceType.Wood, Board.ResourceType.Wheat, Board.ResourceType.Sheep
             };
+        public static Board.ResourceType[] ROAD_COST =
+            {
+                Board.ResourceType.Brick, Board.ResourceType.Wood
+            };
+        public static Board.ResourceType[] DEV_CARD_COST =
+        {
+            Board.ResourceType.Sheep, Board.ResourceType.Wheat, Board.ResourceType.Ore
+        };
 
         public Deck developmentCards;
         private List<ResourceCard> resources;
@@ -64,6 +72,7 @@ namespace SettlersOfCatan
                 dc.setType(dct);
                 developmentCards.putCard(dc);
             }
+            developmentCards.shuffleDeck();
 
             for (int i = 0; i < 19; i ++)
             {
@@ -114,5 +123,40 @@ namespace SettlersOfCatan
             }
         }
 
+        public static bool hasPayment(Player p, Board.ResourceType[] paymentList)
+        {
+            int[] resourceList = new int[6];
+            bool satisfied = true;
+            foreach (Board.ResourceType res in paymentList)
+            {
+                resourceList[(int)res]++;
+            }
+            for (int i = 0; i < 6; i++)
+            {
+                if (!(p.getResourceCount((Board.ResourceType)i) >= resourceList[i]))
+                {
+                    satisfied = false;
+                }
+            }
+            return satisfied;
+        }
+
+        public DevelopmentCard purchaseDevelopmentCard(Player p)
+        {
+            //Check for payment
+            //Check for available cards
+            if (!hasPayment(p, Bank.DEV_CARD_COST))
+            {
+                throw new BuildError(BuildError.NOT_ENOUGH_RESOURCES);
+            }
+
+            if (developmentCards.cardCount() < 1)
+            {
+                throw new BuildError(BuildError.NOT_ENOUGH_DEV_CARDS);
+            }
+
+            //We passed the previous checks, give the player a card
+            return (DevelopmentCard)developmentCards.drawTopCard();
+        }
     }
 }

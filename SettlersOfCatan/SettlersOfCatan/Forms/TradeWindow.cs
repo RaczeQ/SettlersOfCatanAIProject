@@ -19,16 +19,34 @@ namespace SettlersOfCatan
             MessageBox.Show("This is not implemented yet. Close the window to continue.");
         }
 
+        /*
+            Allow the player to trade any 4 of the same resource for any one other available resource from the bank.
+         */
         public void loadBankTrade()
         {
+
         }
 
+        /*
+            Allow the player to trade with the chosen harbor.
+         */
         public void loadHarborTrade()
         {
 
         }
 
+        /*
+            Allow the player to trade with another player.
+         */
         public void loadPlayerTrade()
+        {
+
+        }
+
+        /*
+            Allow the player to pick any two available resources from the bank for no cost.
+         */
+        public void loadYearOfPlenty()
         {
 
         }

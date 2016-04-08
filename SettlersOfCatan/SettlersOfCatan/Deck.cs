@@ -29,6 +29,11 @@ namespace SettlersOfCatan
             cardsInDeck.Add(c);
         }
 
+        public void putCardBottom(Card c)
+        {
+            cardsInDeck.Insert(0, c);
+        }
+
         public int cardCount()
         {
             return cardsInDeck.Count();

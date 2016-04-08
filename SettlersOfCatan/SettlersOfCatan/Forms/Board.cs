@@ -16,7 +16,6 @@ using System.Runtime.Serialization;
 
 namespace SettlersOfCatan
 {
-    [Serializable]
     public partial class Board : Form, EvtOwnr
     {
         public static Bank TheBank = new Bank();
@@ -79,8 +78,6 @@ namespace SettlersOfCatan
             InitializeComponent();
 
             this.pnlBoardArea.BackColor = Color.Transparent; //Set the color to transparent. The color is white by default so it is visible in the editor.
-            this.pbBuildDevelopmentCard.MouseEnter += showDevelopmentCardToolTip;
-            this.pbBuildDevelopmentCard.MouseLeave += hideDevelopmentCardToolTip;
 
             //Load up the tile image resources .
             for (int i = 0; i < 6; i++)
@@ -307,8 +304,6 @@ namespace SettlersOfCatan
                         if (settlementLocation == null)
                         {
                             settlementLocation = new Settlement(setPoint, 0);
-                            settlementLocation.MouseEnter += showSettlementBuildToolTip;
-                            settlementLocation.MouseLeave += hideSettlementBuildToolTip;
                             settlementLocation.id = settlementLocations.Count;
                             settlementLocations.Add(settlementLocation);
                             pnlBoardArea.Controls.Add(settlementLocation);
@@ -334,8 +329,6 @@ namespace SettlersOfCatan
                         {
                             roadLocation = new Road(roadPoint, 0);
                             pnlBoardArea.Controls.Add(roadLocation);
-                            roadLocation.MouseEnter += showRoadBuildToolTip;
-                            roadLocation.MouseLeave += hideRoadBuildToolTip;
                             roadLocation.id = roadLocations.Count;
                             roadLocations.Add(roadLocation);
                             roadLocation.BringToFront();
@@ -461,14 +454,11 @@ namespace SettlersOfCatan
 
         public void showRoadBuildToolTip(object sender, EventArgs e)
         {
-            if (true)
-            {
-                Point loc = ((PictureBox)sender).Location;
-                loc.X += 32;
-                loc.Y += 32;
-                this.pnlRoadToolTip.Location = loc;
-                this.pnlRoadToolTip.Visible = true;
-            }
+            Point loc = ((PictureBox)sender).Location;
+            loc.X += 32;
+            loc.Y += 32;
+            this.pnlRoadToolTip.Location = loc;
+            this.pnlRoadToolTip.Visible = true;
         }
 
         public void hideRoadBuildToolTip(object sender, EventArgs e)
@@ -478,37 +468,75 @@ namespace SettlersOfCatan
 
         public void showSettlementBuildToolTip(object sender, EventArgs s)
         {
-            if (true)
+            if (sender is Settlement)
             {
+                Settlement set = (Settlement)sender;
                 Point loc = ((PictureBox)sender).Location;
                 loc.X += 32;
                 loc.Y += 32;
-                this.pnlSettlementToolTip.Location = loc;
-                this.pnlSettlementToolTip.Visible = true;
+                if (set.getOwningPlayer() == null)
+                {
+                    this.pnlSettlementToolTip.Location = loc;
+                    this.pnlSettlementToolTip.Visible = true;
+                } else
+                {
+                    this.pnlCityToolTip.Location = loc;
+                    this.pnlCityToolTip.Visible = true;
+                }
             }
         }
 
         public void hideSettlementBuildToolTip(object sender, EventArgs s)
         {
             this.pnlSettlementToolTip.Visible = false;
+            this.pnlCityToolTip.Visible = false;
         }
 
 
         public void showDevelopmentCardToolTip(object sender, EventArgs s)
         {
-            if (true)
-            {
-                Point loc = ((PictureBox)sender).Parent.Location;
-                loc.X += ((PictureBox)sender).Width;
-                loc.Y += ((PictureBox)sender).Location.Y;
-                this.pnlDevelopmentCardToolTip.Location = loc;
-                this.pnlDevelopmentCardToolTip.Visible = true;
-            }
+            Point loc = ((PictureBox)sender).Parent.Location;
+            loc.X += ((PictureBox)sender).Width;
+            loc.Y += ((PictureBox)sender).Location.Y;
+            this.pnlDevelopmentCardToolTip.Location = loc;
+            this.pnlDevelopmentCardToolTip.Visible = true;
         }
 
         public void hideDevelopmentCardToolTip(object sender, EventArgs s)
         {
             this.pnlDevelopmentCardToolTip.Visible = false;
+        }
+
+        public void enableToolTips()
+        {
+            foreach (Settlement set in this.settlementLocations)
+            {
+                set.MouseEnter += showSettlementBuildToolTip;
+                set.MouseLeave += hideSettlementBuildToolTip;
+            }
+            foreach (Road road in this.roadLocations)
+            {
+                road.MouseEnter += showRoadBuildToolTip;
+                road.MouseLeave += hideRoadBuildToolTip;
+            }
+            pbBuildDevelopmentCard.MouseEnter += showDevelopmentCardToolTip;
+            pbBuildDevelopmentCard.MouseLeave += hideDevelopmentCardToolTip;
+        }
+
+        public void disableToolTips()
+        {
+            foreach (Settlement set in this.settlementLocations)
+            {
+                set.MouseEnter -= showSettlementBuildToolTip;
+                set.MouseLeave -= hideSettlementBuildToolTip;
+            }
+            foreach (Road road in this.roadLocations)
+            {
+                road.MouseEnter -= showRoadBuildToolTip;
+                road.MouseLeave -= hideRoadBuildToolTip;
+            }
+            pbBuildDevelopmentCard.MouseEnter -= showDevelopmentCardToolTip;
+            pbBuildDevelopmentCard.MouseLeave -= hideDevelopmentCardToolTip;
         }
 
         /**
