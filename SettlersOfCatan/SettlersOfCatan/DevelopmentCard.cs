@@ -18,7 +18,7 @@ namespace SettlersOfCatan
 
         private DevCardType type = DevCardType.Back;
         private bool hidden = false;
-        private bool used = false;
+        public bool used = false;
 
         public DevelopmentCard()
         {
@@ -39,8 +39,11 @@ namespace SettlersOfCatan
 
         public void hide()
         {
-            hidden = true;
-            this.BackgroundImage = Bank.devCardImages[(int)DevCardType.Back];
+            if (!used)
+            {
+                hidden = true;
+                this.BackgroundImage = Bank.devCardImages[(int)DevCardType.Back];
+            }
         }
 
         public void setType(DevCardType type)

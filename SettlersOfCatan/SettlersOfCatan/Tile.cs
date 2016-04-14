@@ -8,10 +8,11 @@ using System.Windows.Forms;
 
 namespace SettlersOfCatan
 {
-    [Serializable]
     public abstract class Tile : PictureBox, Card
     {
         public int index = 0;
+
+        private Point position;
 
         private Panel container;
 
@@ -28,12 +29,23 @@ namespace SettlersOfCatan
 //            base.OnPaint(pe);
         }
 
+        public void setPosition(Point pos)
+        {
+            this.position.X = pos.X;
+            this.position.Y = pos.Y;
+            this.Location = position;
+        }
+
+        public Point getPosition()
+        {
+            return this.position;
+        }
+
         public abstract string toString();
     }
 
     /**
      */
-    [Serializable]
     public class TerrainTile : Tile
     {
 
@@ -74,7 +86,7 @@ namespace SettlersOfCatan
                 {
                     if (set.getOwningPlayer() != null)
                     {
-                        ResourceCard rc = Board.TheBank.giveResource(tileType);
+                        ResourceCard rc = Board.TheBank.giveOutResource(tileType);
                         if (rc != null)
                         {
                             set.getOwningPlayer().giveResource(rc);
@@ -150,9 +162,10 @@ namespace SettlersOfCatan
     /**
 
      */
-    [Serializable]
     public class OceanBorderTile : Tile
     {
+
+        public Harbor harbor;
 
         public OceanBorderTile(Panel p) : base(p)
         {
@@ -164,6 +177,21 @@ namespace SettlersOfCatan
         public override string toString()
         {
             return "";
+        }
+
+        public void setHarbor(Harbor harbor)
+        {
+            this.harbor = harbor;
+        }
+
+        public Harbor getHarbor()
+        {
+            return this.harbor;
+        }
+
+        public override string ToString()
+        {
+            return "";   
         }
     }
 }

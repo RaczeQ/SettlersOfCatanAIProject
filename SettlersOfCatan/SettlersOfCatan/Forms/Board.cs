@@ -25,14 +25,14 @@ namespace SettlersOfCatan
         public static String[] TILE_NAMES = { "Forest", "Hills", "Mountains", "Farms", "Fields", "Desert" };
         public Bitmap[] tileImages = new Bitmap[6];
         public String[] tileImageResourceNames = { "Forest_Tile.png", "Hills_Tile.png", "Mountain_Tile.png", "Wheat_Fields_Tile.png", "Pasture_Tile.png", "Desert_Tile.png" };
-
+        public static String[] iconImageResourceNames = { "Wood_Icon.png", "Brick_Icon.png", "Ore_Icon.png", "Wheat_Icon.png", "Sheep_Icon.png", "No_Resource_Icon.png" };
         //Keeps track of what tile indexes are ocean borders for later use.
-        private int[] oceanBorderInds = { 0, 1, 2, 3, 4, 8, 9, 14, 15, 21, 22, 27, 28, 32, 33, 34, 35, 36 };
-        String[] tileFileNames = { "Rock.png", "Wood.png" };
         private Random rand = new Random();
         public Tile[] boardTiles = new Tile[BOARD_TILE_COUNT];
         public List<Road> roadLocations = new List<Road>();
         public List<Settlement> settlementLocations = new List<Settlement>();
+        public List<Harbor> harbors = new List<Harbor>();
+
         //This is the distribution of terrain resources for a four player game.
         public static Board.ResourceType[] fourPlayerTiles = 
             {
@@ -41,6 +41,20 @@ namespace SettlersOfCatan
                 Board.ResourceType.Wood, Board.ResourceType.Wood, Board.ResourceType.Wood, Board.ResourceType.Wood,
                 Board.ResourceType.Wheat, Board.ResourceType.Wheat, Board.ResourceType.Wheat, Board.ResourceType.Wheat,
                 Board.ResourceType.Brick, Board.ResourceType.Brick, Board.ResourceType.Brick, Board.ResourceType.Desert
+            };
+
+
+        private int[] oceanBorderIndsFourPlayer = { 0, 1, 2, 3, 4, 8, 9, 14, 15, 21, 22, 27, 28, 32, 33, 34, 35, 36 };
+
+        public static int[] FourPlayerHarborLocations =         { 2, 0, 8, 32, 33, 35, 22, 21, 9 };
+        public static int[] FourPlayerHarborRequiredResources = { 2, 3, 3, 2, 3 , 2 , 2 , 3 , 2 };
+        public static String[] FourPlayerHarborResourceNames = { "Harbor_2-1-Wool.png", "Harbor_3-1-X.png", "Harbor_3-1-X.png", "Harbor_2-1-Brick.png",
+            "Harbor_3-1-X.png", "Harbor_2-1-Wood.png", "Harbor_2-1-Wheat.png", "Harbor_3-1-X.png", "Harbor_2-1-Ore.png" };
+        public static Board.ResourceType[] FourPlayerHarborOutputResources =
+            {
+                Board.ResourceType.Sheep, Board.ResourceType.Desert, Board.ResourceType.Desert,
+                Board.ResourceType.Brick, Board.ResourceType.Desert, Board.ResourceType.Wood, Board.ResourceType.Wheat,
+                Board.ResourceType.Desert, Board.ResourceType.Ore
             };
 
         //This is the correctly ordered number chip distribution for a four player game.
@@ -238,9 +252,9 @@ namespace SettlersOfCatan
 
                 //Determine if this tile is an ocean border.
                 bool ocean = false;
-                for (int f = 0; f < oceanBorderInds.Length; f++)
+                for (int f = 0; f < oceanBorderIndsFourPlayer.Length; f++)
                 {
-                    if (i == oceanBorderInds[f])
+                    if (i == oceanBorderIndsFourPlayer[f])
                     {
                         ocean = true;
                     }
@@ -252,7 +266,7 @@ namespace SettlersOfCatan
                 {
                     
                     TerrainTile tile = (TerrainTile)terrainTiles.drawTopCard();
-                    tile.Location = position;
+                    tile.setPosition(position);
                     tile.index = i;
                     boardTiles[i] = tile;
                     if (tile.getResourceType() == ResourceType.Desert)
@@ -269,7 +283,7 @@ namespace SettlersOfCatan
                 } else
                 {
                     OceanBorderTile tile = new OceanBorderTile(pnlBoardArea);
-                    tile.Location = position;
+                    tile.setPosition(position);
                     tile.index = i;
                     boardTiles[i] = tile;
                 }
@@ -362,12 +376,50 @@ namespace SettlersOfCatan
                     }
                 }
             }
+
+            //Position each of the harbors
+            for (int i = 0; i < FourPlayerHarborLocations.Count(); i++)
+            {
+                
+                        //Create a new harbor using the information from the trade at harborCount location
+                 
+                OceanBorderTile bt = (OceanBorderTile)this.boardTiles[FourPlayerHarborLocations[i]];
+                Harbor h = new Harbor(FourPlayerHarborRequiredResources[i], FourPlayerHarborOutputResources[i]);
+                //MessageBox.Show("Resources/" + FourPlayerHarborResourceNames[harborCount]);
+                h.BackgroundImage = new Bitmap("Resources/" + FourPlayerHarborResourceNames[i]);
+                h.Location = new Point(0, TILE_TRIANGLE_HEIGHT);
+                harbors.Add(h);
+                bt.setHarbor(h);
+                bt.Controls.Add(h);
+
+                //Set the settlements that will be able to use this harbor
+                Point position = bt.getPosition();
+
+                Point[] settlementPoints = new Point[6];
+                //A list of positions for each possible settlement location on this ocean border
+                settlementPoints[0] = new Point(position.X, position.Y + TILE_TRIANGLE_HEIGHT);
+                settlementPoints[1] = new Point(position.X + (SPACING / 2), position.Y);
+                settlementPoints[2] = new Point(position.X + SPACING, position.Y + TILE_TRIANGLE_HEIGHT);
+                settlementPoints[3] = new Point(position.X + SPACING, position.Y + SPACING - TILE_TRIANGLE_HEIGHT);
+                settlementPoints[4] = new Point(position.X + (SPACING / 2), position.Y + SPACING);
+                settlementPoints[5] = new Point(position.X, position.Y + SPACING - TILE_TRIANGLE_HEIGHT);
+                //Look through the list of points to see if any of these positions match exisiting settlement locations
+                foreach (Point p in settlementPoints)
+                {
+                    Settlement set = findSettlementWithPosition(p);
+                    if (set != null)
+                    {
+                        //We have found a valid trade location
+                        bt.getHarbor().addTradeLocation(set);
+                    }
+                }
+            }
+
+            debugSaveBoardData();
         }
 
         public void debugSaveBoardData()
         {
-            MessageBox.Show(this.settlementLocations.Count() + "");
-            MessageBox.Show(this.roadLocations.Count() + "");
             try
             {
                 StreamWriter write = new StreamWriter("datastructure.txt");
@@ -393,7 +445,7 @@ namespace SettlersOfCatan
             }
             catch (IOException e)
             {
-                MessageBox.Show("There was an I/O issue.");
+                MessageBox.Show("There was an I/O issue. " + e.Message);
             }
         }
 

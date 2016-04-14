@@ -343,6 +343,76 @@ namespace SettlersOfCatan.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Harbor_2_1_Brick {
+            get {
+                object obj = ResourceManager.GetObject("Harbor_2_1_Brick", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Harbor_2_1_Ore {
+            get {
+                object obj = ResourceManager.GetObject("Harbor_2_1_Ore", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Harbor_2_1_Wheat {
+            get {
+                object obj = ResourceManager.GetObject("Harbor_2_1_Wheat", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Harbor_2_1_Wood {
+            get {
+                object obj = ResourceManager.GetObject("Harbor_2_1_Wood", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Harbor_2_1_Wool {
+            get {
+                object obj = ResourceManager.GetObject("Harbor_2_1_Wool", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Harbor_3_1_X {
+            get {
+                object obj = ResourceManager.GetObject("Harbor_3_1_X", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Harbor_5_1_X {
+            get {
+                object obj = ResourceManager.GetObject("Harbor_5_1_X", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Hills_Tile {
             get {
                 object obj = ResourceManager.GetObject("Hills_Tile", resourceCulture);
@@ -406,6 +476,16 @@ namespace SettlersOfCatan.Properties {
         internal static System.Drawing.Bitmap Mountain_Tile {
             get {
                 object obj = ResourceManager.GetObject("Mountain_Tile", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap No_Resource_Icon {
+            get {
+                object obj = ResourceManager.GetObject("No_Resource_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

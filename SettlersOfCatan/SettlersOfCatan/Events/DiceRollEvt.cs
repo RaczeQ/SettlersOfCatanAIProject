@@ -49,7 +49,7 @@ namespace SettlersOfCatan.Events
                                 {
                                     if (set.getOwningPlayer() != null)
                                     {
-                                        ResourceCard rc = Board.TheBank.giveResource(tt.getResourceType());
+                                        ResourceCard rc = Board.TheBank.giveOutResource(tt.getResourceType());
                                         if (rc != null)
                                         {
                                             set.getOwningPlayer().giveResource(rc);

@@ -265,4 +265,28 @@
   <data name="Error" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Error.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Harbor_2_1_Brick" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Harbor_2-1-Brick.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Harbor_2_1_Ore" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Harbor_2-1-Ore.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Harbor_2_1_Wheat" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Harbor_2-1-Wheat.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Harbor_2_1_Wood" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Harbor_2-1-Wood.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Harbor_2_1_Wool" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Harbor_2-1-Wool.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Harbor_3_1_X" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Harbor_3-1-X.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Harbor_5_1_X" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Harbor_5-1-X.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="No_Resource_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\No_Resource_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

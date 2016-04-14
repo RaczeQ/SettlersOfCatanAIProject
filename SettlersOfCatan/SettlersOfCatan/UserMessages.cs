@@ -67,5 +67,7 @@ namespace SettlersOfCatan
         {
             return player.getPlayerName() + " used a Road Building card.";
         }
+
+        public static string PlayerDoesNotHaveAdjascentSettlement = "You do not have an adjascent settlement to trade with this harbor.";
     }
 }

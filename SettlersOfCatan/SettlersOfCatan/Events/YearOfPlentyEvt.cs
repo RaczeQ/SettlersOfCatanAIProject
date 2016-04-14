@@ -34,7 +34,7 @@ namespace SettlersOfCatan.Events
         public void enableEventObjects()
         {
             tradeWindow = new TradeWindow();
-            tradeWindow.loadYearOfPlenty();
+            tradeWindow.loadYearOfPlenty(theBoard.currentPlayer);
             tradeWindow.Show();
             tradeWindow.Closing += executeUpdate;
         }

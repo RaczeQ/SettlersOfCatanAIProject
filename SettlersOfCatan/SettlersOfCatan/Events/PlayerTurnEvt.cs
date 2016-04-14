@@ -31,8 +31,7 @@ namespace SettlersOfCatan.Events
                         //End turn.
                         theBoard.addEventText(UserMessages.PlayerEndedTurn(theBoard.currentPlayer));
                         endExecution();
-                    }
-                    if (sender is Settlement)
+                    } else if (sender is Settlement)
                     {
                         Settlement location = (Settlement)sender;
                         try
@@ -99,6 +98,27 @@ namespace SettlersOfCatan.Events
                                 Board.TheBank.developmentCards.putCardBottom(theBoard.currentPlayer.takeDevelopmentCard(card.getType()));
                                 break;
                         }
+                    } else if (sender is Harbor)
+                    {
+                        Harbor hb = (Harbor)sender;
+                        if (hb.playerHasValidSettlement(theBoard.currentPlayer))
+                        {
+                            if (TradeWindow.canPlayerTradeWithHarbor(hb, theBoard.currentPlayer))
+                            {
+                                disableEventObjects();
+                                tradeWindow = new TradeWindow();
+                                tradeWindow.loadHarborTrade(hb, theBoard.currentPlayer);
+                                tradeWindow.Closing += onTradeEnded;
+                                currentState = State.Trade;
+                                tradeWindow.Show();
+                            } else
+                            {
+                                theBoard.addEventText(BuildError.NOT_ENOUGH_RESOURCES);
+                            }
+                        } else
+                        {
+                            theBoard.addEventText(UserMessages.PlayerDoesNotHaveAdjascentSettlement);
+                        }
                     }
                     break;
                 case State.Trade:
@@ -112,17 +132,7 @@ namespace SettlersOfCatan.Events
         {
             disableEventObjects();
             tradeWindow = new TradeWindow();
-            tradeWindow.loadBankTrade();
-            tradeWindow.Closing += onTradeEnded;
-            currentState = State.Trade;
-            tradeWindow.Show();
-        }
-
-        public void harborTrade(Object sender, EventArgs e)
-        {
-            disableEventObjects();
-            tradeWindow = new TradeWindow();
-            tradeWindow.loadHarborTrade();
+            tradeWindow.loadBankTrade(theBoard.currentPlayer);
             tradeWindow.Closing += onTradeEnded;
             currentState = State.Trade;
             tradeWindow.Show();
@@ -132,7 +142,7 @@ namespace SettlersOfCatan.Events
         {
             disableEventObjects();
             tradeWindow = new TradeWindow();
-            tradeWindow.loadPlayerTrade();
+            tradeWindow.loadPlayerTrade(theBoard.currentPlayer);
             tradeWindow.Closing += onTradeEnded;
             currentState = State.Trade;
             tradeWindow.Show();
@@ -174,6 +184,10 @@ namespace SettlersOfCatan.Events
             {
                 st.Click += executeUpdate;
             }
+            foreach (Harbor hb in theBoard.harbors)
+            {
+                hb.Click += executeUpdate;
+            }
             theBoard.enableToolTips();
         }
 
@@ -193,6 +207,10 @@ namespace SettlersOfCatan.Events
             foreach (Settlement st in theBoard.settlementLocations)
             {
                 st.Click -= executeUpdate;
+            }
+            foreach (Harbor hb in theBoard.harbors)
+            {
+                hb.Click -= executeUpdate;
             }
             theBoard.pnlDevelopmentCardToolTip.Enabled = false;
             theBoard.pnlRoadToolTip.Enabled = false;

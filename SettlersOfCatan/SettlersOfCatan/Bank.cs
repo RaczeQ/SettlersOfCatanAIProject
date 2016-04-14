@@ -87,7 +87,7 @@ namespace SettlersOfCatan
         /*
             Players can get this type of resource. If no resource is available, none is given.
          */
-        public ResourceCard giveResource(Board.ResourceType type)
+        public ResourceCard giveOutResource(Board.ResourceType type)
         {
             ResourceCard c = null;
             for (int i = 0; i < resources.Count; i ++)
@@ -104,9 +104,27 @@ namespace SettlersOfCatan
                 resources.Remove(c);
             } else
             {
-                MessageBox.Show("There are no more resource cards in the deck.");
+                //MessageBox.Show("There are no more resource cards in the deck.");
             }
             return c;
+        }
+
+        public bool canGiveOutResource(Board.ResourceType type, int count)
+        {
+            bool can = false;
+            int cardCount = 0;
+            foreach (ResourceCard rc in resources)
+            {
+                if (rc.getResourceType()==type)
+                {
+                    cardCount++;
+                }
+            }
+            if (cardCount>= count)
+            {
+                can = true;
+            }
+            return can;
         }
 
         public void putResourceCard(ResourceCard rc)

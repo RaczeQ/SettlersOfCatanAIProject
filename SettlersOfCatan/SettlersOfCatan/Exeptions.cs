@@ -34,6 +34,23 @@ namespace SettlersOfCatan
         { }
     }
 
+    public class TradeError : Exception
+    {
+
+        public static string NO_HARBOR_RESOURCE_SELECTED = "You must choose a resource from the harbor first.";
+        public TradeError(String message) : base(message) { }
+    }
+
+    public class BankError : Exception
+    {
+        public static string BankDoesNotHaveEnoughResourceCard()
+        {
+            return "The bank does not have enough of that type of resource to give.";
+        }
+
+        public BankError(String message) : base(message) { }
+    }
+
     public class BuildError : Exception
     {
         public static String LocationOwnedBy(Player owner)
