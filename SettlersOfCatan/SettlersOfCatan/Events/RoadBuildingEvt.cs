@@ -36,6 +36,7 @@ namespace SettlersOfCatan.Events
                     rd.buildRoad(theBoard.currentPlayer, false);
                     builtRoads++;
                     theBoard.addEventText(UserMessages.PlayerPlacedARoad(theBoard.currentPlayer));
+                    theBoard.checkForWinner();
                 } catch (BuildError be)
                 {
                     theBoard.addEventText(be.Message);

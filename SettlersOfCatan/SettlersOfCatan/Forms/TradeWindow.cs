@@ -15,8 +15,8 @@ namespace SettlersOfCatan
     public partial class TradeWindow : Form
     {
 
-        public List<ResourceSelector> playerResourceIcons = new List<ResourceSelector>();
-        public List<ResourceSelector> otherResourceIcons = new List<ResourceSelector>();
+        public List<ResourceSelector> playerResourceSelectors = new List<ResourceSelector>();
+        public List<ResourceSelector> otherResourceSelectors = new List<ResourceSelector>();
         public Player initiatingPlayer;
         private bool canClearOther = true;
 
@@ -43,12 +43,12 @@ namespace SettlersOfCatan
             lblTradeName.Text = "Bank";
             lblPlayerTitle.Text = pl.getPlayerName();
             lblPlayerTitle.BackColor = pl.getPlayerColor();
-            foreach (ResourceSelector sel in playerResourceIcons)
+            foreach (ResourceSelector sel in playerResourceSelectors)
             {
                 sel.Click += lockedTradePlayerClickPlayerResource;
             }
 
-            foreach (ResourceSelector select in otherResourceIcons)
+            foreach (ResourceSelector select in otherResourceSelectors)
             {
                 select.Click += playerClickOtherResource;
             }
@@ -67,7 +67,7 @@ namespace SettlersOfCatan
             lblTradeName.Text = "Harbor";
             lblPlayerTitle.Text = pl.getPlayerName();
             lblPlayerTitle.BackColor = pl.getPlayerColor();
-            foreach (ResourceSelector sel in playerResourceIcons)
+            foreach (ResourceSelector sel in playerResourceSelectors)
             {
                 sel.Click += lockedTradePlayerClickPlayerResource;
             }
@@ -75,7 +75,7 @@ namespace SettlersOfCatan
             if (hb.getTradeOutputResource() == Board.ResourceType.Desert)
             {
                 //The player may choose any resource to trade for.
-                foreach (ResourceSelector select in otherResourceIcons)
+                foreach (ResourceSelector select in otherResourceSelectors)
                 {
                     select.Click += playerClickOtherResource;
                 }
@@ -83,7 +83,7 @@ namespace SettlersOfCatan
             {
                 //The player is only allowed to choose the one resource.
                 canClearOther = false;
-                foreach (ResourceSelector select in otherResourceIcons)
+                foreach (ResourceSelector select in otherResourceSelectors)
                 {
                     if (select.type == hb.getTradeOutputResource())
                     {
@@ -111,6 +111,38 @@ namespace SettlersOfCatan
         public void loadYearOfPlenty(Player pl)
         {
             initiatingPlayer = pl;
+            lblTradeName.Text = "Bank";
+            lblPlayerTitle.Text = pl.getPlayerName();
+            lblPlayerTitle.BackColor = pl.getPlayerColor();
+            //Allow the player to choose resources much like they can with the harbor trade
+            for (int i = 0; i < 5; i++)
+            {
+                ResourceSelector otherSelector = new ResourceSelector((Board.ResourceType)i);
+                otherResourceSelectors.Add(otherSelector);
+                pnlOther.Controls.Add(otherSelector);
+                otherSelector.Location = new Point(5, i * otherSelector.Height + 1);
+                otherSelector.Click += yearOfPlentyClickResourceSelector;
+                otherSelector.hideControls();
+            }
+
+        }
+
+        private void yearOfPlentyClickResourceSelector(object sender, EventArgs e)
+        {
+            //Player can choose any two...
+            if (sender is ResourceSelector)
+            {
+                int count = 0;
+                foreach (ResourceSelector select in otherResourceSelectors)
+                {
+                    count += select.getCount();
+                }
+                if (count < 2)
+                {
+                    ((ResourceSelector)sender).setSelected(true);
+                    ((ResourceSelector)sender).setCount(((ResourceSelector)sender).getCount() + 1);
+                }
+            }
         }
 
 
@@ -120,7 +152,7 @@ namespace SettlersOfCatan
             {
                 bool otherResourceSelected = false;
                 ResourceSelector selectedItem=null;
-                foreach (ResourceSelector select in otherResourceIcons)
+                foreach (ResourceSelector select in otherResourceSelectors)
                 {
                     if (select.getSelected())
                     {
@@ -163,7 +195,7 @@ namespace SettlersOfCatan
             if (sender is ResourceSelector)
             {
                 int count = 0;
-                foreach (ResourceSelector select in otherResourceIcons)
+                foreach (ResourceSelector select in otherResourceSelectors)
                 {
                     select.setSelected(false);
                     if (select.getCount()>0)
@@ -190,7 +222,7 @@ namespace SettlersOfCatan
             {
                 Board.ResourceType resType = (Board.ResourceType)i;
                 ResourceSelector playerSelector = new ResourceSelector(resType);
-                playerResourceIcons.Add(playerSelector);
+                playerResourceSelectors.Add(playerSelector);
                 pnlPlayer.Controls.Add(playerSelector);
                 playerSelector.Location = new Point(5, i * playerSelector.Height + 1);
                 if (!playerControlsEnabled)
@@ -199,9 +231,9 @@ namespace SettlersOfCatan
                 }
 
                 ResourceSelector otherSelector = new ResourceSelector(resType);
-                otherResourceIcons.Add(otherSelector);
+                otherResourceSelectors.Add(otherSelector);
                 pnlOther.Controls.Add(otherSelector);
-                otherSelector.Location = new Point(5, i * playerSelector.Height + 1);
+                otherSelector.Location = new Point(5, i * otherSelector.Height + 1);
                 if (!otherPartyControlsEnabled)
                 {
                     otherSelector.hideControls();
@@ -227,14 +259,14 @@ namespace SettlersOfCatan
 
         private void clearSelection(object sender, EventArgs e)
         {
-            foreach (ResourceSelector sel in playerResourceIcons)
+            foreach (ResourceSelector sel in playerResourceSelectors)
             {
                 sel.setSelected(false);
                 sel.setCount(0);
             }
             if (canClearOther)
             {
-                foreach (ResourceSelector sel in otherResourceIcons)
+                foreach (ResourceSelector sel in otherResourceSelectors)
                 {
                     sel.setSelected(false);
                     sel.setCount(0);
@@ -246,7 +278,7 @@ namespace SettlersOfCatan
         {
             //Tabulate calculate and complete the transactions!
 
-            foreach (ResourceSelector select in playerResourceIcons)
+            foreach (ResourceSelector select in playerResourceSelectors)
             {
                 //Give bank this resource
                 for (int i = 0; i < select.getCount(); i++)
@@ -256,7 +288,7 @@ namespace SettlersOfCatan
                 }
             }
 
-            foreach (ResourceSelector select in otherResourceIcons)
+            foreach (ResourceSelector select in otherResourceSelectors)
             {
                 for (int i = 0; i < select.getCount(); i ++)
                 {

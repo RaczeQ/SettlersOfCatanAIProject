@@ -591,6 +591,61 @@ namespace SettlersOfCatan
             pbBuildDevelopmentCard.MouseLeave -= hideDevelopmentCardToolTip;
         }
 
+        public void checkForWinner()
+        {
+            //Yay!
+
+            //Update the largest army and longest road stuff
+            Player lapl = null;
+            int largestArmy = 0;
+            Player llpl = null;
+            int longestRoad = 0;
+            foreach (Player pl in playerOrder)
+            {
+                int arm = pl.getArmySize();
+                if (arm > largestArmy)
+                {
+                    lapl = pl;
+                    largestArmy = arm;
+                }
+
+                arm = pl.getLongestRoadCount();
+                if (arm > longestRoad)
+                {
+                    llpl = pl;
+                    longestRoad = arm;
+                }
+                pl.setLongestRoad(false);
+                pl.setLargestArmy(false);
+                
+            }
+            if (largestArmy > 3)
+            {
+                lapl.setLargestArmy(true);
+            }
+            if (longestRoad > 5)
+            {
+                llpl.setLongestRoad(true);
+            }
+
+            bool winner = false;
+            foreach (Player pl in playerOrder)
+            {
+                int vps = pl.calculateVictoryPoints(true);
+                if (vps >= 10)
+                {
+                    winner = true;
+                } else
+                {
+                    pl.setVictoryPoints(pl.calculateVictoryPoints(false));
+                }
+            }
+            if (winner)
+            {
+                MessageBox.Show("There is a winner.");
+            }
+        }
+
         /**
             Adds the text to the events list box and scrolls it to the bottom, then hides the blue highlight bar.
          */
@@ -609,6 +664,28 @@ namespace SettlersOfCatan
             this.currentGameState = GameState.FirstDiceRoll;
             currentGameEvent = new FirstPlayerEvt();
             currentGameEvent.beginExecution(this, this);
+        }
+
+        private void btnCheat_Click(object sender, EventArgs e)
+        {
+            foreach (Player p in this.playerOrder)
+            {
+                p.giveResource(new ResourceCard(ResourceType.Brick));
+                p.giveResource(new ResourceCard(ResourceType.Brick));
+                p.giveResource(new ResourceCard(ResourceType.Brick));
+                p.giveResource(new ResourceCard(ResourceType.Sheep));
+                p.giveResource(new ResourceCard(ResourceType.Sheep));
+                p.giveResource(new ResourceCard(ResourceType.Sheep));
+                p.giveResource(new ResourceCard(ResourceType.Wheat));
+                p.giveResource(new ResourceCard(ResourceType.Wheat));
+                p.giveResource(new ResourceCard(ResourceType.Wheat));
+                p.giveResource(new ResourceCard(ResourceType.Wood));
+                p.giveResource(new ResourceCard(ResourceType.Wood));
+                p.giveResource(new ResourceCard(ResourceType.Wood));
+                p.giveResource(new ResourceCard(ResourceType.Ore));
+                p.giveResource(new ResourceCard(ResourceType.Ore));
+                p.giveResource(new ResourceCard(ResourceType.Ore));
+            }
         }
     }
 }

@@ -63,8 +63,8 @@ namespace SettlersOfCatan.Events
                     try
                     {
                         ((Settlement)sender).buildSettlement(p, false);
-                        p.addSettlement((Settlement)sender);
                         theBoard.addEventText(UserMessages.PlayerPlacedASettlement(p));
+                        theBoard.checkForWinner();
                     } catch(BuildError be)
                     {
                         theBoard.addEventText(be.Message);
@@ -82,8 +82,8 @@ namespace SettlersOfCatan.Events
                     try
                     {
                         ((Road)sender).buildRoad(p, false);
-                        p.addRoad((Road)sender);
                         theBoard.addEventText(UserMessages.PlayerPlacedARoad(p));
+                        theBoard.checkForWinner();
                     } catch (BuildError be)
                     {
                         theBoard.addEventText(be.Message);

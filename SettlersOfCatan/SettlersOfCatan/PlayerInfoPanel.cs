@@ -10,7 +10,6 @@ using System.Windows.Forms;
 
 namespace SettlersOfCatan
 {
-    [Serializable]
     public partial class Player : UserControl
     {
 
@@ -24,7 +23,7 @@ namespace SettlersOfCatan
         private List<Settlement> settlements;
         private List<Road> roads;
         private Random rand;
-
+        private int victoryPoints = 0;
 
         public Player()
         {
@@ -34,6 +33,119 @@ namespace SettlersOfCatan
             settlements = new List<Settlement>();
             roads = new List<Road>();
             rand = new Random();
+        }
+
+        public void setVictoryPoints(int vp)
+        {
+            this.victoryPoints = vp;
+            this.lblVictoryPoints.Text = "" + vp;
+        }
+
+        public int getVictoryPoints()
+        {
+            return this.victoryPoints;
+        }
+
+        /*
+            Calculates the number of victory points held by this player.
+            If includeVPCards is true the victory point cards will be counted
+            toward the points, otherwise they will be ignored.
+         */
+        public int calculateVictoryPoints(bool includeVPCards )
+        {
+            //Count the settlements and cities
+            int val = 0;
+            foreach (Settlement set in settlements)
+            {
+                val++;
+                if (set.city())
+                {
+                    val++;
+                }
+            }
+            foreach (DevelopmentCard devCard in onHandDevelopmentCards)
+            {
+                //The played knight cards
+                //The victory point cards
+                if (devCard.getType() == DevelopmentCard.DevCardType.Victory)
+                {
+                    if (includeVPCards)
+                    {
+                        val++;
+                    }
+                }
+            }
+
+
+            //Longest road
+            if (pbLargestArmy.Visible == true)
+            {
+                val++;
+            }
+            //Largest army
+            if (pbLongestRoad.Visible == true)
+            {
+                val++;
+            }
+
+            return val;
+        }
+
+        public int getArmySize()
+        {
+            int vp = 0;
+            foreach (DevelopmentCard devCard in onHandDevelopmentCards)
+            {
+                //The played knight cards
+                //The victory point cards
+                if (devCard.getType() == DevelopmentCard.DevCardType.Knight)
+                {
+                    if (devCard.used)
+                    {
+                        vp++;
+                    }
+                }
+            }
+            return vp;
+        }
+
+        public int getLongestRoadCount()
+        {
+            int longest = 0;
+            //Checks the longest road for each road the player owns.
+            //The length of the road can change depending on where you start from.
+            foreach (Road road in roads)
+            {
+                int len = roadLength(road, new List<Road>(), 0);
+                longest = Math.Max(len, longest);
+            }
+
+            return longest;
+        }
+
+        private int roadLength(Road road, List<Road> countedRoads, int position)
+        {
+            countedRoads.Add(road);
+            int pos = position++;
+            int maximum = 0;
+            foreach (Settlement settlement in road.getConnectedSettlements())
+            {
+                if (settlement.getOwningPlayer() == this || settlement.getOwningPlayer() == null)
+                {
+                    List<Road> rds = settlement.getConnectedRoads();
+                    foreach (Road rd in rds)
+                    {
+                        if (rd.getOwningPlayer() == this)
+                        {
+                            if (!countedRoads.Contains(rd))
+                            {
+                                maximum = roadLength(rd, countedRoads, pos);
+                            }
+                        }
+                    }
+                }
+            }
+            return Math.Max(pos,maximum);
         }
 
         public void addSettlement(Settlement s)
@@ -84,7 +196,12 @@ namespace SettlersOfCatan
             return theCard;
         }
 
-        public void updateDevelopmentCards()
+        public List<DevelopmentCard> getDevelopmentCards()
+        {
+            return this.onHandDevelopmentCards;
+        }
+
+        private void updateDevelopmentCards()
         {
 
             this.pnlDevCards.Controls.Clear();

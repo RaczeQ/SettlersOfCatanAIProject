@@ -75,6 +75,7 @@
             this.pnlUpgradedToolTip = new System.Windows.Forms.Panel();
             this.label10 = new System.Windows.Forms.Label();
             this.pictureBox17 = new System.Windows.Forms.PictureBox();
+            this.btnCheat = new System.Windows.Forms.Button();
             this.pnlRoadToolTip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -91,6 +92,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).BeginInit();
             this.pnlGameInfo.SuspendLayout();
+            this.pnlBoardArea.SuspendLayout();
             this.pnlCityToolTip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox12)).BeginInit();
@@ -434,6 +436,7 @@
             this.pnlBoardArea.BackColor = System.Drawing.Color.White;
             this.pnlBoardArea.BackgroundImage = global::SettlersOfCatan.Properties.Resources.ocean_surface;
             this.pnlBoardArea.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pnlBoardArea.Controls.Add(this.btnCheat);
             this.pnlBoardArea.Location = new System.Drawing.Point(0, 0);
             this.pnlBoardArea.Name = "pnlBoardArea";
             this.pnlBoardArea.Size = new System.Drawing.Size(1005, 580);
@@ -579,6 +582,17 @@
             this.pictureBox17.TabIndex = 0;
             this.pictureBox17.TabStop = false;
             // 
+            // btnCheat
+            // 
+            this.btnCheat.BackColor = System.Drawing.Color.Transparent;
+            this.btnCheat.Location = new System.Drawing.Point(860, 3);
+            this.btnCheat.Name = "btnCheat";
+            this.btnCheat.Size = new System.Drawing.Size(142, 23);
+            this.btnCheat.TabIndex = 10;
+            this.btnCheat.Text = "Super Secret Cheat Button";
+            this.btnCheat.UseVisualStyleBackColor = false;
+            this.btnCheat.Click += new System.EventHandler(this.btnCheat_Click);
+            // 
             // Board
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -617,6 +631,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).EndInit();
             this.pnlGameInfo.ResumeLayout(false);
+            this.pnlBoardArea.ResumeLayout(false);
             this.pnlCityToolTip.ResumeLayout(false);
             this.pnlCityToolTip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).EndInit();
@@ -682,6 +697,7 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.PictureBox pictureBox16;
         private System.Windows.Forms.PictureBox pictureBox17;
+        private System.Windows.Forms.Button btnCheat;
     }
 }
 

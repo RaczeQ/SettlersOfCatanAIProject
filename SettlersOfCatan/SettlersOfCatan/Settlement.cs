@@ -123,6 +123,7 @@ namespace SettlersOfCatan
 
                 this.owningPlayer = currentPlayer;
                 this.BackColor = owningPlayer.getPlayerColor();
+                currentPlayer.addSettlement(this);
             }
             else if (owningPlayer == currentPlayer)
             {

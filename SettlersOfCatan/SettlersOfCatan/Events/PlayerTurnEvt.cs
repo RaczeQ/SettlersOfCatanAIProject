@@ -44,11 +44,13 @@ namespace SettlersOfCatan.Events
                                 //take city resources
                                 Board.TheBank.takePayment(theBoard.currentPlayer, Bank.CITY_COST);
                                 theBoard.addEventText(UserMessages.PlayerPlacedASettlement(theBoard.currentPlayer));
+                                theBoard.checkForWinner();
                             } else
                             {
                                 //take settlement resources
                                 Board.TheBank.takePayment(theBoard.currentPlayer, Bank.SETTLEMENT_COST);
                                 theBoard.addEventText(UserMessages.PlayerBuiltACity(theBoard.currentPlayer));
+                                theBoard.checkForWinner();
                             }
                         } catch (BuildError be)
                         {
@@ -64,6 +66,8 @@ namespace SettlersOfCatan.Events
                             //Take the resources.
                             Board.TheBank.takePayment(theBoard.currentPlayer, Bank.ROAD_COST);
                             theBoard.addEventText(UserMessages.PlayerPlacedARoad(theBoard.currentPlayer));
+                            //RUN LONGEST ROAD CHECK
+                            theBoard.checkForWinner();
                         } catch (BuildError be)
                         {
                             theBoard.addEventText(be.Message);
@@ -76,6 +80,7 @@ namespace SettlersOfCatan.Events
                             theBoard.currentPlayer.giveDevelopmentCard(Board.TheBank.purchaseDevelopmentCard(theBoard.currentPlayer));
                             Board.TheBank.takePayment(theBoard.currentPlayer, Bank.DEV_CARD_COST);
                             theBoard.addEventText(UserMessages.PlayerPurchasedADevCard(theBoard.currentPlayer));
+                            theBoard.checkForWinner();
                         } catch (BuildError be)
                         {
                             theBoard.addEventText(be.Message);
@@ -96,6 +101,20 @@ namespace SettlersOfCatan.Events
                                 yr.beginExecution(theBoard, this);
                                 disableEventObjects();
                                 Board.TheBank.developmentCards.putCardBottom(theBoard.currentPlayer.takeDevelopmentCard(card.getType()));
+                                break;
+                            case DevelopmentCard.DevCardType.Knight:
+
+                                //Launch the thief event
+                                ThiefEvt thevt = new ThiefEvt();
+                                thevt.beginExecution(theBoard, this);
+                                disableEventObjects();
+                                card.used = true;
+                                theBoard.checkForWinner();
+                                break;
+                            case DevelopmentCard.DevCardType.Monopoly:
+
+                                //Player names a resource, all players give this player that resource they carry
+
                                 break;
                         }
                     } else if (sender is Harbor)
@@ -188,6 +207,10 @@ namespace SettlersOfCatan.Events
             {
                 hb.Click += executeUpdate;
             }
+            foreach (DevelopmentCard devc in theBoard.currentPlayer.getDevelopmentCards())
+            {
+                devc.Click += executeUpdate;
+            }
             theBoard.enableToolTips();
         }
 
@@ -211,6 +234,10 @@ namespace SettlersOfCatan.Events
             foreach (Harbor hb in theBoard.harbors)
             {
                 hb.Click -= executeUpdate;
+            }
+            foreach (DevelopmentCard devc in theBoard.currentPlayer.getDevelopmentCards())
+            {
+                devc.Click -= executeUpdate;
             }
             theBoard.pnlDevelopmentCardToolTip.Enabled = false;
             theBoard.pnlRoadToolTip.Enabled = false;

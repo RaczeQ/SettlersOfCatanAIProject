@@ -40,7 +40,7 @@
             this.lblSheep = new System.Windows.Forms.Label();
             this.lblWheat = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
+            this.lblVictoryPoints = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblPlayerColorName = new System.Windows.Forms.Label();
             this.pnlPlayerColor = new System.Windows.Forms.Panel();
@@ -174,22 +174,22 @@
             this.label6.TabIndex = 2;
             this.label6.Text = "Score";
             // 
-            // label7
+            // lblVictoryPoints
             // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(16, 31);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(25, 25);
-            this.label7.TabIndex = 3;
-            this.label7.Text = "0";
+            this.lblVictoryPoints.AutoSize = true;
+            this.lblVictoryPoints.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVictoryPoints.Location = new System.Drawing.Point(16, 31);
+            this.lblVictoryPoints.Name = "lblVictoryPoints";
+            this.lblVictoryPoints.Size = new System.Drawing.Size(25, 25);
+            this.lblVictoryPoints.TabIndex = 3;
+            this.lblVictoryPoints.Text = "0";
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.label6);
-            this.panel1.Controls.Add(this.label7);
+            this.panel1.Controls.Add(this.lblVictoryPoints);
             this.panel1.Location = new System.Drawing.Point(178, 12);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(58, 61);
@@ -256,6 +256,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.Controls.Add(this.pnlDevCards);
             this.Controls.Add(this.lblTurn);
             this.Controls.Add(this.pbLargestArmy);
@@ -264,7 +265,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBox1);
             this.Name = "Player";
-            this.Size = new System.Drawing.Size(251, 244);
+            this.Size = new System.Drawing.Size(247, 240);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.panel1.ResumeLayout(false);
@@ -291,7 +292,7 @@
         private System.Windows.Forms.Label lblSheep;
         private System.Windows.Forms.Label lblWheat;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label lblVictoryPoints;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lblPlayerColorName;
         private System.Windows.Forms.Panel pnlPlayerColor;

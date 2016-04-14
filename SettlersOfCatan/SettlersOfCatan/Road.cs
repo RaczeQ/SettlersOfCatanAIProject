@@ -128,6 +128,7 @@ namespace SettlersOfCatan
 
             this.owningPlayer = currentPlayer;
             this.BackColor = currentPlayer.getPlayerColor();
+            currentPlayer.addRoad(this);
         }
     }
 }
