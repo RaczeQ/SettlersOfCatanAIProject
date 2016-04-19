@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SettlersOfCatan.Events
 {
-    
+
     class ThiefEvt : Event
     {
 
@@ -21,14 +21,33 @@ namespace SettlersOfCatan.Events
             theBoard = b;
             owner = evt;
             enableEventObjects();
-            theBoard.addEventText(theBoard.currentPlayer.getPlayerName() + " please select a location to move the thief.");
+            theBoard.addEventText(UserMessages.PlayerMoveThief(theBoard.currentPlayer));
         }
 
         /*
-
+         * The actual event code is located in exec because executeUpdate is only called by buttons.
+         * I have no way of handling button exceptions directly, so I use a secondary function to
+         * run the main code then use the main function to handle the exceptions.
          */
-        public void executeUpdate(Object sender, EventArgs e)
+        public void executeUpdate(object sender, EventArgs e)
         {
+            try
+            {
+                exec(sender, e);
+            }
+            catch (ThiefException ex)
+            {
+                theBoard.addEventText(ex.Message);
+            }
+
+        }
+
+        /*
+            A bit of an odd workaround for the issue of having no way to handle exceptions from buttons firing these 
+                methods.
+         */
+        public void exec(object sender, EventArgs e)
+        { 
             //Check
             switch (state)
             {
@@ -36,65 +55,29 @@ namespace SettlersOfCatan.Events
                     if (sender is NumberChip)
                     {
                         NumberChip nc = (NumberChip)sender;
-                        if (nc.isBlocked() && nc.getNumber() != 0)
+
+                        //Check if the player has selected the desert
+                        if (Board.THIEF_MUST_MOVE && nc.isBlocked())
                         {
-                            if (Board.THIEF_MUST_MOVE)
-                            {
-                                theBoard.addEventText("The robber cannot stay in the same location.");
-                            }
-                            else
-                            {
-                                theBoard.addEventText(theBoard.currentPlayer.getPlayerName() + " has chosen to keep the robber where it is.");
-                                oldThiefLocation.removeThief();
-                                nc.placeThief();
-                                oldThiefLocation = nc;
-                                if (chitHasPlayers())
-                                {
-                                    state++;
-                                    theBoard.addEventText("Please select a player to steal 1 resource card from. The card is chosen at random.");
-                                }
-                                else
-                                {
-                                    endExecution();
-                                }
-                            }
+                            throw new ThiefException(ThiefException.THIEF_CANNOT_STAY);
                         }
-                        else if (!nc.isBlocked() && nc.getNumber() != 0)
+
+                        if (Board.THIEF_CANNOT_GO_HOME && nc.getNumber() == 0)
                         {
-                            theBoard.addEventText(theBoard.currentPlayer.getPlayerName() + " has moved the robber.");
-                            oldThiefLocation.removeThief();
-                            nc.placeThief();
-                            oldThiefLocation = nc;
-                            if (chitHasPlayers())
-                            {
-                                state++;
-                                theBoard.addEventText("Please select a player to steal 1 resource card from. The card is chosen at random.");
-                            } else
-                            {
-                                endExecution();
-                            }
+                            throw new ThiefException(ThiefException.THIEF_CANNOT_GO_DESERT);
                         }
-                        else
+
+                        theBoard.addEventText(UserMessages.RobberHasMoved(theBoard.currentPlayer));
+                        oldThiefLocation.removeThief();
+                        nc.placeThief();
+                        oldThiefLocation = nc;
+                        if (chitHasPlayers())
                         {
-                            if (Board.THIEF_CANNOT_GO_HOME)
-                            {
-                                theBoard.addEventText("You cannot move the robber back to the desert.");
-                            }
-                            else
-                            {
-                                theBoard.addEventText(theBoard.currentPlayer.getPlayerName() + " has moved the robber back to the desert.");
-                                oldThiefLocation.removeThief();
-                                nc.placeThief();
-                                oldThiefLocation = nc;
-                                if (chitHasPlayers())
-                                {
-                                    state++;
-                                    theBoard.addEventText("Please select a player to steal 1 resource card from. The card is chosen at random.");
-                                } else
-                                {
-                                    endExecution();
-                                }
-                            }
+                            state++;
+                            theBoard.addEventText(UserMessages.PLAYER_STEAL_RESOURCES);
+                        } else
+                        {
+                            endExecution();
                         }
                     }
                     break;
@@ -108,7 +91,7 @@ namespace SettlersOfCatan.Events
                     //We check if the settlement is actually adjascent to the thief.
                     if (!terrainTileWithThief.hasSettlement((Settlement)sender))
                     {
-                        throw new SettlementNotNearThiefException();
+                        throw new ThiefException(ThiefException.CANT_STEAL_FROM_PLAYER);
                     }
 
                     //Get the player at the chosen location (sender is that location)
@@ -117,13 +100,13 @@ namespace SettlersOfCatan.Events
                     //Check if there is a player at the location.
                     if (playerToStealFrom== null)
                     {
-                        throw new NoPlayerAtSettlementException();
+                        throw new ThiefException(ThiefException.NO_PLAYER);
                     }
 
                     //Check if the player is not the current player.
                     if (playerToStealFrom == theBoard.currentPlayer)
                     {
-                        throw new SamePlayerException();
+                        throw new ThiefException(ThiefException.YOU_OWN_THIS_SETTLEMENT);
                     }
 
                     //At this point we can safely assume a card can be taken.
@@ -134,11 +117,15 @@ namespace SettlersOfCatan.Events
                         //What happens if there were cards to steal
                         theBoard.currentPlayer.giveResource(playerToStealFrom.takeRandomResource());
                         theBoard.addEventText(UserMessages.PlayerGotResourceFromPlayer(theBoard.currentPlayer, playerToStealFrom, rCard.getResourceType()));
+                        state++;
+                        endExecution();
                     }
                     else
                     {
                         //What happens if there were no cards to steal.
                         theBoard.addEventText(UserMessages.PlayerGoNoResourceFromPlayer(theBoard.currentPlayer, playerToStealFrom));
+                        state++;
+                        endExecution();
                     }
                     break;
             }
@@ -188,11 +175,12 @@ namespace SettlersOfCatan.Events
                     {
                         oldThiefLocation = tt.getNumberChip();
                     }
-                    foreach (Settlement set in tt.adjascentSettlements)
-                    {
-                        set.Click += executeUpdate;
-                    }
                 }
+            }
+
+            foreach (Settlement set in theBoard.settlementLocations)
+            {
+                set.Click += executeUpdate;
             }
         }
 
@@ -204,11 +192,11 @@ namespace SettlersOfCatan.Events
                 {
                     TerrainTile tt = (TerrainTile)t;
                     tt.getNumberChip().Click -= executeUpdate;
-                    foreach (Settlement set in tt.adjascentSettlements)
-                    {
-                        set.Click -= executeUpdate;
-                    }
                 }
+            }
+            foreach (Settlement set in theBoard.settlementLocations)
+            {
+                set.Click -= executeUpdate;
             }
         }
     }

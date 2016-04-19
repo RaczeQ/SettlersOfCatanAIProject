@@ -56,8 +56,8 @@ namespace SettlersOfCatan
         private void Dice_Enable(object sender, EventArgs e)
         {
             this.lblInstructions.Visible = this.Enabled;
-            this.pbRedDie.Visible = this.Enabled;
-            this.pbYellowDie.Visible = this.Enabled;
+            //this.pbRedDie.Visible = this.Enabled;
+            //this.pbYellowDie.Visible = this.Enabled;
         }
 
         private void childClicked(object sender, EventArgs e)

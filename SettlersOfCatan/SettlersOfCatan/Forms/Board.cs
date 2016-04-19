@@ -659,7 +659,7 @@ namespace SettlersOfCatan
         private void btnSetupBoard_Click(object sender, EventArgs e)
         {
             distributeTiles();
-            //debugSaveBoardData();
+            debugSaveBoardData();
             this.btnSetupBoard.Hide();
             this.currentGameState = GameState.FirstDiceRoll;
             currentGameEvent = new FirstPlayerEvt();

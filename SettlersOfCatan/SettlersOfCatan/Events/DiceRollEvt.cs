@@ -31,8 +31,8 @@ namespace SettlersOfCatan.Events
                     theBoard.addEventText("Robber event! Players with more than 7 resource lose half of them.");
                     //Once the thief event has successfully run, we can terminate this event.
                     ThiefEvt evt = new ThiefEvt();
-                    evt.beginExecution(theBoard, this);
                     disableEventObjects();
+                    evt.beginExecution(theBoard, this);
                 } else
                 {
                     //Players get resources
@@ -44,18 +44,22 @@ namespace SettlersOfCatan.Events
                             TerrainTile tt = (TerrainTile)tile;
                             if (tt.getGatherChance() == dice.getRollValue())
                             {
-                                //All players here get the resource.
-                                foreach (Settlement set in tt.adjascentSettlements)
+                                if (!tt.isGatherBlocked())
                                 {
-                                    if (set.getOwningPlayer() != null)
+                                    //All players here get the resource.
+                                    foreach (Settlement set in tt.adjascentSettlements)
                                     {
-                                        ResourceCard rc = Board.TheBank.giveOutResource(tt.getResourceType());
-                                        if (rc != null)
+                                        if (set.getOwningPlayer() != null)
                                         {
-                                            set.getOwningPlayer().giveResource(rc);
-                                        } else
-                                        {
-                                            theBoard.addEventText("Not enough " + Board.RESOURCE_NAMES[(int)tt.getResourceType()] + " to give  to " + set.getOwningPlayer().getPlayerName());
+                                            ResourceCard rc = Board.TheBank.giveOutResource(tt.getResourceType());
+                                            if (rc != null)
+                                            {
+                                                set.getOwningPlayer().giveResource(rc);
+                                            }
+                                            else
+                                            {
+                                                theBoard.addEventText("Not enough " + Board.RESOURCE_NAMES[(int)tt.getResourceType()] + " to give  to " + set.getOwningPlayer().getPlayerName());
+                                            }
                                         }
                                     }
                                 }

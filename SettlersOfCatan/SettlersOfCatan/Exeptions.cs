@@ -10,21 +10,15 @@ namespace SettlersOfCatan
     {
     }
 
-    /*
-        This exception is thrown when the player is choosing a settlement to steal a resource
-        card but does not choose a settlement adjascent to the thief's current location.
-     */
-    public class SettlementNotNearThiefException : Exception
+
+    public class ThiefException : Exception
     {
-        public static String MESSAGE = "The settlement you have chosen is not adjascent to the thief.";
-        public SettlementNotNearThiefException() : base(MESSAGE)
-        {}
-    }
-    public class NoPlayerAtSettlementException : Exception
-    {
-        public static String MESSAGE = "This location is not occupied by a player. Please choose one with a player.";
-        public NoPlayerAtSettlementException() : base(MESSAGE)
-        {}
+        public static String THIEF_CANNOT_GO_DESERT = "The thief cannot go back to the desert.";
+        public static String THIEF_CANNOT_STAY = "The thief may not remain in the same tile. You must select a new location.";
+        public static String CANT_STEAL_FROM_PLAYER = "The settlement you have chosen is not adjascent to the thief.";
+        public static String NO_PLAYER = "This location is not occupied by a player. Please choose one with a player.";
+        public static String YOU_OWN_THIS_SETTLEMENT = "You can't steal from yourself. Please choose another player's settlement.";
+        public ThiefException(String message) : base(message) { }
     }
 
     public class SamePlayerException : Exception

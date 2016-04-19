@@ -69,5 +69,17 @@ namespace SettlersOfCatan
         }
 
         public static string PlayerDoesNotHaveAdjascentSettlement = "You do not have an adjascent settlement to trade with this harbor.";
+
+        public static string RobberHasMoved(Player player)
+        {
+            return player.getPlayerName() + " has moved the robber.";
+        }
+
+        public static string PlayerMoveThief(Player player)
+        {
+            return player.getPlayerName() + " please select a terrain tile to move the thief into.";
+        }
+
+        public static string PLAYER_STEAL_RESOURCES = "Please select the settlement of the player you wish to steal from.";
     }
 }
