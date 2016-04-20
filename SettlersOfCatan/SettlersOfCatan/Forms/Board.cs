@@ -625,11 +625,11 @@ namespace SettlersOfCatan
                 pl.setLargestArmy(false);
                 
             }
-            if (largestArmy > 3)
+            if (largestArmy >= 3)
             {
                 lapl.setLargestArmy(true);
             }
-            if (longestRoad > 5)
+            if (longestRoad >= 5)
             {
                 llpl.setLongestRoad(true);
             }

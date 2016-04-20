@@ -55,8 +55,9 @@ namespace SettlersOfCatan
         public static string NOT_ENOUGH_RESOURCES = "You do not have enough resources.";
         public static string SETTLEMENT_TOO_CLOSE = "This location is too close to another player's settlement.";
         public static string IS_CITY = "You cannot upgrade this location because it is already a city.";
-        public static string NO_CONNECTED_ROAD = "You cannot build here without a connecting city or other road.";
+        public static string NO_CONNECTED_ROAD = "You can't build that road without another settlement or road connecting to it.";
         public static string NOT_ENOUGH_DEV_CARDS = "There are no more development cards in the deck.";
+        public static string NO_CONNECTION_SETTLEMENT = "You can't build a settlement without a road connecting to it.";
         public BuildError(String message) : base(message)
         {}
     }

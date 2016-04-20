@@ -62,7 +62,7 @@ namespace SettlersOfCatan.Events
                 {
                     try
                     {
-                        ((Settlement)sender).buildSettlement(p, false);
+                        ((Settlement)sender).buildSettlement(p, false, false);
                         theBoard.addEventText(UserMessages.PlayerPlacedASettlement(p));
                         theBoard.checkForWinner();
                     } catch(BuildError be)

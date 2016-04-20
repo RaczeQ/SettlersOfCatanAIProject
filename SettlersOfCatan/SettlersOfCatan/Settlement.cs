@@ -158,6 +158,20 @@ namespace SettlersOfCatan
             return allow;
         }
 
+        private bool checkForConnection(Player currentPlayer)
+        {
+            bool result = false;
+            //We need to check if there is a valid road connection
+            foreach (Road r in connectedRoads)
+            {
+                if (r.getOwningPlayer() == currentPlayer)
+                {
+                    result = true;
+                }
+            }
+            return result;
+        }
+
         /*
             Conditions must apply: 
             no other player's settlement must be present at this location or, within 1 road's distance.
@@ -165,7 +179,7 @@ namespace SettlersOfCatan
             must have required resources: Brick, Wood, Wheat, Sheep
 
          */
-        public void buildSettlement(Player currentPlayer, bool takeResources)
+        public void buildSettlement(Player currentPlayer, bool takeResources, bool connectionCheck)
         {
 
             if (owningPlayer == null)
@@ -178,6 +192,12 @@ namespace SettlersOfCatan
                 {
                     throw new BuildError(BuildError.SETTLEMENT_TOO_CLOSE);
                 }
+
+                if (connectionCheck && !checkForConnection(currentPlayer))
+                {
+                    throw new BuildError(BuildError.NO_CONNECTION_SETTLEMENT);
+                }
+
                 setOwningPlayer(currentPlayer);
                 currentPlayer.addSettlement(this);
             }

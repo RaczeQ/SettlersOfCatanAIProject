@@ -21,6 +21,7 @@ namespace SettlersOfCatan.Events
             owner = evt;
             theBoard.addEventText(UserMessages.PlayerUsedRoadBuilding(board.currentPlayer));
             theBoard.addEventText(UserMessages.ROAD_BUILDING_INSTRUCTIONS);
+            enableEventObjects();
         }
 
         public void executeUpdate(Object sender, EventArgs e)

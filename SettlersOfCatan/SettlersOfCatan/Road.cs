@@ -126,33 +126,36 @@ namespace SettlersOfCatan
          */
         public bool checkForConnection(Player currentPlayer)
         {
+
+            bool result = false;
+
             foreach (Settlement set in connectedSettlements)
             {
                 Player setPlayer = set.getOwningPlayer();
-                //Is it the most likeley... no
                 if (setPlayer == currentPlayer)
                 {
-                    return true;
-                } else
+                    return true; //Always return true.
+                    //If there is a settlement directly next to a road owned by the same color player we
+                    //can just go ahead and place it.
+                }
+                else
                 {
-                    if (setPlayer != null)
-                    {
-                        return false; //Blocked by another player.
-                    } else
-                    {
-                        //Check for a connected road with matching color.
-                        List<Road> connectedRoads = set.getConnectedRoads();
-                        foreach (Road r in connectedRoads) 
+                    List<Road> connectedRoads = set.getConnectedRoads();
+                    foreach (Road r in connectedRoads) {
+                        if (r != this) //Excluding this road.
                         {
-                            if (r.getOwningPlayer() == currentPlayer)
+                            if (setPlayer == null)
                             {
-                                return true;
+                                if (r.getOwningPlayer() == currentPlayer)
+                                {
+                                    result = true;
+                                }
                             }
                         }
                     }
                 }
             }
-            return false;
+            return result;
         }
 
         /**

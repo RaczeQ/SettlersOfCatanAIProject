@@ -37,19 +37,19 @@ namespace SettlersOfCatan.Events
                         try
                         {
                             //Try to build the settlement/upgrade city.
-                            ((Settlement)sender).buildSettlement(theBoard.currentPlayer, true);
+                            ((Settlement)sender).buildSettlement(theBoard.currentPlayer, true, true);
                             //Take resources
                             if (location.city())
                             {
                                 //take city resources
                                 Board.TheBank.takePayment(theBoard.currentPlayer, Bank.CITY_COST);
-                                theBoard.addEventText(UserMessages.PlayerPlacedASettlement(theBoard.currentPlayer));
+                                theBoard.addEventText(UserMessages.PlayerBuiltACity(theBoard.currentPlayer));
                                 theBoard.checkForWinner();
                             } else
                             {
                                 //take settlement resources
                                 Board.TheBank.takePayment(theBoard.currentPlayer, Bank.SETTLEMENT_COST);
-                                theBoard.addEventText(UserMessages.PlayerBuiltACity(theBoard.currentPlayer));
+                                theBoard.addEventText(UserMessages.PlayerPlacedASettlement(theBoard.currentPlayer));
                                 theBoard.checkForWinner();
                             }
                         } catch (BuildError be)
@@ -105,11 +105,14 @@ namespace SettlersOfCatan.Events
                             case DevelopmentCard.DevCardType.Knight:
 
                                 //Launch the thief event
-                                ThiefEvt thevt = new ThiefEvt();
-                                thevt.beginExecution(theBoard, this);
-                                disableEventObjects();
-                                card.used = true;
-                                theBoard.checkForWinner();
+                                if (!card.used)
+                                {
+                                    ThiefEvt thevt = new ThiefEvt();
+                                    thevt.beginExecution(theBoard, this);
+                                    disableEventObjects();
+                                    card.used = true;
+                                    theBoard.checkForWinner();
+                                }
                                 break;
                             case DevelopmentCard.DevCardType.Monopoly:
 
