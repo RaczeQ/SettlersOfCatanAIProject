@@ -37,6 +37,7 @@
             this.pnlOther = new System.Windows.Forms.Panel();
             this.btnClearSelection = new System.Windows.Forms.Button();
             this.lblTradeName = new System.Windows.Forms.Label();
+            this.lblInstructions = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbArrowLeft)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbArrowRight)).BeginInit();
             this.SuspendLayout();
@@ -143,6 +144,18 @@
             this.lblTradeName.Text = "Other";
             this.lblTradeName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // lblInstructions
+            // 
+            this.lblInstructions.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblInstructions.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblInstructions.Location = new System.Drawing.Point(173, 127);
+            this.lblInstructions.Name = "lblInstructions";
+            this.lblInstructions.Size = new System.Drawing.Size(177, 140);
+            this.lblInstructions.TabIndex = 22;
+            this.lblInstructions.Text = "You have selected the required number of resources. Click accept to continue or c" +
+    "lear selection to start over.";
+            this.lblInstructions.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // TradeWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -158,12 +171,13 @@
             this.Controls.Add(this.lblPlayerTitle);
             this.Controls.Add(this.pbArrowLeft);
             this.Controls.Add(this.pbArrowRight);
+            this.Controls.Add(this.lblInstructions);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "TradeWindow";
-            this.Text = "TradeWindow";
+            this.Text = "Trade Window";
             ((System.ComponentModel.ISupportInitialize)(this.pbArrowLeft)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbArrowRight)).EndInit();
             this.ResumeLayout(false);
@@ -180,5 +194,6 @@
         private System.Windows.Forms.Panel pnlOther;
         private System.Windows.Forms.Button btnClearSelection;
         private System.Windows.Forms.Label lblTradeName;
+        private System.Windows.Forms.Label lblInstructions;
     }
 }

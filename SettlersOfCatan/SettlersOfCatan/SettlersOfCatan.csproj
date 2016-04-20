@@ -72,6 +72,7 @@
     <Compile Include="Events\PlayerTradeEvt.cs" />
     <Compile Include="Events\PlayerTurnEvt.cs" />
     <Compile Include="Events\RoadBuildingEvt.cs" />
+    <Compile Include="Events\RobberStealEvt.cs" />
     <Compile Include="Events\ThiefEvt.cs" />
     <Compile Include="Events\YearOfPlentyEvt.cs" />
     <Compile Include="Exeptions.cs" />

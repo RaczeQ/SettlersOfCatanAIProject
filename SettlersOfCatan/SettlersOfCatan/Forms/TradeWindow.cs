@@ -20,6 +20,8 @@ namespace SettlersOfCatan
         public Player initiatingPlayer;
         private bool canClearOther = true;
 
+        private int resCount = 0;
+
         private int minimumPlayerInput = 0;
 
         public TradeWindow()
@@ -106,6 +108,40 @@ namespace SettlersOfCatan
         }
 
         /*
+         * This will allow the player to choose what resources they loose when
+         * the dice land on a "7" while the player has more than 7 resources on hand.
+         */
+         public void loadPlayerResourceLoss(Player pl)
+        {
+            //Load the player's resource selectors
+            for (int i = 0; i < 5; i++)
+            {
+                Board.ResourceType resType = (Board.ResourceType)i;
+                ResourceSelector playerSelector = new ResourceSelector(resType);
+                playerResourceSelectors.Add(playerSelector);
+                pnlPlayer.Controls.Add(playerSelector);
+                playerSelector.Location = new Point(5, i * playerSelector.Height + 1);
+                playerSelector.hideControls();
+                playerSelector.Click += playerClickResourceSelectorRobber;
+            }
+            btnAccept.Enabled = false;
+            initiatingPlayer = pl;
+            lblPlayerTitle.Text = pl.getPlayerName();
+            lblPlayerTitle.BackColor = pl.getPlayerColor();
+            //Disable the cancel button
+            btnCancel.Visible = false;
+            int numToGive = pl.getTotalResourceCount() / 2; //Since this is an integer, VS will automatically drop the decimal which is essentailly the same as floor(count/2)
+            minimumPlayerInput = numToGive;
+            //Hide the other section
+            lblTradeName.Text = "";
+            pnlOther.Visible = false;
+            //Show the player some instructions.
+            lblInstructions.Text = "Please select " + numToGive + " resource to give up.";
+
+            btnClearSelection.Click += playerClickResourceSelectorRobber;
+        }
+
+        /*
             Allow the player to pick any two available resources from the bank for no cost.
          */
         public void loadYearOfPlenty(Player pl)
@@ -144,7 +180,6 @@ namespace SettlersOfCatan
                 }
             }
         }
-
 
         public void lockedTradePlayerClickPlayerResource(object sender, EventArgs e)
         {
@@ -208,6 +243,48 @@ namespace SettlersOfCatan
                 ((ResourceSelector)sender).setCount(count);
             }
 
+        }
+
+        public void playerClickResourceSelectorRobber(object sender, EventArgs e)
+        {
+            //
+            if (sender is ResourceSelector)
+            {
+                ResourceSelector resSelect = (ResourceSelector)sender;
+                int count = resSelect.getCount() + 1;
+                if (resCount < minimumPlayerInput) {
+                    if (initiatingPlayer.getResourceCount(resSelect.type) >= count)
+                    {
+                        resSelect.setSelected(true);
+                        resSelect.setCount(count);
+                        resCount++;
+                        if (resCount == minimumPlayerInput)
+                        {
+                            lblInstructions.Text = "You have selected the required number of resources. Click accept to continue or clear selection to start over.";
+                            btnAccept.Enabled = true;
+                        }
+                        else
+                        {
+                            lblInstructions.Text = "Please select " + (minimumPlayerInput - resCount) + " more resources to give up.";
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show(BuildError.NOT_ENOUGH_RESOURCES);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("You do not need to select any more resources.");
+                }
+            } else if (sender == btnClearSelection)
+            {
+                //Clear everything.
+                resCount = 0;
+                lblInstructions.Text = "Please select " + minimumPlayerInput + " resources to give up.";
+                btnAccept.Enabled = false;
+
+            }
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

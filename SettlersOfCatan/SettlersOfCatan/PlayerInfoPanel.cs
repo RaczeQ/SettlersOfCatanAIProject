@@ -238,6 +238,11 @@ namespace SettlersOfCatan
             return count;
         }
 
+        public int getTotalResourceCount()
+        {
+            return resources.Count();
+        }
+
         /**
             Gets a resource card witht the matching type from the player's
             deck. If no available card exists null is returned.
@@ -264,7 +269,6 @@ namespace SettlersOfCatan
         {
             this.resources.Add(resCard);
             updateResourceGUI();
-            //MessageBox.Show("Player " + this.getPlayerName() + " got " + Board.RESOURCE_NAMES[(int)resCard.getResourceType()] + ".");
         }
 
         public ResourceCard takeRandomResource()

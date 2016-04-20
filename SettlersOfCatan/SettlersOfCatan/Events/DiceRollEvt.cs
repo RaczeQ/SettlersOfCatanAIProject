@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Windows.Forms;
 namespace SettlersOfCatan.Events
 {
     class DiceRollEvt : Event, EvtOwnr
@@ -28,15 +28,15 @@ namespace SettlersOfCatan.Events
                 if (dice.getRollValue()==7)
                 {
                     //Thief event!!
-                    theBoard.addEventText("Robber event! Players with more than 7 resource lose half of them.");
+                    //Go through each player to see if they loose thier resources
                     //Once the thief event has successfully run, we can terminate this event.
-                    ThiefEvt evt = new ThiefEvt();
+                    MessageBox.Show(theBoard.currentPlayer.getPlayerName() + " rolled a 7. The thief has been activated!");
+                    RobberStealEvt evt = new RobberStealEvt();
                     disableEventObjects();
                     evt.beginExecution(theBoard, this);
                 } else
                 {
                     //Players get resources
-                    theBoard.addEventText("Get resources.");
                     foreach (Tile tile in theBoard.boardTiles)
                     {
                         if (tile is TerrainTile)
