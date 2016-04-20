@@ -13,8 +13,8 @@ namespace SettlersOfCatan
     public partial class Player : UserControl
     {
 
-        public static String[] playerColorNames = { "Red", "Blue", "White", "Orange", "Green", "Brown" };
-        public static Color[] playerColors = { Color.Red, Color.Blue, Color.White, Color.Orange, Color.Green, Color.Brown };
+        public static String[] playerColorNames = { "Red", "Blue", "Purple", "Orange", "Green", "Brown" };
+        public static Color[] playerColors = { Color.Red, Color.LightBlue, Color.Purple, Color.Orange, Color.Green, Color.Brown };
 
         private int playerNumber = 0;
         private List<ResourceCard> resources;

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace SettlersOfCatan
 {
@@ -18,14 +19,64 @@ namespace SettlersOfCatan
 
         private Player owningPlayer;
         private bool isCity = false;
+        private Bitmap image = new Bitmap("Resources/settlement.png");
+
 
         public Settlement(Point position, int index)
         {
+            this.Paint += Settlement_Paint;
             this.position = position;
-            BackColor = Color.Black;
+            BackColor = Color.Transparent;
             BackgroundImageLayout = ImageLayout.Stretch;
             Location = new Point(position.X - 6, position.Y - 6);
             Size = new Size(12, 12);
+            Click += forcePaint;
+        }
+
+        private void forcePaint(object sender, EventArgs e)
+        {
+            this.Invalidate();
+        }
+
+        private void Settlement_Paint(object sender, PaintEventArgs e)
+        {
+            ImageAttributes imageAttributes = new ImageAttributes();
+            int width = image.Width;
+            int height = image.Height;
+            Color c = Color.Bisque;
+            if (owningPlayer != null)
+            {
+                c = owningPlayer.getPlayerColor();
+            }
+
+            float r = ((255.0f - c.R+0.0f) / 255.0f);
+            float g = ((255.0f - c.G) / 255.0f);
+            float b = ((255.0f - c.B) / 255.0f);
+
+
+            float[][] colorMatrixElements = {
+               new float[] {1, 0, 0, 0, 0},
+               new float[] {0, 1, 0, 0, 0},
+               new float[] {0, 0, 1, 0, 0},
+               new float[] {0, 0, 0, 1, 0},
+               new float[] {-r, -g, -b, 0, 1}
+            };
+
+            ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
+
+            imageAttributes.SetColorMatrix(
+               colorMatrix,
+               ColorMatrixFlag.Default,
+               ColorAdjustType.Bitmap);
+
+            e.Graphics.DrawImage(
+               image,
+               new Rectangle(0, 0, width, height),  // destination rectangle 
+               0, 0,        // upper-left corner of source rectangle 
+               width,       // width of source rectangle
+               height,      // height of source rectangle
+               GraphicsUnit.Pixel,
+               imageAttributes);
         }
 
         public String toString()
@@ -76,6 +127,13 @@ namespace SettlersOfCatan
             return this.isCity;
         }
 
+        public void setOwningPlayer(Player pl)
+        {
+            //Recolor the image and stuff...
+            this.owningPlayer = pl;
+            
+        }
+
         /**
             Only returns true if no settlement is within 1 location of this settlement.
          */
@@ -120,9 +178,7 @@ namespace SettlersOfCatan
                 {
                     throw new BuildError(BuildError.SETTLEMENT_TOO_CLOSE);
                 }
-
-                this.owningPlayer = currentPlayer;
-                this.BackColor = owningPlayer.getPlayerColor();
+                setOwningPlayer(currentPlayer);
                 currentPlayer.addSettlement(this);
             }
             else if (owningPlayer == currentPlayer)
@@ -138,6 +194,8 @@ namespace SettlersOfCatan
                 }
 
                 this.isCity = true;
+                this.image = new Bitmap("Resources/city.png");
+                this.Invalidate();
             } else
             {
                 throw new BuildError(BuildError.LocationOwnedBy(owningPlayer));

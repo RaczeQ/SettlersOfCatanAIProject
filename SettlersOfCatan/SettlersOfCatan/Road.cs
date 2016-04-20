@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace SettlersOfCatan
 {
@@ -21,11 +22,62 @@ namespace SettlersOfCatan
         public Road(Point position, int index)
         {
             this.position = position;
-            BackColor = Color.Black;
+            BackColor = Color.Transparent;
             BackgroundImageLayout = ImageLayout.Stretch;
             Location = new Point(position.X - 6, position.Y - 6);
             Size = new Size(12, 12);
+            this.Paint += Road_Paint;
+            this.Click += Road_Click;
 
+        }
+
+        /*
+         * Causes the control to redraw.
+         */
+        private void Road_Click(object sender, EventArgs e)
+        {
+            this.Invalidate();
+        }
+
+        private void Road_Paint(object sender, PaintEventArgs e)
+        {
+            ImageAttributes imageAttributes = new ImageAttributes();
+            int width = BackgroundImage.Width;
+            int height = BackgroundImage.Height;
+            Color c = Color.Bisque;
+            if (owningPlayer != null)
+            {
+                c = owningPlayer.getPlayerColor();
+            }
+
+            float r = ((255.0f - c.R + 0.0f) / 255.0f);
+            float g = ((255.0f - c.G) / 255.0f);
+            float b = ((255.0f - c.B) / 255.0f);
+
+
+            float[][] colorMatrixElements = {
+               new float[] {1, 0, 0, 0, 0},
+               new float[] {0, 1, 0, 0, 0},
+               new float[] {0, 0, 1, 0, 0},
+               new float[] {0, 0, 0, 1, 0},
+               new float[] {-r, -g, -b, 0, 1}
+            };
+
+            ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
+
+            imageAttributes.SetColorMatrix(
+               colorMatrix,
+               ColorMatrixFlag.Default,
+               ColorAdjustType.Bitmap);
+
+            e.Graphics.DrawImage(
+               BackgroundImage,
+               new Rectangle(0, 0, width, height),  // destination rectangle 
+               0, 0,        // upper-left corner of source rectangle 
+               width,       // width of source rectangle
+               height,      // height of source rectangle
+               GraphicsUnit.Pixel,
+               imageAttributes);
         }
 
         public Player getOwningPlayer()
@@ -127,7 +179,7 @@ namespace SettlersOfCatan
 
 
             this.owningPlayer = currentPlayer;
-            this.BackColor = currentPlayer.getPlayerColor();
+            //this.BackColor = currentPlayer.getPlayerColor();
             currentPlayer.addRoad(this);
         }
     }

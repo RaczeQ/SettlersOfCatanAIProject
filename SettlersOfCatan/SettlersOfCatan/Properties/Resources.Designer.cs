@@ -303,6 +303,16 @@ namespace SettlersOfCatan.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap city {
+            get {
+                object obj = ResourceManager.GetObject("city", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Desert_Tile {
             get {
                 object obj = ResourceManager.GetObject("Desert_Tile", resourceCulture);
@@ -546,6 +556,46 @@ namespace SettlersOfCatan.Properties {
         internal static System.Drawing.Bitmap road_building_card {
             get {
                 object obj = ResourceManager.GetObject("road_building_card", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap road_h_l {
+            get {
+                object obj = ResourceManager.GetObject("road_h_l", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap road_h_r {
+            get {
+                object obj = ResourceManager.GetObject("road_h_r", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap road_v {
+            get {
+                object obj = ResourceManager.GetObject("road_v", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap settlement {
+            get {
+                object obj = ResourceManager.GetObject("settlement", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

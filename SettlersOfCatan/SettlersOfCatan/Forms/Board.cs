@@ -26,6 +26,7 @@ namespace SettlersOfCatan
         public Bitmap[] tileImages = new Bitmap[6];
         public String[] tileImageResourceNames = { "Forest_Tile.png", "Hills_Tile.png", "Mountain_Tile.png", "Wheat_Fields_Tile.png", "Pasture_Tile.png", "Desert_Tile.png" };
         public static String[] iconImageResourceNames = { "Wood_Icon.png", "Brick_Icon.png", "Ore_Icon.png", "Wheat_Icon.png", "Sheep_Icon.png", "No_Resource_Icon.png" };
+        private static String[] roadImageLocations = { "Resources/road_v.png", "Resources/road_h_l.png", "Resources/road_h_r.png", "Resources/road_v.png", "Resources/road_h_l.png", "Resources/road_h_r.png" };
         //Keeps track of what tile indexes are ocean borders for later use.
         private Random rand = new Random();
         public Tile[] boardTiles = new Tile[BOARD_TILE_COUNT];
@@ -329,12 +330,13 @@ namespace SettlersOfCatan
 
                     //This is almost an exact duplicate of the above process. The only difference being the positions.
                     Point[] roadPoints = new Point[6];
-                    roadPoints[0] = new Point(position.X, position.Y + (SPACING / 2));
-                    roadPoints[1] = new Point(position.X + (SPACING / 4), position.Y + (TILE_TRIANGLE_HEIGHT / 2));
-                    roadPoints[2] = new Point(position.X + (SPACING / 4) * 3, position.Y + (TILE_TRIANGLE_HEIGHT / 2));
-                    roadPoints[3] = new Point(position.X + SPACING, position.Y + (SPACING / 2));
-                    roadPoints[4] = new Point(position.X + (SPACING / 4) * 3, position.Y + (SPACING - (TILE_TRIANGLE_HEIGHT / 2)));
-                    roadPoints[5] = new Point(position.X + (SPACING / 4), position.Y + (SPACING - (TILE_TRIANGLE_HEIGHT / 2)));
+                    roadPoints[0] = new Point(position.X, position.Y + (SPACING / 2)); //V
+                    roadPoints[1] = new Point(position.X + (SPACING / 4), position.Y + (TILE_TRIANGLE_HEIGHT / 2)); //H L
+                    roadPoints[2] = new Point(position.X + (SPACING / 4) * 3, position.Y + (TILE_TRIANGLE_HEIGHT / 2)); // H R
+                    roadPoints[3] = new Point(position.X + SPACING, position.Y + (SPACING / 2)); //V
+                    roadPoints[4] = new Point(position.X + (SPACING / 4) * 3, position.Y + (SPACING - (TILE_TRIANGLE_HEIGHT / 2))); //H R
+                    roadPoints[5] = new Point(position.X + (SPACING / 4), position.Y + (SPACING - (TILE_TRIANGLE_HEIGHT / 2))); //H L
+                    int f = 0;
                     foreach (Point roadPoint in roadPoints)
                     {
                         //We check if this settlement location has already been created.
@@ -346,8 +348,12 @@ namespace SettlersOfCatan
                             roadLocation.id = roadLocations.Count;
                             roadLocations.Add(roadLocation);
                             roadLocation.BringToFront();
+                            roadLocation.BackgroundImage = new Bitmap(roadImageLocations[f]);
+                            roadLocation.Size =  roadLocation.BackgroundImage.Size;
+                            roadLocation.Location = new Point(roadPoint.X - (roadLocation.BackgroundImage.Width / 2), roadPoint.Y - (roadLocation.BackgroundImage.Height / 2));
                         }
                         t.adjascentRoads.Add(roadLocation);
+                        f++;
                     }
 
                     //Next we link the roads and settlements together.
