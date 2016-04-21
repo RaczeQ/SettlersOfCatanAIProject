@@ -36,7 +36,9 @@ namespace SettlersOfCatan
             rand = new Random();
             resourceDisplays = new List<ResourceDisplay>();
 
-            if (!DesignMode)
+            bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+
+            if (!designMode)
             {
                 for (int i = 0; i < 5; i++)
                 {
@@ -142,7 +144,7 @@ namespace SettlersOfCatan
         private int roadLength(Road road, List<Road> countedRoads, int position)
         {
             countedRoads.Add(road);
-            int pos = position++;
+            int pos = position + 1;
             int maximum = 0;
             foreach (Settlement settlement in road.getConnectedSettlements())
             {
@@ -228,9 +230,12 @@ namespace SettlersOfCatan
             {
                 DevelopmentCard devC = onHandDevelopmentCards[i];
                 pnlDevCards.Controls.Add(devC);
+                float newX = pnlDevCards.Width / 2 - 12;
+                float newY = (DevelopmentCard.devCardSize.Height * newX) / DevelopmentCard.devCardSize.Width;
+                devC.Size = new Size((int)newX, (int)newY);
                 devC.Location = new Point(col * devC.Width, row * devC.Height);
                 col++;
-                if (col > 2)
+                if (col > 1)
                 {
                     col = 0;
                     row++;

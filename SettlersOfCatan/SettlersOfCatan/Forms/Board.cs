@@ -99,15 +99,15 @@ namespace SettlersOfCatan
             {
                 tileImages[i] = new Bitmap("Resources/" + tileImageResourceNames[i]);
             }
+
             //Set up player objects and initial player order
             playerOrder = new Player[4];
             playerPanels = new Player[4];
-            playerPanels[0] = playerInfoPanel1;
-            playerPanels[1] = playerInfoPanel2;
-            playerPanels[2] = playerInfoPanel3;
-            playerPanels[3] = playerInfoPanel4;
             for (int i = 0; i < playerPanels.Count(); i ++)
             {
+                playerPanels[i] = new Player();
+                pnlPlayerInfo.Controls.Add(playerPanels[i]);
+                playerPanels[i].Dock = DockStyle.Top;
                 playerPanels[i].setPlayerNumber(i);
             }
             currentPlayer = playerPanels[0];
