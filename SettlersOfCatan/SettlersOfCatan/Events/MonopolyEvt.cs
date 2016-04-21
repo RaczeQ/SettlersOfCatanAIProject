@@ -35,7 +35,7 @@ namespace SettlersOfCatan.Events
                     }
                 }
             }
-            MessageBox.Show(theBoard.currentPlayer.getName() + " has taken " + "x" + " from all players.");
+            MessageBox.Show(theBoard.currentPlayer.getName() + " has taken " + Board.RESOURCE_NAMES[(int)selectedResource] + " from all players.");
             endExecution();
         }
 
