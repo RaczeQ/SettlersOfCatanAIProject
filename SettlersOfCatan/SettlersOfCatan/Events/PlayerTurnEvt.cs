@@ -18,6 +18,12 @@ namespace SettlersOfCatan.Events
         {
             theBoard = board;
             enableEventObjects();
+
+            foreach (DevelopmentCard devC in board.currentPlayer.getDevelopmentCards())
+            {
+                devC.setPlayable(true);
+            }
+
         }
 
         public void executeUpdate(Object sender, EventArgs e)
@@ -25,7 +31,6 @@ namespace SettlersOfCatan.Events
             switch (currentState)
             {
                 case State.Wait:
-                    //Waiting for user input.
                     if (sender == theBoard.btnEndTurn)
                     {
                         //End turn.
@@ -77,9 +82,12 @@ namespace SettlersOfCatan.Events
                         //We want to give the player a development card.
                         try
                         {
-                            theBoard.currentPlayer.giveDevelopmentCard(Board.TheBank.purchaseDevelopmentCard(theBoard.currentPlayer));
+                            DevelopmentCard devC = Board.TheBank.purchaseDevelopmentCard(theBoard.currentPlayer);
+                            devC.setPlayable(false);
+                            theBoard.currentPlayer.giveDevelopmentCard(devC);
                             Board.TheBank.takePayment(theBoard.currentPlayer, Bank.DEV_CARD_COST);
                             theBoard.addEventText(UserMessages.PlayerPurchasedADevCard(theBoard.currentPlayer));
+
                             theBoard.checkForWinner();
                         } catch (BuildError be)
                         {
@@ -88,43 +96,53 @@ namespace SettlersOfCatan.Events
                     } else if (sender is DevelopmentCard)
                     {
                         DevelopmentCard card = (DevelopmentCard)sender;
-                        switch (card.getType())
+                        if (card.isPlayable())
                         {
-                            case DevelopmentCard.DevCardType.Road:
-                                //Player is allowed to place two roads for no cost
-                                RoadBuildingEvt evt = new RoadBuildingEvt();
-                                evt.beginExecution(theBoard, this);
-                                disableEventObjects();
-                                //Remove this card from the player's hand.
-                                Board.TheBank.developmentCards.putCardBottom(theBoard.currentPlayer.takeDevelopmentCard(card.getType()));
-                                break;
-                            case DevelopmentCard.DevCardType.Plenty:
-                                //Player is allowed to take any two resources from the bank
-                                YearOfPlentyEvt yr = new YearOfPlentyEvt();
-                                yr.beginExecution(theBoard, this);
-                                disableEventObjects();
-                                //Remove this card from the player's hand.
-                                Board.TheBank.developmentCards.putCardBottom(theBoard.currentPlayer.takeDevelopmentCard(card.getType()));
-                                break;
-                            case DevelopmentCard.DevCardType.Knight:
-                                //Launch the thief event
-                                if (!card.used)
-                                {
-                                    ThiefEvt thevt = new ThiefEvt();
-                                    thevt.beginExecution(theBoard, this);
+                            switch (card.getType())
+                            {
+                                case DevelopmentCard.DevCardType.Road:
+                                    //Player is allowed to place two roads for no cost
+                                    RoadBuildingEvt evt = new RoadBuildingEvt();
+                                    evt.beginExecution(theBoard, this);
                                     disableEventObjects();
-                                    card.used = true;
-                                    theBoard.checkForWinner();
-                                }
-                                break;
-                            case DevelopmentCard.DevCardType.Monopoly:
-                                //Player names a resource, all players give this player that resource they carry
-                                MonopolyEvt monEvt = new MonopolyEvt();
-                                monEvt.beginExecution(theBoard, this);
-                                disableEventObjects();
-                                //Remove this card from the player's hand.
-                                Board.TheBank.developmentCards.putCardBottom(theBoard.currentPlayer.takeDevelopmentCard(card.getType()));
-                                break;
+                                    //Remove this card from the player's hand.
+                                    theBoard.currentPlayer.takeDevelopmentCard(card.getType());
+                                    break;
+                                case DevelopmentCard.DevCardType.Plenty:
+                                    //Player is allowed to take any two resources from the bank
+                                    YearOfPlentyEvt yr = new YearOfPlentyEvt();
+                                    yr.beginExecution(theBoard, this);
+                                    disableEventObjects();
+                                    //Remove this card from the player's hand. They DO NOT go back to the bank
+                                    theBoard.currentPlayer.takeDevelopmentCard(card.getType());
+                                    break;
+                                case DevelopmentCard.DevCardType.Knight:
+                                    //Launch the thief event
+                                    if (!card.used)
+                                    {
+                                        ThiefEvt thevt = new ThiefEvt();
+                                        thevt.beginExecution(theBoard, this);
+                                        disableEventObjects();
+                                        card.used = true;
+                                        theBoard.checkForWinner();
+                                    }
+                                    break;
+                                case DevelopmentCard.DevCardType.Monopoly:
+                                    //Player names a resource, all players give this player that resource they carry
+                                    MonopolyEvt monEvt = new MonopolyEvt();
+                                    monEvt.beginExecution(theBoard, this);
+                                    disableEventObjects();
+                                    //Remove this card from the player's hand. They DO NOT go back to the bank
+                                    theBoard.currentPlayer.takeDevelopmentCard(card.getType());
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            if (card.getType() != DevelopmentCard.DevCardType.Victory)
+                            {
+                                theBoard.addEventText("You must wait until the next turn to play that card.");
+                            }
                         }
                     } else if (sender is Harbor)
                     {

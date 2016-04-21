@@ -15,7 +15,7 @@ namespace SettlersOfCatan
         public enum DevCardType { Back, Knight, Victory, Road, Plenty, Monopoly };
         public static Size devCardSize = new Size(64, 92);
 
-
+        private bool canUse = false;
         private DevCardType type = DevCardType.Back;
         private bool hidden = false;
         public bool used = false;
@@ -61,6 +61,16 @@ namespace SettlersOfCatan
         public DevCardType getType()
         {
             return type;
+        }
+
+        public bool isPlayable()
+        {
+            return canUse;
+        }
+
+        public void setPlayable(bool use)
+        {
+            this.canUse = use;
         }
 
     }
