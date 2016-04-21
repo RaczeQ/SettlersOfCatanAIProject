@@ -33,7 +33,8 @@ namespace SettlersOfCatan
         public List<Road> roadLocations = new List<Road>();
         public List<Settlement> settlementLocations = new List<Settlement>();
         public List<Harbor> harbors = new List<Harbor>();
-
+        private int largestArmy = 0;
+        private int longestRoad = 0;
         //This is the distribution of terrain resources for a four player game.
         public static Board.ResourceType[] fourPlayerTiles = 
             {
@@ -71,8 +72,22 @@ namespace SettlersOfCatan
         public Player[] playerOrder; //The players in the order of first player.
         public int turnCounter = 0;
         public Player firstPlayer;
-        public Player currentPlayer;
-        public enum GameState { Setup, FirstDiceRoll, FirstSettlement, FirstResources, DiceRoll, PlayerTurn };
+        private Player _currentPlayer;
+        public Player currentPlayer
+        {
+            get { return _currentPlayer; }
+            set
+            {
+                _currentPlayer = value;
+                foreach (Player pl in playerPanels)
+                {
+                    pl.Current = false;
+                }
+                value.Current = true;
+            }
+        }
+
+        public enum GameState { Setup, FirstDiceRoll, FirstSettlement, FirstResources, DiceRoll, PlayerTurn, End };
         public static Event currentGameEvent;
         public GameState currentGameState;
 
@@ -167,6 +182,9 @@ namespace SettlersOfCatan
                     currentGameState = GameState.DiceRoll;
                     currentGameEvent = new DiceRollEvt();
                     currentGameEvent.beginExecution(this, this);
+                    break;
+                case GameState.End:
+                    //Nothing
                     break;
             }
         }
@@ -603,9 +621,7 @@ namespace SettlersOfCatan
 
             //Update the largest army and longest road stuff
             Player lapl = null;
-            int largestArmy = 0;
             Player llpl = null;
-            int longestRoad = 0;
             foreach (Player pl in playerOrder)
             {
                 int arm = pl.getArmySize();
@@ -627,28 +643,47 @@ namespace SettlersOfCatan
             }
             if (largestArmy >= 3)
             {
-                lapl.setLargestArmy(true);
+                if (lapl != null)
+                {
+                    foreach (Player pl in playerOrder)
+                    {
+                        pl.setLargestArmy(false);
+                    }
+                    lapl.setLargestArmy(true);
+                }
             }
             if (longestRoad >= 5)
             {
-                llpl.setLongestRoad(true);
+                if (llpl != null)
+                {
+                    foreach (Player pl in playerOrder)
+                    {
+                        pl.setLongestRoad(false);
+                    }
+                    llpl.setLongestRoad(true);
+                }
             }
 
             bool winner = false;
+            Player winningPlayer = null;
             foreach (Player pl in playerOrder)
             {
-                int vps = pl.calculateVictoryPoints(true);
+                int vps = Player.calculateVictoryPoints(true, pl);
                 if (vps >= 10)
                 {
+                    winningPlayer = pl;
                     winner = true;
-                } else
+                }
+                else
                 {
-                    pl.setVictoryPoints(pl.calculateVictoryPoints(false));
+                    pl.updateScore();
                 }
             }
             if (winner)
             {
-                MessageBox.Show("There is a winner.");
+                currentGameState = GameState.End;
+                currentGameEvent.endExecution();
+                MessageBox.Show(winningPlayer.getName() + " has won!");
             }
         }
 

@@ -17,8 +17,11 @@ namespace SettlersOfCatan.Events
         private List<Player> playersToGiveUpCards;
         private int state = 0;
 
+        private Player activePlayer;
+
         public void beginExecution(Board board, EvtOwnr evt)
         {
+            activePlayer = board.currentPlayer;
             enableEventObjects();
             theBoard = board;
             owner = evt;
@@ -43,6 +46,7 @@ namespace SettlersOfCatan.Events
 
                     if (playersToGiveUpCards.Count() > 0)
                     {
+                        theBoard.currentPlayer = playersToGiveUpCards[0];
                         MessageBox.Show(playersToGiveUpCards[0].getName() + " is holding more than 7 cards. Please select ones you wish to give up.");
                         //make the player at index 0 give up their cards
                         disableEventObjects();
@@ -53,7 +57,7 @@ namespace SettlersOfCatan.Events
                         playersToGiveUpCards.Remove(playersToGiveUpCards[0]);
                     } else
                     {
-                        //We have finished our task
+                        theBoard.currentPlayer = activePlayer;
                         state++;
                         executeUpdate(sender, e);
                     }

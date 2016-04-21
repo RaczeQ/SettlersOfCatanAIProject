@@ -118,7 +118,7 @@
             // lblTurn
             // 
             this.lblTurn.BackColor = System.Drawing.Color.Yellow;
-            this.lblTurn.Location = new System.Drawing.Point(86, 47);
+            this.lblTurn.Location = new System.Drawing.Point(87, 47);
             this.lblTurn.Name = "lblTurn";
             this.lblTurn.Size = new System.Drawing.Size(86, 32);
             this.lblTurn.TabIndex = 8;

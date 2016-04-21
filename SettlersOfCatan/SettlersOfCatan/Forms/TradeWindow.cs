@@ -111,7 +111,7 @@ namespace SettlersOfCatan
             this.otherPlayer = otherPlayer;
             lblTradeName.Text = otherPlayer.getName();
             lblTradeName.BackColor = otherPlayer.getColor();
-
+            otherPlayer.Current = true;
             btnAccept.Click -= acceptClickToBank;
             btnAccept.Click += acceptClickPlayerToPlayer;
             createResourceSelectors(false, false);
@@ -191,6 +191,10 @@ namespace SettlersOfCatan
             pnlOther.Visible = false;
             btnClearSelection.Visible = false;
             lblInstructions.Text += "Please select the resource you wish to take from the other players.";
+            lblInstructions.Visible = true;
+            lblTradeName.Text = "";
+            lblPlayerTitle.Text = pl.getName();
+            lblPlayerTitle.BackColor = pl.getColor();
             btnAccept.Click -= acceptClickToBank;
             btnAccept.Click += acceptClickMonopoly;
             btnAccept.Enabled = false;
@@ -390,6 +394,10 @@ namespace SettlersOfCatan
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
+            if (otherPlayer != null)
+            {
+                otherPlayer.Current = false;
+            }
             this.Close();
         }
 
@@ -480,6 +488,24 @@ namespace SettlersOfCatan
 
         private void acceptClickPlayerToPlayer(object sender, EventArgs e)
         {
+            int pCount = 0;
+            foreach (ResourceSelector select in playerResourceSelectors)
+            {
+                //Give bank this resource
+                pCount += select.getCount();
+            }
+            int oCount = 0;
+            foreach (ResourceSelector select in otherResourceSelectors)
+            {
+                oCount += select.getCount();
+            }
+
+            if (!(pCount > 0 && oCount > 0))
+            {
+                MessageBox.Show("Both players must select at least one resource to continue.");
+                return;
+            }
+
             //Tabulate calculate and complete the transactions!
 
             foreach (ResourceSelector select in playerResourceSelectors)
@@ -502,6 +528,7 @@ namespace SettlersOfCatan
             }
 
             //We are done.
+            otherPlayer.Current = false;
             this.Close();
         }
 

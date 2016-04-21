@@ -38,6 +38,7 @@ namespace SettlersOfCatan.Events
                 playersToRoll.Add(p);
             }
             theBoard.addEventText(UserMessages.PlayerDiceRollPrompt(playersToRoll[0]));
+            theBoard.currentPlayer = playersToRoll[0];
         }
 
         public void executeUpdate(Object sender, EventArgs e)
@@ -59,6 +60,7 @@ namespace SettlersOfCatan.Events
                     {
                         p = playersToRoll[rollPosition];
                         theBoard.addEventText(UserMessages.PlayerDiceRollPrompt(p));
+                        theBoard.currentPlayer = p;
                     }
                     break;
                 case 1:

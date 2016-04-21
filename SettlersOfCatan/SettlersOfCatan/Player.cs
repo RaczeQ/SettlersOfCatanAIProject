@@ -18,13 +18,44 @@ namespace SettlersOfCatan
 
         private int playerNumber = 0;
         private List<ResourceCard> resources;
-        private bool activePlayer = false;
         private List<DevelopmentCard> onHandDevelopmentCards;
         private List<Settlement> settlements;
         private List<Road> roads;
         private List<ResourceDisplay> resourceDisplays;
         private Random rand;
-        private int victoryPoints = 0;
+
+        private bool _current = false;
+        public bool Current
+        {
+            get { return _current; }
+            set
+            {
+                _current = value;
+                if (_current)
+                {
+                    showInformation();
+                    lblTurn.Visible = true;
+                    score = Player.calculateVictoryPoints(true, this);
+                }
+                else
+                {
+                    hideInformation();
+                    lblTurn.Visible = false;
+                    score = Player.calculateVictoryPoints(false, this);
+                }
+            }
+        }
+
+        private int _score = 0;
+        public int score
+        {
+            get { return _score; }
+            set
+            {
+                _score = value;
+                this.lblVictoryPoints.Text = "" + _score;
+            }
+        }
 
         public Player()
         {
@@ -36,8 +67,8 @@ namespace SettlersOfCatan
             rand = new Random();
             resourceDisplays = new List<ResourceDisplay>();
 
+            //Prevents designer glitches because Visual Studio is bitches.
             bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
-
             if (!designMode)
             {
                 for (int i = 0; i < 5; i++)
@@ -53,15 +84,9 @@ namespace SettlersOfCatan
             }
         }
 
-        public void setVictoryPoints(int vp)
+        public void updateScore()
         {
-            this.victoryPoints = vp;
-            this.lblVictoryPoints.Text = "" + vp;
-        }
-
-        public int getVictoryPoints()
-        {
-            return this.victoryPoints;
+            score = Player.calculateVictoryPoints(!Current, this);
         }
 
         /*
@@ -69,11 +94,11 @@ namespace SettlersOfCatan
             If includeVPCards is true the victory point cards will be counted
             toward the points, otherwise they will be ignored.
          */
-        public int calculateVictoryPoints(bool includeVPCards )
+        public static int calculateVictoryPoints(bool includeVPCards, Player player )
         {
             //Count the settlements and cities
             int val = 0;
-            foreach (Settlement set in settlements)
+            foreach (Settlement set in player.settlements)
             {
                 val++;
                 if (set.city())
@@ -81,7 +106,7 @@ namespace SettlersOfCatan
                     val++;
                 }
             }
-            foreach (DevelopmentCard devCard in onHandDevelopmentCards)
+            foreach (DevelopmentCard devCard in player.onHandDevelopmentCards)
             {
                 //The played knight cards
                 //The victory point cards
@@ -96,16 +121,15 @@ namespace SettlersOfCatan
 
 
             //Longest road
-            if (pbLargestArmy.Visible == true)
+            if (player.pbLargestArmy.Visible == true)
             {
-                val++;
+                val+= 2;
             }
             //Largest army
-            if (pbLongestRoad.Visible == true)
+            if (player.pbLongestRoad.Visible == true)
             {
-                val++;
+                val+=2;
             }
-
             return val;
         }
 
@@ -343,18 +367,36 @@ namespace SettlersOfCatan
             this.pbLargestArmy.Visible = value;
         }
 
-        public void setTurn(bool value)
-        {
-            this.lblTurn.Visible = value;
-            activePlayer = value;
-        }
-
         public void updateResourceDisplays()
         {
             for (int i = 0; i < 5; i ++)
             {
                 Board.ResourceType rType = (Board.ResourceType)i;
                 resourceDisplays[i].setCount(this.getResourceCount(rType));
+            }
+        }
+
+        private void hideInformation()
+        {
+            foreach (ResourceDisplay rd in resourceDisplays)
+            {
+                rd.hide();
+            }
+            foreach (DevelopmentCard dc in onHandDevelopmentCards)
+            {
+                dc.hide();
+            }
+        }
+
+        private void showInformation()
+        {
+            foreach (ResourceDisplay rd in resourceDisplays)
+            {
+                rd.show();
+            }
+            foreach (DevelopmentCard dc in onHandDevelopmentCards)
+            {
+                dc.show();
             }
         }
 

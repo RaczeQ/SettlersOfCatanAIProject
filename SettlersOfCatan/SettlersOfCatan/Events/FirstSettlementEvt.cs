@@ -29,11 +29,10 @@ namespace SettlersOfCatan.Events
         public void beginExecution(Board b, EvtOwnr evt)
         {
             theBoard = b;
+            enableEventObjects();
             owner = evt;
-            //We don't need any of these controls (we can safely assume no other controls will be available.
             playerTurnOrder = new List<int>();
             int num = -1;
-            enableEventObjects();
             for (int i = 0; i < theBoard.playerOrder.Count()*2; i ++)
             {
                 if (i < theBoard.playerOrder.Count())
@@ -46,6 +45,7 @@ namespace SettlersOfCatan.Events
                 }
             }
             theBoard.addEventText("Player " + theBoard.playerOrder[0].getName() + " please place your first settlement and road.");
+            theBoard.currentPlayer = theBoard.playerOrder[0];
         }
 
         public void executeUpdate(Object sender, EventArgs e)
@@ -92,11 +92,7 @@ namespace SettlersOfCatan.Events
                 {
                     theBoard.addEventText("You may not place any more roads.");
                 }
-            } else
-            {
-                theBoard.addEventText("Invalid click! " + sender.GetType().ToString());
             }
-
             //Move to the next player in the turn order only when the previous player has both the settlement and road built.
             if (firstPass && p.getSettlementCount() == 1 && p.getRoadCount() == 1 || !firstPass && p.getSettlementCount() == 2 && p.getRoadCount() == 2)
             {
@@ -110,6 +106,7 @@ namespace SettlersOfCatan.Events
                     firstPass = !(playerNum + 1 > theBoard.playerPanels.Count());
                     theBoard.addEventText("Player " + theBoard.playerOrder[playerTurnOrder[playerNum]].getName() 
                         + " please place your " + (firstPass? "first" : "second" ) + " settlement and road.");
+                    theBoard.currentPlayer = theBoard.playerOrder[playerTurnOrder[playerNum]];
                 }
             }
 

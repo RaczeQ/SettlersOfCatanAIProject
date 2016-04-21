@@ -155,7 +155,7 @@ namespace SettlersOfCatan.Events
 
             foreach (Settlement set in terrainTileWithThief.adjascentSettlements)
             {
-                if (set.getOwningPlayer() != null)
+                if (set.getOwningPlayer() != null && set.getOwningPlayer() != theBoard.currentPlayer)
                 {
                     return true;
                 }
