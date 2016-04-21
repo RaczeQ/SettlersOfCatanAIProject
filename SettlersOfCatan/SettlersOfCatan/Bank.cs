@@ -58,6 +58,7 @@ namespace SettlersOfCatan
         public Bank()
         {
             resources = new List<ResourceCard>();
+            
             //Load the development card images.
             for (int i = 0; i < 6; i++)
             {

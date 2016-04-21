@@ -55,10 +55,10 @@
             this.pictureBox8 = new System.Windows.Forms.PictureBox();
             this.pictureBox9 = new System.Windows.Forms.PictureBox();
             this.pnlGameInfo = new System.Windows.Forms.Panel();
-            this.playerInfoPanel4 = new SettlersOfCatan.Player();
-            this.playerInfoPanel3 = new SettlersOfCatan.Player();
-            this.playerInfoPanel2 = new SettlersOfCatan.Player();
-            this.playerInfoPanel1 = new SettlersOfCatan.Player();
+            this.playerInfoPanel4 = new Player();
+            this.playerInfoPanel3 = new Player();
+            this.playerInfoPanel2 = new Player();
+            this.playerInfoPanel1 = new Player();
             this.lstGameEvents = new System.Windows.Forms.ListBox();
             this.pnlBoardArea = new SettlersOfCatan.TransparencyFix.BoardArea();
             this.btnCheat = new System.Windows.Forms.Button();

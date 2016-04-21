@@ -91,19 +91,22 @@ namespace SettlersOfCatan.Events
                         switch (card.getType())
                         {
                             case DevelopmentCard.DevCardType.Road:
+                                //Player is allowed to place two roads for no cost
                                 RoadBuildingEvt evt = new RoadBuildingEvt();
                                 evt.beginExecution(theBoard, this);
                                 disableEventObjects();
+                                //Remove this card from the player's hand.
                                 Board.TheBank.developmentCards.putCardBottom(theBoard.currentPlayer.takeDevelopmentCard(card.getType()));
                                 break;
                             case DevelopmentCard.DevCardType.Plenty:
+                                //Player is allowed to take any two resources from the bank
                                 YearOfPlentyEvt yr = new YearOfPlentyEvt();
                                 yr.beginExecution(theBoard, this);
                                 disableEventObjects();
+                                //Remove this card from the player's hand.
                                 Board.TheBank.developmentCards.putCardBottom(theBoard.currentPlayer.takeDevelopmentCard(card.getType()));
                                 break;
                             case DevelopmentCard.DevCardType.Knight:
-
                                 //Launch the thief event
                                 if (!card.used)
                                 {
@@ -115,9 +118,12 @@ namespace SettlersOfCatan.Events
                                 }
                                 break;
                             case DevelopmentCard.DevCardType.Monopoly:
-
                                 //Player names a resource, all players give this player that resource they carry
-
+                                MonopolyEvt monEvt = new MonopolyEvt();
+                                monEvt.beginExecution(theBoard, this);
+                                disableEventObjects();
+                                //Remove this card from the player's hand.
+                                Board.TheBank.developmentCards.putCardBottom(theBoard.currentPlayer.takeDevelopmentCard(card.getType()));
                                 break;
                         }
                     } else if (sender is Harbor)

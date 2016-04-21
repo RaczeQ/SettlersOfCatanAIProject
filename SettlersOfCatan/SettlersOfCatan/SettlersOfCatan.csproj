@@ -69,6 +69,7 @@
     <Compile Include="Events\FirstPlayerEvt.cs" />
     <Compile Include="Events\FirstSettlementEvt.cs" />
     <Compile Include="Events\HarborTrade.cs" />
+    <Compile Include="Events\MonopolyEvt.cs" />
     <Compile Include="Events\PlayerTradeEvt.cs" />
     <Compile Include="Events\PlayerTurnEvt.cs" />
     <Compile Include="Events\RoadBuildingEvt.cs" />

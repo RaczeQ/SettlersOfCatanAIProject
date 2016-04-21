@@ -14,11 +14,11 @@ namespace SettlersOfCatan
 {
     public partial class TradeWindow : Form
     {
-
         public List<ResourceSelector> playerResourceSelectors = new List<ResourceSelector>();
         public List<ResourceSelector> otherResourceSelectors = new List<ResourceSelector>();
         public Player initiatingPlayer;
         public Player otherPlayer;
+        public Board.ResourceType selectedResource = Board.ResourceType.Desert;
         private bool canClearOther = true;
 
         private int resCount = 0;
@@ -183,6 +183,28 @@ namespace SettlersOfCatan
 
         }
 
+        /*
+         * 
+         */
+         public void loadMonopoly(Player pl)
+        {
+            pnlOther.Visible = false;
+            btnClearSelection.Visible = false;
+            lblInstructions.Text += "Please select the resource you wish to take from the other players.";
+            btnAccept.Click -= acceptClickToBank;
+            btnAccept.Click += acceptClickMonopoly;
+            btnAccept.Enabled = false;
+            //Load all resource selectors.
+            for (int i = 0; i < 5; i++)
+            {
+                ResourceSelector resSelect = new ResourceSelector((Board.ResourceType)i);
+                resSelect.hideControls();
+                pnlPlayer.Controls.Add(resSelect);
+                resSelect.Location = new Point(5, i * resSelect.Height + 1);
+                playerResourceSelectors.Add(resSelect);
+                resSelect.Click += clickMonopoly;
+            }
+        }
 
         /*
          * The following are all the events that drives each of the individual trade window events.
@@ -353,6 +375,19 @@ namespace SettlersOfCatan
             }
         }
 
+        public void clickMonopoly(object sender, EventArgs e)
+        {
+            if (sender is ResourceSelector)
+            {
+                foreach (ResourceSelector resSelect in playerResourceSelectors)
+                {
+                    resSelect.setSelected(false);
+                }
+                ((ResourceSelector)sender).setSelected(true);
+                btnAccept.Enabled = true;
+            }
+        }
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -469,5 +504,21 @@ namespace SettlersOfCatan
             //We are done.
             this.Close();
         }
+
+        private void acceptClickMonopoly(object sender, EventArgs e)
+        {
+            //Somehow transfer all resources to the initiating player from other player's hands.
+            //Determine the selected resource
+            foreach (ResourceSelector resSelect in playerResourceSelectors)
+            {
+                if (resSelect.getSelected())
+                {
+                    this.selectedResource = resSelect.type;
+                }
+            }
+            this.Close();
+        }
+
+        /**/
     }
 }

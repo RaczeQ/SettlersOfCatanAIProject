@@ -34,17 +34,20 @@ namespace SettlersOfCatan
             settlements = new List<Settlement>();
             roads = new List<Road>();
             rand = new Random();
-
             resourceDisplays = new List<ResourceDisplay>();
-            for (int i = 0; i < 5; i ++)
+
+            if (!DesignMode)
             {
-                ResourceDisplay resDisp = new ResourceDisplay();
-                resourceDisplays.Add(resDisp);
-                resDisp.setType((Board.ResourceType)i);
-                resDisp.setCount(0);
-                resDisp.show();
-                pnlResources.Controls.Add(resDisp);
-                resDisp.Location = new Point(i * 34+32, 2);
+                for (int i = 0; i < 5; i++)
+                {
+                    ResourceDisplay resDisp = new ResourceDisplay();
+                    resourceDisplays.Add(resDisp);
+                    resDisp.setType((Board.ResourceType)i);
+                    resDisp.setCount(0);
+                    resDisp.show();
+                    pnlResources.Controls.Add(resDisp);
+                    resDisp.Location = new Point(i * 34 + 32, 2);
+                }
             }
         }
 
