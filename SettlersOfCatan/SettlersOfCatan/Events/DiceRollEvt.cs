@@ -24,13 +24,13 @@ namespace SettlersOfCatan.Events
             {
                 //
                 Dice dice = (Dice)sender;
-                theBoard.addEventText(theBoard.currentPlayer.getPlayerName() + " rolled a " + dice.getRollValue());
+                theBoard.addEventText(theBoard.currentPlayer.getName() + " rolled a " + dice.getRollValue());
                 if (dice.getRollValue()==7)
                 {
                     //Thief event!!
                     //Go through each player to see if they loose thier resources
                     //Once the thief event has successfully run, we can terminate this event.
-                    MessageBox.Show(theBoard.currentPlayer.getPlayerName() + " rolled a 7. The thief has been activated!");
+                    MessageBox.Show(theBoard.currentPlayer.getName() + " rolled a 7. The thief has been activated!");
                     RobberStealEvt evt = new RobberStealEvt();
                     disableEventObjects();
                     evt.beginExecution(theBoard, this);
@@ -58,7 +58,7 @@ namespace SettlersOfCatan.Events
                                             }
                                             else
                                             {
-                                                theBoard.addEventText("Not enough " + Board.RESOURCE_NAMES[(int)tt.getResourceType()] + " to give  to " + set.getOwningPlayer().getPlayerName());
+                                                theBoard.addEventText("Not enough " + Board.RESOURCE_NAMES[(int)tt.getResourceType()] + " to give  to " + set.getOwningPlayer().getName());
                                             }
                                         }
                                     }

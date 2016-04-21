@@ -61,6 +61,7 @@
             this.playerInfoPanel1 = new SettlersOfCatan.Player();
             this.lstGameEvents = new System.Windows.Forms.ListBox();
             this.pnlBoardArea = new SettlersOfCatan.TransparencyFix.BoardArea();
+            this.btnCheat = new System.Windows.Forms.Button();
             this.pnlCityToolTip = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -75,7 +76,6 @@
             this.pnlUpgradedToolTip = new System.Windows.Forms.Panel();
             this.label10 = new System.Windows.Forms.Label();
             this.pictureBox17 = new System.Windows.Forms.PictureBox();
-            this.btnCheat = new System.Windows.Forms.Button();
             this.pnlRoadToolTip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -387,6 +387,7 @@
             // playerInfoPanel4
             // 
             this.playerInfoPanel4.BackColor = System.Drawing.SystemColors.Control;
+            this.playerInfoPanel4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.playerInfoPanel4.Location = new System.Drawing.Point(9, 733);
             this.playerInfoPanel4.Name = "playerInfoPanel4";
             this.playerInfoPanel4.Size = new System.Drawing.Size(251, 244);
@@ -395,6 +396,7 @@
             // playerInfoPanel3
             // 
             this.playerInfoPanel3.BackColor = System.Drawing.SystemColors.Control;
+            this.playerInfoPanel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.playerInfoPanel3.Location = new System.Drawing.Point(9, 489);
             this.playerInfoPanel3.Name = "playerInfoPanel3";
             this.playerInfoPanel3.Size = new System.Drawing.Size(251, 244);
@@ -403,6 +405,7 @@
             // playerInfoPanel2
             // 
             this.playerInfoPanel2.BackColor = System.Drawing.SystemColors.Control;
+            this.playerInfoPanel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.playerInfoPanel2.Location = new System.Drawing.Point(9, 245);
             this.playerInfoPanel2.Name = "playerInfoPanel2";
             this.playerInfoPanel2.Size = new System.Drawing.Size(251, 244);
@@ -411,6 +414,7 @@
             // playerInfoPanel1
             // 
             this.playerInfoPanel1.BackColor = System.Drawing.SystemColors.Control;
+            this.playerInfoPanel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.playerInfoPanel1.Location = new System.Drawing.Point(9, 1);
             this.playerInfoPanel1.Name = "playerInfoPanel1";
             this.playerInfoPanel1.Size = new System.Drawing.Size(251, 244);
@@ -441,6 +445,17 @@
             this.pnlBoardArea.Name = "pnlBoardArea";
             this.pnlBoardArea.Size = new System.Drawing.Size(1005, 580);
             this.pnlBoardArea.TabIndex = 0;
+            // 
+            // btnCheat
+            // 
+            this.btnCheat.BackColor = System.Drawing.Color.Transparent;
+            this.btnCheat.Location = new System.Drawing.Point(860, 3);
+            this.btnCheat.Name = "btnCheat";
+            this.btnCheat.Size = new System.Drawing.Size(142, 23);
+            this.btnCheat.TabIndex = 10;
+            this.btnCheat.Text = "Super Secret Cheat Button";
+            this.btnCheat.UseVisualStyleBackColor = false;
+            this.btnCheat.Click += new System.EventHandler(this.btnCheat_Click);
             // 
             // pnlCityToolTip
             // 
@@ -581,17 +596,6 @@
             this.pictureBox17.Size = new System.Drawing.Size(32, 32);
             this.pictureBox17.TabIndex = 0;
             this.pictureBox17.TabStop = false;
-            // 
-            // btnCheat
-            // 
-            this.btnCheat.BackColor = System.Drawing.Color.Transparent;
-            this.btnCheat.Location = new System.Drawing.Point(860, 3);
-            this.btnCheat.Name = "btnCheat";
-            this.btnCheat.Size = new System.Drawing.Size(142, 23);
-            this.btnCheat.TabIndex = 10;
-            this.btnCheat.Text = "Super Secret Cheat Button";
-            this.btnCheat.UseVisualStyleBackColor = false;
-            this.btnCheat.Click += new System.EventHandler(this.btnCheat_Click);
             // 
             // Board
             // 

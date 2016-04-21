@@ -45,7 +45,7 @@ namespace SettlersOfCatan.Events
                     playerTurnOrder.Add(i - num);
                 }
             }
-            theBoard.addEventText("Player " + theBoard.playerOrder[0].getPlayerName() + " please place your first settlement and road.");
+            theBoard.addEventText("Player " + theBoard.playerOrder[0].getName() + " please place your first settlement and road.");
         }
 
         public void executeUpdate(Object sender, EventArgs e)
@@ -108,7 +108,7 @@ namespace SettlersOfCatan.Events
                 } else
                 {
                     firstPass = !(playerNum + 1 > theBoard.playerPanels.Count());
-                    theBoard.addEventText("Player " + theBoard.playerOrder[playerTurnOrder[playerNum]].getPlayerName() 
+                    theBoard.addEventText("Player " + theBoard.playerOrder[playerTurnOrder[playerNum]].getName() 
                         + " please place your " + (firstPass? "first" : "second" ) + " settlement and road.");
                 }
             }

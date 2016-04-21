@@ -75,7 +75,7 @@
             this.btnAccept.TabIndex = 8;
             this.btnAccept.Text = "Accept";
             this.btnAccept.UseVisualStyleBackColor = true;
-            this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
+            this.btnAccept.Click += new System.EventHandler(this.acceptClickToBank);
             // 
             // pbArrowLeft
             // 
@@ -155,6 +155,7 @@
             this.lblInstructions.Text = "You have selected the required number of resources. Click accept to continue or c" +
     "lear selection to start over.";
             this.lblInstructions.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblInstructions.Visible = false;
             // 
             // TradeWindow
             // 

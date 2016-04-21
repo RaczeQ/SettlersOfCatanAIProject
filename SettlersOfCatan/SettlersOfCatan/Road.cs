@@ -47,7 +47,7 @@ namespace SettlersOfCatan
             Color c = Color.Bisque;
             if (owningPlayer != null)
             {
-                c = owningPlayer.getPlayerColor();
+                c = owningPlayer.getColor();
             }
 
             float r = ((255.0f - c.R + 0.0f) / 255.0f);

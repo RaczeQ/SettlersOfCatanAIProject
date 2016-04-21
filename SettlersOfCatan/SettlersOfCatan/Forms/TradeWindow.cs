@@ -18,6 +18,7 @@ namespace SettlersOfCatan
         public List<ResourceSelector> playerResourceSelectors = new List<ResourceSelector>();
         public List<ResourceSelector> otherResourceSelectors = new List<ResourceSelector>();
         public Player initiatingPlayer;
+        public Player otherPlayer;
         private bool canClearOther = true;
 
         private int resCount = 0;
@@ -43,8 +44,8 @@ namespace SettlersOfCatan
             createResourceSelectors(false, false);
             minimumPlayerInput = 4;
             lblTradeName.Text = "Bank";
-            lblPlayerTitle.Text = pl.getPlayerName();
-            lblPlayerTitle.BackColor = pl.getPlayerColor();
+            lblPlayerTitle.Text = pl.getName();
+            lblPlayerTitle.BackColor = pl.getColor();
             foreach (ResourceSelector sel in playerResourceSelectors)
             {
                 sel.Click += lockedTradePlayerClickPlayerResource;
@@ -67,8 +68,8 @@ namespace SettlersOfCatan
             createResourceSelectors(false, false);
             minimumPlayerInput = hb.getRequiredResourceCount();
             lblTradeName.Text = "Harbor";
-            lblPlayerTitle.Text = pl.getPlayerName();
-            lblPlayerTitle.BackColor = pl.getPlayerColor();
+            lblPlayerTitle.Text = pl.getName();
+            lblPlayerTitle.BackColor = pl.getColor();
             foreach (ResourceSelector sel in playerResourceSelectors)
             {
                 sel.Click += lockedTradePlayerClickPlayerResource;
@@ -101,10 +102,28 @@ namespace SettlersOfCatan
         /*
             Allow the player to trade with another player.
          */
-        public void loadPlayerTrade(Player pl)
+        public void loadPlayerTrade(Player currentPlayer, Player otherPlayer)
         {
             //Both players choose their resources.
-            initiatingPlayer = pl;
+            initiatingPlayer = currentPlayer;
+            lblPlayerTitle.Text = currentPlayer.getName();
+            lblPlayerTitle.BackColor = currentPlayer.getColor();
+            this.otherPlayer = otherPlayer;
+            lblTradeName.Text = otherPlayer.getName();
+            lblTradeName.BackColor = otherPlayer.getColor();
+
+            btnAccept.Click -= acceptClickToBank;
+            btnAccept.Click += acceptClickPlayerToPlayer;
+            createResourceSelectors(false, false);
+            foreach (ResourceSelector sel in playerResourceSelectors)
+            {
+                sel.Click += ptpClickResourceSelectorPlayer;
+            }
+
+            foreach (ResourceSelector sel in otherResourceSelectors)
+            {
+                sel.Click += ptpClickResourceSelectorOther;
+            }
         }
 
         /*
@@ -124,10 +143,11 @@ namespace SettlersOfCatan
                 playerSelector.hideControls();
                 playerSelector.Click += playerClickResourceSelectorRobber;
             }
+            lblInstructions.Visible = true;
             btnAccept.Enabled = false;
             initiatingPlayer = pl;
-            lblPlayerTitle.Text = pl.getPlayerName();
-            lblPlayerTitle.BackColor = pl.getPlayerColor();
+            lblPlayerTitle.Text = pl.getName();
+            lblPlayerTitle.BackColor = pl.getColor();
             //Disable the cancel button
             btnCancel.Visible = false;
             int numToGive = pl.getTotalResourceCount() / 2; //Since this is an integer, VS will automatically drop the decimal which is essentailly the same as floor(count/2)
@@ -148,8 +168,8 @@ namespace SettlersOfCatan
         {
             initiatingPlayer = pl;
             lblTradeName.Text = "Bank";
-            lblPlayerTitle.Text = pl.getPlayerName();
-            lblPlayerTitle.BackColor = pl.getPlayerColor();
+            lblPlayerTitle.Text = pl.getName();
+            lblPlayerTitle.BackColor = pl.getColor();
             //Allow the player to choose resources much like they can with the harbor trade
             for (int i = 0; i < 5; i++)
             {
@@ -161,6 +181,52 @@ namespace SettlersOfCatan
                 otherSelector.hideControls();
             }
 
+        }
+
+
+        /*
+         * The following are all the events that drives each of the individual trade window events.
+         * 
+         */
+
+        private void ptpClickResourceSelectorPlayer(object sender, EventArgs e)
+        {
+            //Player offer
+            if (sender is ResourceSelector)
+            {
+                ResourceSelector resSelect = (ResourceSelector)sender;
+                int count = resSelect.getCount() + 1;
+                //Check if the current player has the required number of resources
+                if (initiatingPlayer.getResourceCount(resSelect.type) >= count)
+                {
+                    resSelect.setCount(count);
+                    resSelect.setSelected(true);
+                }
+                else
+                {
+                    MessageBox.Show(BuildError.NOT_ENOUGH_RESOURCES);
+                }
+            }
+        }
+
+        private void ptpClickResourceSelectorOther(object sender, EventArgs e)
+        {
+            //Other offer
+            if (sender is ResourceSelector)
+            {
+                ResourceSelector resSelect = (ResourceSelector)sender;
+                int count = resSelect.getCount() + 1;
+                //Check if the current player has the required number of resources
+                if (otherPlayer.getResourceCount(resSelect.type) >= count)
+                {
+                    resSelect.setCount(count);
+                    resSelect.setSelected(true);
+                }
+                else
+                {
+                    MessageBox.Show(BuildError.NOT_ENOUGH_RESOURCES);
+                }
+            }
         }
 
         private void yearOfPlentyClickResourceSelector(object sender, EventArgs e)
@@ -351,7 +417,7 @@ namespace SettlersOfCatan
             }
         }
 
-        private void btnAccept_Click(object sender, EventArgs e)
+        private void acceptClickToBank(object sender, EventArgs e)
         {
             //Tabulate calculate and complete the transactions!
 
@@ -370,6 +436,33 @@ namespace SettlersOfCatan
                 for (int i = 0; i < select.getCount(); i ++)
                 {
                     initiatingPlayer.giveResource(Board.TheBank.giveOutResource(select.type));
+                }
+            }
+
+            //We are done.
+            this.Close();
+        }
+
+        private void acceptClickPlayerToPlayer(object sender, EventArgs e)
+        {
+            //Tabulate calculate and complete the transactions!
+
+            foreach (ResourceSelector select in playerResourceSelectors)
+            {
+                //Give bank this resource
+                for (int i = 0; i < select.getCount(); i++)
+                {
+                    //Give the other player this resource.
+                    otherPlayer.giveResource(initiatingPlayer.takeResource(select.type));
+                }
+            }
+
+            foreach (ResourceSelector select in otherResourceSelectors)
+            {
+                for (int i = 0; i < select.getCount(); i++)
+                {
+                    //Give the current player this resource.
+                    initiatingPlayer.giveResource(otherPlayer.takeResource(select.type));
                 }
             }
 

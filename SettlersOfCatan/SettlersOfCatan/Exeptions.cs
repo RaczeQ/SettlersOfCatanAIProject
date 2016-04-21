@@ -49,7 +49,7 @@ namespace SettlersOfCatan
     {
         public static String LocationOwnedBy(Player owner)
         {
-            return "This location is already owned by " + owner.getPlayerName();
+            return "This location is already owned by " + owner.getName();
         }
 
         public static string NOT_ENOUGH_RESOURCES = "You do not have enough resources.";

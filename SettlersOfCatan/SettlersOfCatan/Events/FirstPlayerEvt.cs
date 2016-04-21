@@ -90,7 +90,7 @@ namespace SettlersOfCatan.Events
                             if (playerRolls[ind] == max)
                             {
                                 newPlayers.Add(playersToRoll[ind]);
-                                theBoard.addEventText(playersToRoll[ind].getPlayerName());
+                                theBoard.addEventText(playersToRoll[ind].getName());
                             }
                         }
                         rollPosition = 0;

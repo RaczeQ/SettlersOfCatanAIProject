@@ -28,17 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.lblBrick = new System.Windows.Forms.Label();
-            this.lblOre = new System.Windows.Forms.Label();
-            this.lblWood = new System.Windows.Forms.Label();
-            this.lblSheep = new System.Windows.Forms.Label();
-            this.lblWheat = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.lblVictoryPoints = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -48,122 +37,12 @@
             this.pbLargestArmy = new System.Windows.Forms.PictureBox();
             this.lblTurn = new System.Windows.Forms.Label();
             this.pnlDevCards = new System.Windows.Forms.Panel();
-            this.groupBox1.SuspendLayout();
+            this.pnlResources = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.pnlPlayerColor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbLongestRoad)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLargestArmy)).BeginInit();
             this.SuspendLayout();
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(17, 19);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(39, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Wheat";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(67, 19);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(38, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Sheep";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(116, 19);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(36, 13);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Wood";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(163, 19);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(22, 13);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "ore";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(196, 19);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(31, 13);
-            this.label5.TabIndex = 0;
-            this.label5.Text = "Brick";
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.groupBox1.Controls.Add(this.lblBrick);
-            this.groupBox1.Controls.Add(this.lblOre);
-            this.groupBox1.Controls.Add(this.lblWood);
-            this.groupBox1.Controls.Add(this.lblSheep);
-            this.groupBox1.Controls.Add(this.lblWheat);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Location = new System.Drawing.Point(5, 82);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(242, 58);
-            this.groupBox1.TabIndex = 1;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Resources";
-            // 
-            // lblBrick
-            // 
-            this.lblBrick.AutoSize = true;
-            this.lblBrick.Location = new System.Drawing.Point(203, 42);
-            this.lblBrick.Name = "lblBrick";
-            this.lblBrick.Size = new System.Drawing.Size(13, 13);
-            this.lblBrick.TabIndex = 0;
-            this.lblBrick.Text = "0";
-            // 
-            // lblOre
-            // 
-            this.lblOre.AutoSize = true;
-            this.lblOre.Location = new System.Drawing.Point(166, 42);
-            this.lblOre.Name = "lblOre";
-            this.lblOre.Size = new System.Drawing.Size(13, 13);
-            this.lblOre.TabIndex = 0;
-            this.lblOre.Text = "0";
-            // 
-            // lblWood
-            // 
-            this.lblWood.AutoSize = true;
-            this.lblWood.Location = new System.Drawing.Point(126, 42);
-            this.lblWood.Name = "lblWood";
-            this.lblWood.Size = new System.Drawing.Size(13, 13);
-            this.lblWood.TabIndex = 0;
-            this.lblWood.Text = "0";
-            // 
-            // lblSheep
-            // 
-            this.lblSheep.AutoSize = true;
-            this.lblSheep.Location = new System.Drawing.Point(78, 42);
-            this.lblSheep.Name = "lblSheep";
-            this.lblSheep.Size = new System.Drawing.Size(13, 13);
-            this.lblSheep.TabIndex = 0;
-            this.lblSheep.Text = "0";
-            // 
-            // lblWheat
-            // 
-            this.lblWheat.AutoSize = true;
-            this.lblWheat.Location = new System.Drawing.Point(29, 42);
-            this.lblWheat.Name = "lblWheat";
-            this.lblWheat.Size = new System.Drawing.Size(13, 13);
-            this.lblWheat.TabIndex = 0;
-            this.lblWheat.Text = "0";
             // 
             // label6
             // 
@@ -203,6 +82,7 @@
             this.lblPlayerColorName.Size = new System.Drawing.Size(94, 13);
             this.lblPlayerColorName.TabIndex = 5;
             this.lblPlayerColorName.Text = "Player Color Name";
+            this.lblPlayerColorName.Click += new System.EventHandler(this.Player_Name_Clicked);
             // 
             // pnlPlayerColor
             // 
@@ -212,6 +92,7 @@
             this.pnlPlayerColor.Name = "pnlPlayerColor";
             this.pnlPlayerColor.Size = new System.Drawing.Size(125, 32);
             this.pnlPlayerColor.TabIndex = 6;
+            this.pnlPlayerColor.Click += new System.EventHandler(this.Player_Name_Clicked);
             // 
             // pbLongestRoad
             // 
@@ -247,27 +128,33 @@
             // pnlDevCards
             // 
             this.pnlDevCards.AutoScroll = true;
-            this.pnlDevCards.Location = new System.Drawing.Point(5, 144);
+            this.pnlDevCards.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pnlDevCards.Location = new System.Drawing.Point(3, 144);
             this.pnlDevCards.Name = "pnlDevCards";
-            this.pnlDevCards.Size = new System.Drawing.Size(242, 97);
+            this.pnlDevCards.Size = new System.Drawing.Size(244, 128);
             this.pnlDevCards.TabIndex = 9;
+            // 
+            // pnlResources
+            // 
+            this.pnlResources.Location = new System.Drawing.Point(3, 86);
+            this.pnlResources.Name = "pnlResources";
+            this.pnlResources.Size = new System.Drawing.Size(244, 52);
+            this.pnlResources.TabIndex = 10;
             // 
             // Player
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.pnlResources);
             this.Controls.Add(this.pnlDevCards);
             this.Controls.Add(this.lblTurn);
             this.Controls.Add(this.pbLargestArmy);
             this.Controls.Add(this.pbLongestRoad);
             this.Controls.Add(this.pnlPlayerColor);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.groupBox1);
             this.Name = "Player";
-            this.Size = new System.Drawing.Size(247, 240);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.Size = new System.Drawing.Size(249, 277);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.pnlPlayerColor.ResumeLayout(false);
@@ -279,18 +166,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label lblBrick;
-        private System.Windows.Forms.Label lblOre;
-        private System.Windows.Forms.Label lblWood;
-        private System.Windows.Forms.Label lblSheep;
-        private System.Windows.Forms.Label lblWheat;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label lblVictoryPoints;
         private System.Windows.Forms.Panel panel1;
@@ -300,5 +175,6 @@
         private System.Windows.Forms.PictureBox pbLargestArmy;
         private System.Windows.Forms.Label lblTurn;
         private System.Windows.Forms.Panel pnlDevCards;
+        private System.Windows.Forms.Panel pnlResources;
     }
 }

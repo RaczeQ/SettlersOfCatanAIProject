@@ -22,6 +22,7 @@ namespace SettlersOfCatan
         private List<DevelopmentCard> onHandDevelopmentCards;
         private List<Settlement> settlements;
         private List<Road> roads;
+        private List<ResourceDisplay> resourceDisplays;
         private Random rand;
         private int victoryPoints = 0;
 
@@ -33,6 +34,18 @@ namespace SettlersOfCatan
             settlements = new List<Settlement>();
             roads = new List<Road>();
             rand = new Random();
+
+            resourceDisplays = new List<ResourceDisplay>();
+            for (int i = 0; i < 5; i ++)
+            {
+                ResourceDisplay resDisp = new ResourceDisplay();
+                resourceDisplays.Add(resDisp);
+                resDisp.setType((Board.ResourceType)i);
+                resDisp.setCount(0);
+                resDisp.show();
+                pnlResources.Controls.Add(resDisp);
+                resDisp.Location = new Point(i * 34+32, 2);
+            }
         }
 
         public void setVictoryPoints(int vp)
@@ -261,14 +274,14 @@ namespace SettlersOfCatan
             {
                 resources.Remove(rCard);
             }
-            updateResourceGUI();
+            updateResourceDisplays();
             return rCard;
         }
 
         public void giveResource(ResourceCard resCard)
         {
             this.resources.Add(resCard);
-            updateResourceGUI();
+            updateResourceDisplays();
         }
 
         public ResourceCard takeRandomResource()
@@ -283,51 +296,23 @@ namespace SettlersOfCatan
             {
                 return null;
             }
-            updateResourceGUI();
+            updateResourceDisplays();
             return rCard;
         }
 
-        public Color getPlayerColor()
+        public Color getColor()
         {
             return playerColors[playerNumber];
         }
 
-        public int getPlayerNumber()
+        public int getNumber()
         {
             return this.playerNumber;
         }
 
-        public String getPlayerName()
+        public String getName()
         {
             return playerColorNames[this.playerNumber];
-        }
-        private String wheatCount = "0";
-        private String sheepCount = "0";
-        private String woodCount = "0";
-        private String brickCount = "0";
-        private String oreCount = "0";
-
-        bool resourcesHidden = false;
-
-        //Replaces the value with an asterisk
-        private void HideResources()
-        {
-            this.lblBrick.Text = "*";
-            this.lblOre.Text = "*";
-            this.lblSheep.Text = "*";
-            this.lblWheat.Text = "*";
-            this.lblWood.Text = "*";
-            resourcesHidden = true;
-        }
-
-        private void ShowResources()
-        {
-            this.lblBrick.Text = brickCount;
-            this.lblOre.Text = oreCount;
-            this.lblSheep.Text = sheepCount;
-            this.lblWheat.Text = wheatCount;
-            this.lblWood.Text = woodCount;
-            resourcesHidden = false;
         }
 
         public void setPlayerColor(Color color)
@@ -354,74 +339,20 @@ namespace SettlersOfCatan
         {
             this.lblTurn.Visible = value;
             activePlayer = value;
-            if (value)
+        }
+
+        public void updateResourceDisplays()
+        {
+            for (int i = 0; i < 5; i ++)
             {
-                ShowResources();
-            } else
-            {
-                HideResources();
+                Board.ResourceType rType = (Board.ResourceType)i;
+                resourceDisplays[i].setCount(this.getResourceCount(rType));
             }
         }
 
-        private void updateResourceGUI()
+        private void Player_Name_Clicked(object sender, EventArgs e)
         {
-            this.setBrick(getResourceCount(Board.ResourceType.Brick));
-            this.setOre(getResourceCount(Board.ResourceType.Ore));
-            this.setWood(getResourceCount(Board.ResourceType.Wood));
-            this.setWheat(getResourceCount(Board.ResourceType.Wheat));
-            this.setSheep(getResourceCount(Board.ResourceType.Sheep));
+            this.OnClick(e);
         }
-
-        //Each updates the required values
-        private void setWood(int count)
-        {
-            lblWood.Text = count + "";
-            woodCount = count + "";
-            if (resourcesHidden)
-            {
-                lblWood.Text = "*";
-            }
-        }
-
-        private void setWheat(int count)
-        {
-            lblWheat.Text = count + "";
-            wheatCount = count + "";
-            if (resourcesHidden)
-            {
-                lblWheat.Text = "*";
-            }
-        }
-
-        private void setSheep(int count)
-        {
-            lblSheep.Text = count + "";
-            sheepCount = count + "";
-            if (resourcesHidden)
-            {
-                lblSheep.Text = "*";
-            }
-        }
-
-        private void setBrick(int count)
-        {
-            lblBrick.Text = count + "";
-            brickCount = count + "";
-            if (resourcesHidden)
-            {
-                lblBrick.Text = "*";
-            }
-        }
-
-        private void setOre(int count)
-        {
-            lblOre.Text = count + "";
-            oreCount = count + "";
-            if (resourcesHidden)
-            {
-                lblOre.Text = "*";
-            }
-        }
-
     }
 }

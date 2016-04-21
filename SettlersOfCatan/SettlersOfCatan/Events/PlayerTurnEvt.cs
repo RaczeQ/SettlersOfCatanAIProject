@@ -162,12 +162,15 @@ namespace SettlersOfCatan.Events
         
         public void playerTrade(Object sender, EventArgs e)
         {
-            disableEventObjects();
-            tradeWindow = new TradeWindow();
-            tradeWindow.loadPlayerTrade(theBoard.currentPlayer);
-            tradeWindow.Closing += onTradeEnded;
-            currentState = State.Trade;
-            tradeWindow.Show();
+            if (sender is Player)
+            {
+                disableEventObjects();
+                tradeWindow = new TradeWindow();
+                tradeWindow.loadPlayerTrade(theBoard.currentPlayer, (Player)sender);
+                tradeWindow.Closing += onTradeEnded;
+                currentState = State.Trade;
+                tradeWindow.Show();
+            }
         }
 
         public void onTradeEnded(Object sender, EventArgs e)
@@ -214,6 +217,13 @@ namespace SettlersOfCatan.Events
             {
                 devc.Click += executeUpdate;
             }
+            foreach (Player p in theBoard.playerOrder)
+            {
+                if (p != theBoard.currentPlayer)
+                {
+                    p.Click += playerTrade;
+                }
+            }
             theBoard.enableToolTips();
         }
 
@@ -241,6 +251,13 @@ namespace SettlersOfCatan.Events
             foreach (DevelopmentCard devc in theBoard.currentPlayer.getDevelopmentCards())
             {
                 devc.Click -= executeUpdate;
+            }
+            foreach (Player p in theBoard.playerOrder)
+            {
+                if (p != theBoard.currentPlayer)
+                {
+                    p.Click -= playerTrade;
+                }
             }
             theBoard.pnlDevelopmentCardToolTip.Enabled = false;
             theBoard.pnlRoadToolTip.Enabled = false;

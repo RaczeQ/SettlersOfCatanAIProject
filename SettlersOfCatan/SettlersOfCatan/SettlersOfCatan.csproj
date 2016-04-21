@@ -102,11 +102,11 @@
     <Compile Include="NumberChip.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="PlayerInfoPanel.cs">
+    <Compile Include="Player.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PlayerInfoPanel.Designer.cs">
-      <DependentUpon>PlayerInfoPanel.cs</DependentUpon>
+    <Compile Include="Player.Designer.cs">
+      <DependentUpon>Player.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -114,6 +114,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ResourceCard.cs" />
+    <Compile Include="ResourceDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ResourceDisplay.Designer.cs">
+      <DependentUpon>ResourceDisplay.cs</DependentUpon>
+    </Compile>
     <Compile Include="Road.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -150,6 +156,9 @@
     <EmbeddedResource Include="Forms\ResourceSelector.resx">
       <DependentUpon>ResourceSelector.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ResourceDisplay.resx">
+      <DependentUpon>ResourceDisplay.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Road.resx">
       <DependentUpon>Road.cs</DependentUpon>
     </EmbeddedResource>
@@ -173,8 +182,8 @@
     <EmbeddedResource Include="Forms\TradeWindow.resx">
       <DependentUpon>TradeWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PlayerInfoPanel.resx">
-      <DependentUpon>PlayerInfoPanel.cs</DependentUpon>
+    <EmbeddedResource Include="Player.resx">
+      <DependentUpon>Player.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -43,7 +43,7 @@ namespace SettlersOfCatan.Events
 
                     if (playersToGiveUpCards.Count() > 0)
                     {
-                        MessageBox.Show(playersToGiveUpCards[0].getPlayerName() + " is holding more than 7 cards. Please select ones you wish to give up.");
+                        MessageBox.Show(playersToGiveUpCards[0].getName() + " is holding more than 7 cards. Please select ones you wish to give up.");
                         //make the player at index 0 give up their cards
                         disableEventObjects();
                         TradeWindow tradeWindow = new TradeWindow();

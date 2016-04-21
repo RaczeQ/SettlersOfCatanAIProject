@@ -125,7 +125,7 @@ namespace SettlersOfCatan
                     //Move to the next stage
 
                     //Re order the players so the firstPlayer is the first item in the playerOrder list.
-                    int fp = firstPlayer.getPlayerNumber();
+                    int fp = firstPlayer.getNumber();
                     for (int i = 0; i < playerOrder.Count(); i ++ )
                     {
                         playerOrder[i] = playerPanels[fp];
