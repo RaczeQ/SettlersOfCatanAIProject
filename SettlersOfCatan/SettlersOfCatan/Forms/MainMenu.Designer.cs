@@ -57,6 +57,7 @@
             this.btnRules.TabIndex = 1;
             this.btnRules.Text = "Rules";
             this.btnRules.UseVisualStyleBackColor = false;
+            this.btnRules.Click += new System.EventHandler(this.btnRules_Click);
             // 
             // btnExit
             // 
@@ -69,6 +70,7 @@
             this.btnExit.TabIndex = 2;
             this.btnExit.Text = "Exit";
             this.btnExit.UseVisualStyleBackColor = false;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // MainMenu
             // 

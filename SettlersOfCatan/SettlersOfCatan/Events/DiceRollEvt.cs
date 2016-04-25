@@ -88,7 +88,7 @@ namespace SettlersOfCatan.Events
         {
             theBoard.dice.Click += executeUpdate;
             theBoard.dice.Enabled = true;
-            theBoard.btnPlayerTrade.Enabled = false;
+            
             theBoard.btnBankTrade.Enabled = false;
             theBoard.btnEndTurn.Enabled = false;
             theBoard.pbBuildDevelopmentCard.Enabled = false;
@@ -97,7 +97,7 @@ namespace SettlersOfCatan.Events
         public void disableEventObjects()
         {
             theBoard.dice.Click -= executeUpdate;
-            theBoard.btnPlayerTrade.Enabled = true;
+            
             theBoard.btnBankTrade.Enabled = true;
             theBoard.btnEndTurn.Enabled = true;
             theBoard.pbBuildDevelopmentCard.Enabled = true;

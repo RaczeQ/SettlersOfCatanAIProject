@@ -219,10 +219,10 @@ namespace SettlersOfCatan.Events
         public void enableEventObjects()
         {
             theBoard.btnBankTrade.Enabled = true;
-            theBoard.btnPlayerTrade.Enabled = true;
+            
             theBoard.btnEndTurn.Enabled = true;
             theBoard.btnBankTrade.Click += bankTrade;
-            theBoard.btnPlayerTrade.Click += playerTrade;
+            
             theBoard.btnEndTurn.Click += executeUpdate;
             theBoard.pbBuildDevelopmentCard.Click += executeUpdate;
             foreach (Road rd in theBoard.roadLocations)
@@ -254,10 +254,10 @@ namespace SettlersOfCatan.Events
         public void disableEventObjects()
         {
             theBoard.btnBankTrade.Enabled = false;
-            theBoard.btnPlayerTrade.Enabled = false;
+
             theBoard.btnEndTurn.Enabled = false;
             theBoard.btnBankTrade.Click -= bankTrade;
-            theBoard.btnPlayerTrade.Click -= playerTrade;
+
             theBoard.btnEndTurn.Click -= executeUpdate;
             theBoard.pbBuildDevelopmentCard.Click -= executeUpdate;
             foreach (Road rd in theBoard.roadLocations)

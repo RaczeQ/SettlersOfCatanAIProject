@@ -304,4 +304,7 @@
   <data name="settlement" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\settlement.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="SoC_rv_Rules_091907" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SoC_rv_Rules_091907.pdf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

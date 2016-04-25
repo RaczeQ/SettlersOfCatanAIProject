@@ -611,6 +611,16 @@ namespace SettlersOfCatan.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] SoC_rv_Rules_091907 {
+            get {
+                object obj = ResourceManager.GetObject("SoC_rv_Rules_091907", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap TEST_TILE2 {
