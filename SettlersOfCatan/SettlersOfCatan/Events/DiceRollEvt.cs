@@ -55,6 +55,11 @@ namespace SettlersOfCatan.Events
                                             if (rc != null)
                                             {
                                                 set.getOwningPlayer().giveResource(rc);
+                                                if (set.city())
+                                                {
+                                                    //Give an extra for cities
+                                                    set.getOwningPlayer().giveResource(rc);
+                                                }
                                             }
                                             else
                                             {
