@@ -108,7 +108,6 @@
             this.btnCheat.TabIndex = 10;
             this.btnCheat.Text = "Super Secret Cheat Button";
             this.btnCheat.UseVisualStyleBackColor = false;
-            this.btnCheat.Visible = false;
             this.btnCheat.Click += new System.EventHandler(this.btnCheat_Click);
             // 
             // pnlBoardArea
@@ -123,7 +122,7 @@
             this.pnlBoardArea.Controls.Add(this.btnCheat);
             this.pnlBoardArea.Location = new System.Drawing.Point(0, 0);
             this.pnlBoardArea.Name = "pnlBoardArea";
-            this.pnlBoardArea.Size = new System.Drawing.Size(1005, 580);
+            this.pnlBoardArea.Size = new System.Drawing.Size(978, 580);
             this.pnlBoardArea.TabIndex = 0;
             // 
             // pictureBox17
@@ -274,7 +273,7 @@
             this.lstGameEvents.Location = new System.Drawing.Point(484, 591);
             this.lstGameEvents.Name = "lstGameEvents";
             this.lstGameEvents.ScrollAlwaysVisible = true;
-            this.lstGameEvents.Size = new System.Drawing.Size(519, 134);
+            this.lstGameEvents.Size = new System.Drawing.Size(492, 134);
             this.lstGameEvents.TabIndex = 6;
             // 
             // pictureBox9
@@ -537,7 +536,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlPlayerInfo.AutoScroll = true;
             this.pnlPlayerInfo.BackColor = System.Drawing.Color.Transparent;
-            this.pnlPlayerInfo.Location = new System.Drawing.Point(1011, 0);
+            this.pnlPlayerInfo.Location = new System.Drawing.Point(984, 0);
             this.pnlPlayerInfo.Name = "pnlPlayerInfo";
             this.pnlPlayerInfo.Size = new System.Drawing.Size(286, 736);
             this.pnlPlayerInfo.TabIndex = 5;
@@ -548,7 +547,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1295, 735);
+            this.ClientSize = new System.Drawing.Size(1268, 735);
             this.Controls.Add(this.lstGameEvents);
             this.Controls.Add(this.pnlPlayerInfo);
             this.Controls.Add(this.pnlDevelopmentCardToolTip);
