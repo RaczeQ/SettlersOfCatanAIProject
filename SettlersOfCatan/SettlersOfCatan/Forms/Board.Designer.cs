@@ -28,8 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnCheat = new System.Windows.Forms.Button();
-            this.pnlBoardArea = new SettlersOfCatan.TransparencyFix.BoardArea();
             this.pictureBox17 = new System.Windows.Forms.PictureBox();
             this.label10 = new System.Windows.Forms.Label();
             this.pnlUpgradedToolTip = new System.Windows.Forms.Panel();
@@ -53,11 +51,15 @@
             this.label5 = new System.Windows.Forms.Label();
             this.pnlDevelopmentCardToolTip = new System.Windows.Forms.Panel();
             this.pbBuildDevelopmentCard = new System.Windows.Forms.PictureBox();
-            this.dice = new SettlersOfCatan.Dice();
             this.btnEndTurn = new System.Windows.Forms.Button();
             this.btnBankTrade = new System.Windows.Forms.Button();
             this.btnSetupBoard = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.numberOfPlayersLabel = new System.Windows.Forms.Label();
+            this.numberOfPlayers = new System.Windows.Forms.NumericUpDown();
+            this.numberOfPlayers.ValueChanged += new System.EventHandler(this.numberOfPlayersChanged);
+            this.btnStartGame = new System.Windows.Forms.Button();
+            this.dice = new SettlersOfCatan.Dice();
             this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
@@ -71,7 +73,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.pnlRoadToolTip = new System.Windows.Forms.Panel();
             this.pnlPlayerInfo = new System.Windows.Forms.Panel();
-            this.pnlBoardArea.SuspendLayout();
+            this.pnlBoardArea = new SettlersOfCatan.TransparencyFix.BoardArea();
+            this.btnCheat = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox17)).BeginInit();
             this.pnlUpgradedToolTip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox16)).BeginInit();
@@ -89,6 +92,7 @@
             this.pnlDevelopmentCardToolTip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBuildDevelopmentCard)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numberOfPlayers)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
@@ -97,33 +101,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.pnlRoadToolTip.SuspendLayout();
+            this.pnlBoardArea.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // btnCheat
-            // 
-            this.btnCheat.BackColor = System.Drawing.Color.Transparent;
-            this.btnCheat.Location = new System.Drawing.Point(860, 3);
-            this.btnCheat.Name = "btnCheat";
-            this.btnCheat.Size = new System.Drawing.Size(142, 23);
-            this.btnCheat.TabIndex = 10;
-            this.btnCheat.Text = "Super Secret Cheat Button";
-            this.btnCheat.UseVisualStyleBackColor = false;
-            this.btnCheat.Click += new System.EventHandler(this.btnCheat_Click);
-            // 
-            // pnlBoardArea
-            // 
-            this.pnlBoardArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlBoardArea.AutoScroll = true;
-            this.pnlBoardArea.BackColor = System.Drawing.Color.White;
-            this.pnlBoardArea.BackgroundImage = global::SettlersOfCatan.Properties.Resources.ocean_surface;
-            this.pnlBoardArea.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pnlBoardArea.Controls.Add(this.btnCheat);
-            this.pnlBoardArea.Location = new System.Drawing.Point(0, 0);
-            this.pnlBoardArea.Name = "pnlBoardArea";
-            this.pnlBoardArea.Size = new System.Drawing.Size(978, 580);
-            this.pnlBoardArea.TabIndex = 0;
             // 
             // pictureBox17
             // 
@@ -359,13 +338,6 @@
             this.pbBuildDevelopmentCard.TabIndex = 4;
             this.pbBuildDevelopmentCard.TabStop = false;
             // 
-            // dice
-            // 
-            this.dice.Location = new System.Drawing.Point(317, 14);
-            this.dice.Name = "dice";
-            this.dice.Size = new System.Drawing.Size(142, 118);
-            this.dice.TabIndex = 5;
-            // 
             // btnEndTurn
             // 
             this.btnEndTurn.Location = new System.Drawing.Point(78, 63);
@@ -398,6 +370,9 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            this.groupBox1.Controls.Add(this.numberOfPlayersLabel);
+            this.groupBox1.Controls.Add(this.numberOfPlayers);
+            this.groupBox1.Controls.Add(this.btnStartGame);
             this.groupBox1.Controls.Add(this.btnSetupBoard);
             this.groupBox1.Controls.Add(this.btnBankTrade);
             this.groupBox1.Controls.Add(this.btnEndTurn);
@@ -409,6 +384,56 @@
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Actions";
+            // 
+            // numberOfPlayersLabel
+            // 
+            this.numberOfPlayersLabel.AutoSize = true;
+            this.numberOfPlayersLabel.Location = new System.Drawing.Point(211, 68);
+            this.numberOfPlayersLabel.Name = "numberOfPlayersLabel";
+            this.numberOfPlayersLabel.Size = new System.Drawing.Size(92, 13);
+            this.numberOfPlayersLabel.TabIndex = 12;
+            this.numberOfPlayersLabel.Text = "Number of players";
+            // 
+            // numberOfPlayers
+            // 
+            this.numberOfPlayers.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.numberOfPlayers.Location = new System.Drawing.Point(206, 101);
+            this.numberOfPlayers.Maximum = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.numberOfPlayers.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numberOfPlayers.Name = "numberOfPlayers";
+            this.numberOfPlayers.Size = new System.Drawing.Size(105, 20);
+            this.numberOfPlayers.TabIndex = 11;
+            this.numberOfPlayers.Value = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            // 
+            // btnStartGame
+            // 
+            this.btnStartGame.Location = new System.Drawing.Point(206, 29);
+            this.btnStartGame.Name = "btnStartGame";
+            this.btnStartGame.Size = new System.Drawing.Size(105, 23);
+            this.btnStartGame.TabIndex = 10;
+            this.btnStartGame.Text = "Start Game";
+            this.btnStartGame.UseVisualStyleBackColor = true;
+            this.btnStartGame.Visible = false;
+            this.btnStartGame.Click += new System.EventHandler(this.btnStartGame_Click);
+            // 
+            // dice
+            // 
+            this.dice.Location = new System.Drawing.Point(317, 14);
+            this.dice.Name = "dice";
+            this.dice.Size = new System.Drawing.Size(142, 118);
+            this.dice.TabIndex = 5;
             // 
             // pictureBox6
             // 
@@ -541,6 +566,32 @@
             this.pnlPlayerInfo.Size = new System.Drawing.Size(286, 736);
             this.pnlPlayerInfo.TabIndex = 5;
             // 
+            // pnlBoardArea
+            // 
+            this.pnlBoardArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlBoardArea.AutoScroll = true;
+            this.pnlBoardArea.BackColor = System.Drawing.Color.White;
+            this.pnlBoardArea.BackgroundImage = global::SettlersOfCatan.Properties.Resources.ocean_surface;
+            this.pnlBoardArea.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pnlBoardArea.Controls.Add(this.btnCheat);
+            this.pnlBoardArea.Location = new System.Drawing.Point(0, 0);
+            this.pnlBoardArea.Name = "pnlBoardArea";
+            this.pnlBoardArea.Size = new System.Drawing.Size(978, 580);
+            this.pnlBoardArea.TabIndex = 0;
+            // 
+            // btnCheat
+            // 
+            this.btnCheat.BackColor = System.Drawing.Color.Transparent;
+            this.btnCheat.Location = new System.Drawing.Point(860, 3);
+            this.btnCheat.Name = "btnCheat";
+            this.btnCheat.Size = new System.Drawing.Size(142, 23);
+            this.btnCheat.TabIndex = 10;
+            this.btnCheat.Text = "Super Secret Cheat Button";
+            this.btnCheat.UseVisualStyleBackColor = false;
+            this.btnCheat.Click += new System.EventHandler(this.btnCheat_Click);
+            // 
             // Board
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -560,7 +611,6 @@
             this.Controls.Add(this.pnlBoardArea);
             this.Name = "Board";
             this.Text = "Settlers of Catan";
-            this.pnlBoardArea.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox17)).EndInit();
             this.pnlUpgradedToolTip.ResumeLayout(false);
             this.pnlUpgradedToolTip.PerformLayout();
@@ -582,6 +632,8 @@
             this.pnlDevelopmentCardToolTip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBuildDevelopmentCard)).EndInit();
             this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numberOfPlayers)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
@@ -592,6 +644,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.pnlRoadToolTip.ResumeLayout(false);
             this.pnlRoadToolTip.PerformLayout();
+            this.pnlBoardArea.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -641,6 +694,9 @@
         private System.Windows.Forms.Label label2;
         public System.Windows.Forms.Panel pnlRoadToolTip;
         private System.Windows.Forms.Panel pnlPlayerInfo;
+        private System.Windows.Forms.Button btnStartGame;
+        private System.Windows.Forms.NumericUpDown numberOfPlayers;
+        private System.Windows.Forms.Label numberOfPlayersLabel;
     }
 }
 

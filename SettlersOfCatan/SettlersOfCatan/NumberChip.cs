@@ -11,9 +11,9 @@ namespace SettlersOfCatan
     [Serializable]
     public class NumberChip : PictureBox, Card
     {
-        private int numberValue = 0;
+        public int numberValue { get; private set; } = 0;
 
-        private bool blocked = false;
+        public bool blocked { get; private set; } = false;
 
         public NumberChip(int numberValue)
         {

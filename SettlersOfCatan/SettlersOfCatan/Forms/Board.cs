@@ -103,7 +103,7 @@ namespace SettlersOfCatan
          */
         public static bool RANDOM_NUMBER_CHITS = false;
 
-        public Board()
+        public Board(bool generateOnStart)
         {
             InitializeComponent();
 
@@ -115,10 +115,30 @@ namespace SettlersOfCatan
                 tileImages[i] = new Bitmap("Resources/" + tileImageResourceNames[i]);
             }
 
+            if (generateOnStart)
+            {
+                _setupBoard();
+                addEventText("Welcome to catan. When you are ready, click on Start Game to begin.");
+            }
+            else
+            {
+                addEventText("Welcome to catan. When you are ready, click on Set Up Board to begin.");
+            }
+        }
+
+        private void numberOfPlayersChanged(object sender, EventArgs e)
+        {
+            generatePlayers();
+        }
+
+        public void generatePlayers()
+        {
+            int numberOfPlayers = (int)this.numberOfPlayers.Value;
             //Set up player objects and initial player order
-            playerOrder = new Player[4];
-            playerPanels = new Player[4];
-            for (int i = 0; i < playerPanels.Count(); i ++)
+            playerOrder = new Player[numberOfPlayers];
+            playerPanels = new Player[numberOfPlayers];
+            pnlPlayerInfo.Controls.Clear();
+            for (int i = 0; i < playerPanels.Count(); i++)
             {
                 playerPanels[i] = new Player();
                 pnlPlayerInfo.Controls.Add(playerPanels[i]);
@@ -126,9 +146,11 @@ namespace SettlersOfCatan
                 playerPanels[i].setPlayerNumber(i);
             }
             currentPlayer = playerPanels[0];
+        }
 
-            addEventText("Welcome to catan. When you are ready, click on Set Up Board to begin.");
-
+        public BoardState getBoardState()
+        {
+            return new BoardState(currentPlayer, boardTiles, settlementLocations, roadLocations, btnEndTurn);
         }
 
         //Runs when an event has sucessfully resolved.
@@ -200,7 +222,6 @@ namespace SettlersOfCatan
             foreach (Board.ResourceType r in fourPlayerTiles)
             {
                 terrainTiles.putCard(new TerrainTile(pnlBoardArea, r, this.tileImages[(int)r]));
-
             }
 
             terrainTiles.shuffleDeck();
@@ -437,6 +458,14 @@ namespace SettlersOfCatan
                         bt.getHarbor().addTradeLocation(set);
                     }
                 }
+            }
+
+            foreach (Settlement set in settlementLocations)
+            {
+                var adjTiles = boardTiles
+                    .OfType<TerrainTile>()
+                    .Where(x => x.adjascentSettlements.Contains(set));
+                set.adjacentTiles.AddRange(adjTiles);
             }
 
             debugSaveBoardData();
@@ -697,36 +726,41 @@ namespace SettlersOfCatan
             this.lstGameEvents.SelectedIndex =  -1;
         }
 
-        private void btnSetupBoard_Click(object sender, EventArgs e)
+        private void _setupBoard()
         {
             distributeTiles();
             debugSaveBoardData();
             this.btnSetupBoard.Hide();
+            this.btnStartGame.Show();
+        }
+
+        private void btnSetupBoard_Click(object sender, EventArgs e)
+        {
+            _setupBoard();
+        }
+
+        private void _startGame()
+        {
+            this.btnStartGame.Hide();
+            this.numberOfPlayers.Hide();
+            this.numberOfPlayersLabel.Hide();
             this.currentGameState = GameState.FirstDiceRoll;
+            foreach (Player p in this.playerPanels) p.lockPlayerComboBox();
             currentGameEvent = new FirstPlayerEvt();
             currentGameEvent.beginExecution(this, this);
+        }
+
+        private void btnStartGame_Click(object sender, EventArgs e)
+        {
+            _startGame();
         }
 
         private void btnCheat_Click(object sender, EventArgs e)
         {
             foreach (Player p in this.playerOrder)
-            {
-                p.giveResource(new ResourceCard(ResourceType.Brick));
-                p.giveResource(new ResourceCard(ResourceType.Brick));
-                p.giveResource(new ResourceCard(ResourceType.Brick));
-                p.giveResource(new ResourceCard(ResourceType.Sheep));
-                p.giveResource(new ResourceCard(ResourceType.Sheep));
-                p.giveResource(new ResourceCard(ResourceType.Sheep));
-                p.giveResource(new ResourceCard(ResourceType.Wheat));
-                p.giveResource(new ResourceCard(ResourceType.Wheat));
-                p.giveResource(new ResourceCard(ResourceType.Wheat));
-                p.giveResource(new ResourceCard(ResourceType.Wood));
-                p.giveResource(new ResourceCard(ResourceType.Wood));
-                p.giveResource(new ResourceCard(ResourceType.Wood));
-                p.giveResource(new ResourceCard(ResourceType.Ore));
-                p.giveResource(new ResourceCard(ResourceType.Ore));
-                p.giveResource(new ResourceCard(ResourceType.Ore));
-            }
+                foreach (ResourceType r in Enum.GetValues(typeof(ResourceType)))
+                    for (int i = 0; i < 3; i++)
+                        p.giveResource(new ResourceCard(r));
         }
     }
 }

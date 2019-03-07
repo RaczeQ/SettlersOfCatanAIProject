@@ -31,6 +31,8 @@ namespace SettlersOfCatan
         private Random diceRandomizer;
         private int lastRollValue = 0;
 
+        public DialogResult DialogResult { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         /*
             Gives a realistic dice value by generating two random numbers and adding them.
             The values of the individual dice can be accessed later with the above global variables.

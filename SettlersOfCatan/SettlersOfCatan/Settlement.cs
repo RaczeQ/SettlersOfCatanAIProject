@@ -15,10 +15,11 @@ namespace SettlersOfCatan
         public int id = 0;
         public Point position;
 
-        private List<Road> connectedRoads=new List<Road>();
+        public List<Road> connectedRoads { get; private set; } = new List<Road>();
+        public List<TerrainTile> adjacentTiles { get; private set; } = new List<TerrainTile>();
 
-        private Player owningPlayer;
-        private bool isCity = false;
+        public Player owningPlayer { get; private set; }
+        public bool isCity { get; private set; } = false;
         private Bitmap image = new Bitmap("Resources/settlement.png");
 
 
@@ -30,13 +31,13 @@ namespace SettlersOfCatan
             BackgroundImageLayout = ImageLayout.Stretch;
             Location = new Point(position.X - 6, position.Y - 6);
             Size = new Size(12, 12);
-            Click += forcePaint;
+            //Click += forcePaint;
         }
 
-        private void forcePaint(object sender, EventArgs e)
-        {
-            this.Invalidate();
-        }
+        //private void forcePaint(object sender, EventArgs e)
+        //{
+        //    this.Invalidate();
+        //}
 
         private void Settlement_Paint(object sender, PaintEventArgs e)
         {
@@ -81,10 +82,15 @@ namespace SettlersOfCatan
 
         public String toString()
         {
-            String str = "Settlement ID: " + this.id + " Connected Roads: (";
+            String str = "Settlement ID: " + this.id + " Connected Roads: ( ";
             foreach (Road r in connectedRoads)
             {
-                str += "Road ID: " + r.id + ", "; 
+                str += "Road ID: " + r.id + ", ";
+            }
+            str += ") Adjacent Terrain Tiles: ( ";
+            foreach (TerrainTile t in adjacentTiles)
+            {
+                str += t.index + ", ";
             }
             str += " )";
             return str;
@@ -137,7 +143,7 @@ namespace SettlersOfCatan
         /**
             Only returns true if no settlement is within 1 location of this settlement.
          */
-        private bool checkForOtherSettlement()
+        public bool checkForOtherSettlement()
         {
             bool allow = true;
             foreach (Road cRoad in connectedRoads)
@@ -158,7 +164,7 @@ namespace SettlersOfCatan
             return allow;
         }
 
-        private bool checkForConnection(Player currentPlayer)
+        public bool checkForConnection(Player currentPlayer)
         {
             bool result = false;
             //We need to check if there is a valid road connection
@@ -184,7 +190,7 @@ namespace SettlersOfCatan
 
             if (owningPlayer == null)
             {
-                if (!Bank.hasPayment(currentPlayer, Bank.SETTLEMENT_COST) && takeResources)
+                if (takeResources && !Bank.hasPayment(currentPlayer, Bank.SETTLEMENT_COST))
                 {
                     throw new BuildError(BuildError.NOT_ENOUGH_RESOURCES);
                 }
@@ -200,6 +206,7 @@ namespace SettlersOfCatan
 
                 setOwningPlayer(currentPlayer);
                 currentPlayer.addSettlement(this);
+                this.Invalidate();
             }
             else if (owningPlayer == currentPlayer)
             {

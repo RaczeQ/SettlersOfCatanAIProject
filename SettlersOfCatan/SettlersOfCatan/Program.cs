@@ -16,9 +16,10 @@ namespace SettlersOfCatan
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainMenu());
+            Application.Run(new Board(true));
+            //var board = new Board();
+            //board.Show();
         }
-
 
     }
 }

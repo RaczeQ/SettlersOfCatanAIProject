@@ -15,7 +15,15 @@ namespace SettlersOfCatan.Events
         {
             theBoard = b;
             owner = evt;
-            enableEventObjects();
+            if (!theBoard.currentPlayer.isAI)
+            {
+                enableEventObjects();
+            }
+            else
+            {
+                theBoard.dice.roll();
+                executeUpdate(theBoard.dice, null);
+            }
         }
 
         public void executeUpdate(Object sender, EventArgs e)
@@ -27,14 +35,15 @@ namespace SettlersOfCatan.Events
                 theBoard.addEventText(theBoard.currentPlayer.getName() + " rolled a " + dice.getRollValue());
                 if (dice.getRollValue()==7)
                 {
-                    //Thief event!!
-                    //Go through each player to see if they loose thier resources
-                    //Once the thief event has successfully run, we can terminate this event.
-                    MessageBox.Show(theBoard.currentPlayer.getName() + " rolled a 7. The thief has been activated!");
-                    RobberStealEvt evt = new RobberStealEvt();
-                    disableEventObjects();
-                    evt.beginExecution(theBoard, this);
-                } else
+                    ////Thief event!!
+                    ////Go through each player to see if they loose thier resources
+                    ////Once the thief event has successfully run, we can terminate this event.
+                    //MessageBox.Show(theBoard.currentPlayer.getName() + " rolled a 7. The thief has been activated!");
+                    //RobberStealEvt evt = new RobberStealEvt();
+                    //disableEventObjects();
+                    //evt.beginExecution(theBoard, this);
+                }
+                else
                 {
                     //Players get resources
                     foreach (Tile tile in theBoard.boardTiles)

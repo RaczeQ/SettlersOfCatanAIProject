@@ -49,9 +49,9 @@ namespace SettlersOfCatan
     public class TerrainTile : Tile
     {
 
-        private NumberChip numberChip;
-        private int gatherChance = 0;
-        private Board.ResourceType tileType;
+        public NumberChip numberChip { get; private set; }
+        public int gatherChance { get; private set; } = 0;
+        public Board.ResourceType tileType { get; private set; }
 
         public List<Settlement> adjascentSettlements;
         public List<Road> adjascentRoads;

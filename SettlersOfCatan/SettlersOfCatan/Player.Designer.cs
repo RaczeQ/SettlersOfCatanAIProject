@@ -1,4 +1,7 @@
-﻿namespace SettlersOfCatan
+﻿using SettlersOfCatan.AI;
+using System.Linq;
+
+namespace SettlersOfCatan
 {
     partial class Player
     {
@@ -38,6 +41,7 @@
             this.lblTurn = new System.Windows.Forms.Label();
             this.pnlDevCards = new System.Windows.Forms.Panel();
             this.pnlResources = new System.Windows.Forms.Panel();
+            this.playerComboBox = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             this.pnlPlayerColor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbLongestRoad)).BeginInit();
@@ -98,7 +102,7 @@
             // pbLongestRoad
             // 
             this.pbLongestRoad.Image = global::SettlersOfCatan.Properties.Resources.LongestRoad;
-            this.pbLongestRoad.Location = new System.Drawing.Point(49, 47);
+            this.pbLongestRoad.Location = new System.Drawing.Point(140, 47);
             this.pbLongestRoad.Name = "pbLongestRoad";
             this.pbLongestRoad.Size = new System.Drawing.Size(32, 32);
             this.pbLongestRoad.TabIndex = 7;
@@ -108,7 +112,7 @@
             // pbLargestArmy
             // 
             this.pbLargestArmy.Image = global::SettlersOfCatan.Properties.Resources.LargestArmy;
-            this.pbLargestArmy.Location = new System.Drawing.Point(11, 47);
+            this.pbLargestArmy.Location = new System.Drawing.Point(102, 47);
             this.pbLargestArmy.Name = "pbLargestArmy";
             this.pbLargestArmy.Size = new System.Drawing.Size(32, 32);
             this.pbLargestArmy.TabIndex = 7;
@@ -118,9 +122,9 @@
             // lblTurn
             // 
             this.lblTurn.BackColor = System.Drawing.Color.Yellow;
-            this.lblTurn.Location = new System.Drawing.Point(87, 47);
+            this.lblTurn.Location = new System.Drawing.Point(141, 9);
             this.lblTurn.Name = "lblTurn";
-            this.lblTurn.Size = new System.Drawing.Size(86, 32);
+            this.lblTurn.Size = new System.Drawing.Size(32, 32);
             this.lblTurn.TabIndex = 8;
             this.lblTurn.Text = "Your Turn";
             this.lblTurn.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -145,11 +149,21 @@
             this.pnlResources.Size = new System.Drawing.Size(244, 52);
             this.pnlResources.TabIndex = 10;
             // 
+            // playerComboBox
+            // 
+            this.playerComboBox.FormattingEnabled = true;
+            this.playerComboBox.Location = new System.Drawing.Point(11, 52);
+            this.playerComboBox.Name = "playerComboBox";
+            this.playerComboBox.Size = new System.Drawing.Size(85, 21);
+            this.playerComboBox.TabIndex = 0;
+            this.playerComboBox.Items.AddRange(AgentManager.availableAgents.ToArray());
+            // 
             // Player
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.playerComboBox);
             this.Controls.Add(this.pnlResources);
             this.Controls.Add(this.pnlDevCards);
             this.Controls.Add(this.lblTurn);
@@ -180,5 +194,6 @@
         private System.Windows.Forms.Label lblTurn;
         private System.Windows.Forms.Panel pnlDevCards;
         private System.Windows.Forms.Panel pnlResources;
+        private System.Windows.Forms.ComboBox playerComboBox;
     }
 }

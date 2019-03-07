@@ -17,7 +17,16 @@ namespace SettlersOfCatan.Events
         public void beginExecution(Board board, EvtOwnr evt)
         {
             theBoard = board;
-            enableEventObjects();
+
+            if (!theBoard.currentPlayer.isAI)
+            {
+                enableEventObjects();
+            }
+            else
+            {
+                var move = theBoard.currentPlayer.agent.makeMove(theBoard.getBoardState());
+                executeUpdate(move, null);
+            }
 
             foreach (DevelopmentCard devC in board.currentPlayer.getDevelopmentCards())
             {
@@ -171,6 +180,11 @@ namespace SettlersOfCatan.Events
                     //Should not be able to reach this statement.
                     break;
 
+            }
+            if (theBoard.currentPlayer.isAI)
+            { 
+                var move = theBoard.currentPlayer.agent.makeMove(theBoard.getBoardState());
+                executeUpdate(move, null);
             }
         }
 

@@ -29,7 +29,6 @@ namespace SettlersOfCatan.Events
         public void beginExecution(Board b, EvtOwnr evt)
         {
             theBoard = b;
-            enableEventObjects();
             owner = evt;
             playerTurnOrder = new List<int>();
             int num = -1;
@@ -46,6 +45,16 @@ namespace SettlersOfCatan.Events
             }
             theBoard.addEventText("Player " + theBoard.playerOrder[0].getName() + " please place your first settlement and road.");
             theBoard.currentPlayer = theBoard.playerOrder[0];
+
+            if (!theBoard.currentPlayer.isAI)
+            {
+                enableEventObjects();
+            }
+            else
+            {
+                Settlement settlement = theBoard.currentPlayer.agent.placeFreeSettlement(theBoard.getBoardState());
+                executeUpdate(settlement, null);
+            }
         }
 
         public void executeUpdate(Object sender, EventArgs e)
@@ -72,6 +81,16 @@ namespace SettlersOfCatan.Events
                 } else
                 {
                     theBoard.addEventText("You may not place any more settlements.");
+                }
+                if (theBoard.currentPlayer.isAI)
+                {
+                    disableEventObjects();
+                    Road road = theBoard.currentPlayer.agent.placeFreeRoad(theBoard.getBoardState());
+                    executeUpdate(road, null);
+                }
+                else
+                {
+                    enableEventObjects();
                 }
             }
             else if (sender is Road)
@@ -107,6 +126,16 @@ namespace SettlersOfCatan.Events
                     theBoard.addEventText("Player " + theBoard.playerOrder[playerTurnOrder[playerNum]].getName() 
                         + " please place your " + (firstPass? "first" : "second" ) + " settlement and road.");
                     theBoard.currentPlayer = theBoard.playerOrder[playerTurnOrder[playerNum]];
+                    if (theBoard.currentPlayer.isAI)
+                    {
+                        disableEventObjects();
+                        Settlement settlement = theBoard.currentPlayer.agent.placeFreeSettlement(theBoard.getBoardState());
+                        executeUpdate(settlement, null);
+                    }
+                    else
+                    {
+                        enableEventObjects();
+                    }
                 }
             }
 
@@ -123,10 +152,12 @@ namespace SettlersOfCatan.Events
         {
             foreach (Road rd in theBoard.roadLocations)
             {
+                rd.Click -= executeUpdate;
                 rd.Click += executeUpdate;
             }
             foreach (Settlement st in theBoard.settlementLocations)
             {
+                st.Click -= executeUpdate;
                 st.Click += executeUpdate;
             }
 

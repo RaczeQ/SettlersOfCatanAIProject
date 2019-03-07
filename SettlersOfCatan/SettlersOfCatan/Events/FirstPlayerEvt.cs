@@ -30,7 +30,6 @@ namespace SettlersOfCatan.Events
             owner = evt;
             //Locks down all but the needed controls.
             //Adds the onExecuteUpdate to the controls that need it.
-            enableEventObjects();
             playersToRoll = new List<Player>();
             playerRolls = new List<int>();
             foreach (Player p in b.playerPanels)
@@ -39,6 +38,16 @@ namespace SettlersOfCatan.Events
             }
             theBoard.addEventText(UserMessages.PlayerDiceRollPrompt(playersToRoll[0]));
             theBoard.currentPlayer = playersToRoll[0];
+            //enableEventObjects();
+            if (!theBoard.currentPlayer.isAI)
+            {
+                enableEventObjects();
+            }
+            else
+            {
+                theBoard.dice.roll();
+                executeUpdate(theBoard.dice, null);
+            }
         }
 
         public void executeUpdate(Object sender, EventArgs e)
@@ -61,6 +70,15 @@ namespace SettlersOfCatan.Events
                         p = playersToRoll[rollPosition];
                         theBoard.addEventText(UserMessages.PlayerDiceRollPrompt(p));
                         theBoard.currentPlayer = p;
+                        if (p.isAI)
+                        {
+                            theBoard.dice.roll();
+                            executeUpdate(sender, e);
+                        }
+                        else
+                        {
+                            enableEventObjects();
+                        }
                     }
                     break;
                 case 1:
@@ -101,6 +119,15 @@ namespace SettlersOfCatan.Events
                         playersToRoll = newPlayers;
                         state = 0;
                         theBoard.addEventText(UserMessages.PlayerDiceRollPrompt(playersToRoll[0]));
+                        if (playersToRoll[0].isAI)
+                        {
+                            theBoard.dice.roll();
+                            executeUpdate(sender, e);
+                        }
+                        else
+                        {
+                            enableEventObjects();
+                        }
                     } else
                     {
                         //All was good the first player is *drumroll*
@@ -128,6 +155,7 @@ namespace SettlersOfCatan.Events
 
         public void enableEventObjects()
         {
+            theBoard.dice.Click -= executeUpdate;
             theBoard.dice.Click += executeUpdate;
             
             theBoard.btnBankTrade.Enabled = false;

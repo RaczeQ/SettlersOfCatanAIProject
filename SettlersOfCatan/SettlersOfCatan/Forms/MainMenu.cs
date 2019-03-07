@@ -27,7 +27,7 @@ namespace SettlersOfCatan
         private void btnStart_Click(object sender, EventArgs e)
         {
             //this.Hide();
-            theGame = new Board();
+            theGame = new Board(false);
             theGame.Show();
         }
 

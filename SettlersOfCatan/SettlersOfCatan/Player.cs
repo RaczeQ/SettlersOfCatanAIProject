@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SettlersOfCatan.AI;
 
 namespace SettlersOfCatan
 {
@@ -17,10 +18,10 @@ namespace SettlersOfCatan
         public static Color[] playerColors = { Color.Red, Color.LightBlue, Color.Purple, Color.Orange, Color.Green, Color.Brown };
 
         private int playerNumber = 0;
-        private List<ResourceCard> resources;
-        private List<DevelopmentCard> onHandDevelopmentCards;
-        private List<Settlement> settlements;
-        private List<Road> roads;
+        public List<ResourceCard> resources { get; private set; }
+        public List<DevelopmentCard> onHandDevelopmentCards { get; private set; }
+        public List<Settlement> settlements { get; private set; }
+        public List<Road> roads { get; private set; }
         private List<ResourceDisplay> resourceDisplays;
         private Random rand;
 
@@ -46,6 +47,19 @@ namespace SettlersOfCatan
             }
         }
 
+        public bool isAI
+        {
+            get { return playerComboBox.SelectedIndex > 0; }
+        }
+
+        public IAgent agent
+        {
+            get {
+                return AgentManager.getAgent(playerComboBox.SelectedItem.ToString());
+            }
+        }
+
+
         private int _score = 0;
         public int score
         {
@@ -66,6 +80,7 @@ namespace SettlersOfCatan
             roads = new List<Road>();
             rand = new Random();
             resourceDisplays = new List<ResourceDisplay>();
+            playerComboBox.SelectedIndex = 0;
 
             //Prevents designer glitches because Visual Studio is bitches.
             bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
@@ -87,6 +102,11 @@ namespace SettlersOfCatan
         public void updateScore()
         {
             score = Player.calculateVictoryPoints(!Current, this);
+        }
+
+        public void lockPlayerComboBox()
+        {
+            this.playerComboBox.Enabled = false;
         }
 
         /*
