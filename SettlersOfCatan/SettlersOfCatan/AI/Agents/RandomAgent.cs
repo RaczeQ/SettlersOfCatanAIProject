@@ -25,9 +25,7 @@ namespace SettlersOfCatan.AI.Agents
             {
                 return state.canBuildRoad.ElementAt(_r.Next(0, state.canBuildRoad.Count()));
             }
-            else if (state.playerResourcesAmounts.Any(kv => kv.Value < minResourceAmount)
-                && state.playerResourcesAmounts.Any(kv => kv.Value >= state.bankTradePrices[kv.Key])
-            )
+            else if (state.resourcesAvailableToBuy.Values.Any(x => x))
             {
                 // Buy resource with lowest amount for resource with highest amount left after buy
                 var amountLeft = state.playerResourcesAmounts.ToDictionary(k => k.Key, v => v.Value - state.bankTradePrices[v.Key]);
