@@ -364,7 +364,7 @@ namespace SettlersOfCatan
 
         public String getName()
         {
-            return playerColorNames[this.playerNumber];
+            return $"{playerColorNames[this.playerNumber]} [{playerComboBox.SelectedItem.ToString()}]";
         }
 
         public void setPlayerColor(Color color)
