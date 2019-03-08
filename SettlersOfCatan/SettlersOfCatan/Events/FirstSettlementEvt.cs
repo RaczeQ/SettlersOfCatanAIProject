@@ -26,7 +26,7 @@ namespace SettlersOfCatan.Events
 
         public List<int> playerTurnOrder;
 
-        public void beginExecution(Board b, EvtOwnr evt)
+        public override void beginExecution(Board b, EvtOwnr evt)
         {
             theBoard = b;
             owner = evt;
@@ -57,7 +57,7 @@ namespace SettlersOfCatan.Events
             }
         }
 
-        public void executeUpdate(Object sender, EventArgs e)
+        public override void executeUpdate(Object sender, EventArgs e)
         {
             //Determines if this is only the first pass or the second pass.
             bool firstPass = !(playerNum+1>theBoard.playerPanels.Count());
@@ -140,15 +140,16 @@ namespace SettlersOfCatan.Events
             }
 
         }
-        public void endExecution()
+        public override void endExecution()
         {
 
             disableEventObjects();
-            owner.subeventEnded();
+            if (!(owner is Board))
+                owner.subeventEnded();
 
         }
 
-        public void enableEventObjects()
+        public override void enableEventObjects()
         {
             foreach (Road rd in theBoard.roadLocations)
             {
@@ -163,7 +164,7 @@ namespace SettlersOfCatan.Events
 
         }
 
-        public void disableEventObjects()
+        public override void disableEventObjects()
         {
             foreach (Road rd in theBoard.roadLocations)
             {

@@ -12,7 +12,7 @@ namespace SettlersOfCatan.Events
         Board theBoard;
         EvtOwnr owner;
 
-        public void beginExecution(Board b, EvtOwnr evt)
+        public override void beginExecution(Board b, EvtOwnr evt)
         {
             //Since this event does not depend on user input we can safely turn
             // off all controls.
@@ -21,7 +21,7 @@ namespace SettlersOfCatan.Events
             executeUpdate(this, new EventArgs());
         }
 
-        public void executeUpdate(Object sender, EventArgs e)
+        public override void executeUpdate(Object sender, EventArgs e)
         {
             foreach (Tile t in theBoard.boardTiles)
             {
@@ -34,17 +34,17 @@ namespace SettlersOfCatan.Events
             endExecution();
         }
 
-        public void endExecution()
+        public override void endExecution()
         {
-            theBoard.subeventEnded();
+            //theBoard.subeventEnded();
         }
 
-        public void enableEventObjects()
+        public override void enableEventObjects()
         {
 
         }
 
-        public void disableEventObjects()
+        public override void disableEventObjects()
         {
 
         }

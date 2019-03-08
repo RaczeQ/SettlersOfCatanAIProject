@@ -66,10 +66,11 @@
     </Compile>
     <Compile Include="Events\BankTradeEvt.cs" />
     <Compile Include="Events\DiceRollEvt.cs" />
+    <Compile Include="Events\Event.cs" />
     <Compile Include="Events\EvtOwnr.cs" />
     <Compile Include="Events\FirstResourcesEvt.cs" />
     <Compile Include="Events\EmpyEvt.cs" />
-    <Compile Include="Events\Event.cs" />
+    <Compile Include="Events\Event2.cs" />
     <Compile Include="Events\FirstPlayerEvt.cs" />
     <Compile Include="Events\FirstSettlementEvt.cs" />
     <Compile Include="Events\HarborTrade.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="UserMessages.cs" />
     <EmbeddedResource Include="Dice.resx">
       <DependentUpon>Dice.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Board.resx">
       <DependentUpon>Board.cs</DependentUpon>

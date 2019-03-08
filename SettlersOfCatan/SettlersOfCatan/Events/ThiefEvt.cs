@@ -16,7 +16,7 @@ namespace SettlersOfCatan.Events
         NumberChip oldThiefLocation;
         TerrainTile terrainTileWithThief;
         private int state = 0;
-        public void beginExecution(Board b, EvtOwnr evt)
+        public override void beginExecution(Board b, EvtOwnr evt)
         {
             theBoard = b;
             owner = evt;
@@ -29,7 +29,7 @@ namespace SettlersOfCatan.Events
          * I have no way of handling button exceptions directly, so I use a secondary function to
          * run the main code then use the main function to handle the exceptions.
          */
-        public void executeUpdate(object sender, EventArgs e)
+        public override void executeUpdate(object sender, EventArgs e)
         {
             try
             {
@@ -132,10 +132,11 @@ namespace SettlersOfCatan.Events
 
         }
 
-        public void endExecution()
+        public override void endExecution()
         {
             disableEventObjects();
-            owner.subeventEnded();
+            if (!(owner is Board))
+                owner.subeventEnded();
         }
 
         public bool chitHasPlayers()
@@ -163,7 +164,7 @@ namespace SettlersOfCatan.Events
             return false;
         }
 
-        public void enableEventObjects()
+        public override void enableEventObjects()
         {
             foreach (Tile t in theBoard.boardTiles)
             {
@@ -184,7 +185,7 @@ namespace SettlersOfCatan.Events
             }
         }
 
-        public void disableEventObjects()
+        public override void disableEventObjects()
         {
             foreach (Tile t in theBoard.boardTiles)
             {

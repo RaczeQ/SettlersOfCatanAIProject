@@ -31,13 +31,13 @@ namespace SettlersOfCatan
             BackgroundImageLayout = ImageLayout.Stretch;
             Location = new Point(position.X - 6, position.Y - 6);
             Size = new Size(12, 12);
-            //Click += forcePaint;
+            Click += forcePaint;
         }
 
-        //private void forcePaint(object sender, EventArgs e)
-        //{
-        //    this.Invalidate();
-        //}
+        private void forcePaint(object sender, EventArgs e)
+        {
+            this.Invalidate();
+        }
 
         private void Settlement_Paint(object sender, PaintEventArgs e)
         {
@@ -187,7 +187,6 @@ namespace SettlersOfCatan
          */
         public void buildSettlement(Player currentPlayer, bool takeResources, bool connectionCheck)
         {
-
             if (owningPlayer == null)
             {
                 if (takeResources && !Bank.hasPayment(currentPlayer, Bank.SETTLEMENT_COST))
@@ -206,7 +205,6 @@ namespace SettlersOfCatan
 
                 setOwningPlayer(currentPlayer);
                 currentPlayer.addSettlement(this);
-                this.Invalidate();
             }
             else if (owningPlayer == currentPlayer)
             {
@@ -222,11 +220,11 @@ namespace SettlersOfCatan
 
                 this.isCity = true;
                 this.image = new Bitmap("Resources/city.png");
-                this.Invalidate();
             } else
             {
                 throw new BuildError(BuildError.LocationOwnedBy(owningPlayer));
             }
+            this.Refresh();
         }
     }
 }

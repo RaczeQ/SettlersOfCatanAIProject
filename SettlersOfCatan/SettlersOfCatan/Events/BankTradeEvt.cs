@@ -8,27 +8,27 @@ namespace SettlersOfCatan.Events
 {
     class BankTradeEvt : Event
     {
-        public void beginExecution(Board board, EvtOwnr evt)
+        public override void beginExecution(Board board, EvtOwnr evt)
         {
 
         }
 
-        public void executeUpdate(Object sender, EventArgs e)
+        public override void executeUpdate(Object sender, EventArgs e)
         {
 
         }
 
-        public void endExecution()
+        public override void endExecution()
         {
 
         }
 
-        public void enableEventObjects()
+        public override void enableEventObjects()
         {
 
         }
 
-        public void disableEventObjects()
+        public override void disableEventObjects()
         {
 
         }

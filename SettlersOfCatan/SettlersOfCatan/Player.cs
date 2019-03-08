@@ -15,7 +15,7 @@ namespace SettlersOfCatan
     {
 
         public static String[] playerColorNames = { "Red", "Blue", "Purple", "Orange", "Green", "Brown" };
-        public static Color[] playerColors = { Color.Red, Color.LightBlue, Color.Purple, Color.Orange, Color.Green, Color.Brown };
+        public static Color[] playerColors = { Color.Red, Color.RoyalBlue, Color.Purple, Color.Orange, Color.Green, Color.Brown };
 
         private int playerNumber = 0;
         public List<ResourceCard> resources { get; private set; }
@@ -40,7 +40,7 @@ namespace SettlersOfCatan
                 }
                 else
                 {
-                    hideInformation();
+                    showInformation();
                     lblTurn.Visible = false;
                     score = Player.calculateVictoryPoints(false, this);
                 }

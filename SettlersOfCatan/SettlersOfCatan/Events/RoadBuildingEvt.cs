@@ -15,7 +15,7 @@ namespace SettlersOfCatan.Events
         public Board theBoard;
         int builtRoads = 0;
         EvtOwnr owner;
-        public void beginExecution(Board board, EvtOwnr evt)
+        public override void beginExecution(Board board, EvtOwnr evt)
         {
             theBoard = board;
             owner = evt;
@@ -24,7 +24,7 @@ namespace SettlersOfCatan.Events
             enableEventObjects();
         }
 
-        public void executeUpdate(Object sender, EventArgs e)
+        public override void executeUpdate(Object sender, EventArgs e)
         {
             //Runs when the player clicks on a road.
             if (sender is Road)
@@ -50,13 +50,14 @@ namespace SettlersOfCatan.Events
             }
         }
 
-        public void endExecution()
+        public override void endExecution()
         {
             disableEventObjects();
-            owner.subeventEnded();
+            if (!(owner is Board))
+                owner.subeventEnded();
         }
 
-        public void enableEventObjects()
+        public override void enableEventObjects()
         {
             foreach (Road rd in theBoard.roadLocations)
             {
@@ -64,7 +65,7 @@ namespace SettlersOfCatan.Events
             }
         }
 
-        public void disableEventObjects()
+        public override void disableEventObjects()
         {
             foreach (Road rd in theBoard.roadLocations)
             {

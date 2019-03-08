@@ -8,6 +8,6 @@ namespace SettlersOfCatan.Events
 {
     public interface EvtOwnr
     {
-        void subeventEnded();
+        bool subeventEnded();
     }
 }

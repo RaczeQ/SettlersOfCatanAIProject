@@ -24,7 +24,7 @@ namespace SettlersOfCatan.Events
         int rollPosition = 0;
         public int state = 0;
 
-        public void beginExecution(Board b, EvtOwnr evt)
+        public override void beginExecution(Board b, EvtOwnr evt)
         {
             theBoard = b;
             owner = evt;
@@ -50,7 +50,7 @@ namespace SettlersOfCatan.Events
             }
         }
 
-        public void executeUpdate(Object sender, EventArgs e)
+        public override void executeUpdate(Object sender, EventArgs e)
         {
 
             switch (state)
@@ -141,19 +141,20 @@ namespace SettlersOfCatan.Events
         }
 
 
-        public void endExecution()
+        public override void endExecution()
         {
             disableEventObjects();
-            owner.subeventEnded();
+            if (!(owner is Board))
+                owner.subeventEnded();
         }
 
-        public void disableEventObjects()
+        public override void disableEventObjects()
         {
             theBoard.dice.Click -= executeUpdate;
             theBoard.dice.Enabled = false;
         }
 
-        public void enableEventObjects()
+        public override void enableEventObjects()
         {
             theBoard.dice.Click -= executeUpdate;
             theBoard.dice.Click += executeUpdate;

@@ -19,7 +19,7 @@ namespace SettlersOfCatan.Events
 
         private Player activePlayer;
 
-        public void beginExecution(Board board, EvtOwnr evt)
+        public override void beginExecution(Board board, EvtOwnr evt)
         {
             activePlayer = board.currentPlayer;
             enableEventObjects();
@@ -38,7 +38,7 @@ namespace SettlersOfCatan.Events
             executeUpdate(this, new EventArgs());
         }
 
-        public void executeUpdate(Object sender, EventArgs e)
+        public override void executeUpdate(Object sender, EventArgs e)
         {
             switch (state)
             {
@@ -80,23 +80,25 @@ namespace SettlersOfCatan.Events
             executeUpdate(sender, e);
         }
 
-        public void endExecution()
+        public override void endExecution()
         {
             disableEventObjects();
-            owner.subeventEnded();
+            if (!(owner is Board))
+                owner.subeventEnded();
         }
 
-        public void subeventEnded()
+        public bool subeventEnded()
         {
             executeUpdate(this, new EventArgs());
+            return true;
         }
 
-        public void enableEventObjects()
+        public override void enableEventObjects()
         {
             //Does not require anything on its own.
         }
 
-        public void disableEventObjects()
+        public override void disableEventObjects()
         {
 
         }

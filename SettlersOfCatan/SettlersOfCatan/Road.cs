@@ -27,17 +27,17 @@ namespace SettlersOfCatan
             Location = new Point(position.X - 6, position.Y - 6);
             Size = new Size(12, 12);
             this.Paint += Road_Paint;
-            //this.Click += Road_Click;
+            this.Click += Road_Click;
 
         }
 
         /*
          * Causes the control to redraw.
          */
-        //private void Road_Click(object sender, EventArgs e)
-        //{
-        //    this.Invalidate();
-        //}
+        private void Road_Click(object sender, EventArgs e)
+        {
+            this.Invalidate();
+        }
 
         private void Road_Paint(object sender, PaintEventArgs e)
         {
@@ -184,7 +184,7 @@ namespace SettlersOfCatan
             this.owningPlayer = currentPlayer;
             //this.BackColor = currentPlayer.getPlayerColor();
             currentPlayer.addRoad(this);
-            this.Invalidate();
+            this.Refresh();
         }
     }
 }

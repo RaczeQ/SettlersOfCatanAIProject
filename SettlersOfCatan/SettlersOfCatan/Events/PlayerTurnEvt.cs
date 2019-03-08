@@ -14,7 +14,7 @@ namespace SettlersOfCatan.Events
         Board theBoard;
         TradeWindow tradeWindow;
 
-        public void beginExecution(Board board, EvtOwnr evt)
+        public override void beginExecution(Board board, EvtOwnr evt)
         {
             theBoard = board;
 
@@ -35,7 +35,7 @@ namespace SettlersOfCatan.Events
 
         }
 
-        public void executeUpdate(Object sender, EventArgs e)
+        public override void executeUpdate(Object sender, EventArgs e)
         {
             switch (currentState)
             {
@@ -45,6 +45,7 @@ namespace SettlersOfCatan.Events
                         //End turn.
                         theBoard.addEventText(UserMessages.PlayerEndedTurn(theBoard.currentPlayer));
                         endExecution();
+                        return;
                     } else if (sender is Settlement)
                     {
                         Settlement location = (Settlement)sender;
@@ -219,18 +220,19 @@ namespace SettlersOfCatan.Events
             currentState = State.Wait;
         }
 
-        public void subeventEnded()
+        public bool subeventEnded()
         {
             enableEventObjects();
+            return true;
         }
 
-        public void endExecution()
+        public override void endExecution()
         {
             disableEventObjects();
-            theBoard.subeventEnded();
+            //theBoard.subeventEnded();
         }
 
-        public void enableEventObjects()
+        public override void enableEventObjects()
         {
             theBoard.btnBankTrade.Enabled = true;
             
@@ -265,7 +267,7 @@ namespace SettlersOfCatan.Events
             theBoard.enableToolTips();
         }
 
-        public void disableEventObjects()
+        public override void disableEventObjects()
         {
             theBoard.btnBankTrade.Enabled = false;
 

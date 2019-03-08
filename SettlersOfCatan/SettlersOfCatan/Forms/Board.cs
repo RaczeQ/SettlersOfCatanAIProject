@@ -87,7 +87,7 @@ namespace SettlersOfCatan
             }
         }
 
-        public enum GameState { Setup, FirstDiceRoll, FirstSettlement, FirstResources, DiceRoll, PlayerTurn, End };
+        public enum GameState { Setup, FirstPlayer, FirstDiceRoll, FirstSettlement, FirstResources, DiceRoll, PlayerTurn, End };
         public static Event currentGameEvent;
         public GameState currentGameState;
 
@@ -153,11 +153,35 @@ namespace SettlersOfCatan
             return new BoardState(currentPlayer, boardTiles, settlementLocations, roadLocations, btnEndTurn);
         }
 
+        private void _startGame()
+        {
+            this.btnStartGame.Hide();
+            this.numberOfPlayers.Hide();
+            this.numberOfPlayersLabel.Hide();
+            this.currentGameState = GameState.FirstPlayer;
+            foreach (Player p in this.playerPanels) p.lockPlayerComboBox();
+            _runNextMove();
+        }
+
+        private void _runNextMove()
+        {
+            while (subeventEnded())
+            {
+                System.Threading.Thread.Sleep(50);
+                foreach (Player p in this.playerPanels) p.Refresh();
+            }
+        }
+
         //Runs when an event has sucessfully resolved.
-        public void subeventEnded()
+        public bool subeventEnded()
         {
             switch (this.currentGameState)
             {
+                case GameState.FirstPlayer:
+                    currentGameState = GameState.FirstDiceRoll;
+                    currentGameEvent = new FirstPlayerEvt();
+                    currentGameEvent.beginExecution(this, this);
+                    break;
                 case GameState.FirstDiceRoll:
                     //Move to the next stage
 
@@ -206,9 +230,9 @@ namespace SettlersOfCatan
                     currentGameEvent.beginExecution(this, this);
                     break;
                 case GameState.End:
-                    //Nothing
-                    break;
+                    return false;
             }
+            return true;
         }
 
         /*
@@ -721,6 +745,10 @@ namespace SettlersOfCatan
          */
         public void addEventText(String text)
         {
+            if (this.lstGameEvents.Items.Count > 1000)
+            {
+                this.lstGameEvents.Items.Clear();
+            }
             this.lstGameEvents.Items.Add(text);
             this.lstGameEvents.SelectedIndex = this.lstGameEvents.Items.Count - 1;
             this.lstGameEvents.SelectedIndex =  -1;
@@ -737,17 +765,6 @@ namespace SettlersOfCatan
         private void btnSetupBoard_Click(object sender, EventArgs e)
         {
             _setupBoard();
-        }
-
-        private void _startGame()
-        {
-            this.btnStartGame.Hide();
-            this.numberOfPlayers.Hide();
-            this.numberOfPlayersLabel.Hide();
-            this.currentGameState = GameState.FirstDiceRoll;
-            foreach (Player p in this.playerPanels) p.lockPlayerComboBox();
-            currentGameEvent = new FirstPlayerEvt();
-            currentGameEvent.beginExecution(this, this);
         }
 
         private void btnStartGame_Click(object sender, EventArgs e)

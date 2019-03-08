@@ -429,11 +429,9 @@ namespace SettlersOfCatan
 
         public static bool canPlayerTradeWithHarbor(Harbor hb, Player pl)
         {
-            for (int i = 0; i < 5; i++)
+            foreach (Board.ResourceType rt in Enum.GetValues(typeof(Board.ResourceType)))
             {
                 //Get the player's current resource counts.
-                
-                Board.ResourceType rt = (Board.ResourceType)i;
                 int count = pl.getResourceCount(rt);
                 if (count >= hb.getRequiredResourceCount())
                 {

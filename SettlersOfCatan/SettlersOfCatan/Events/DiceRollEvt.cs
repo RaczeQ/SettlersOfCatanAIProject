@@ -11,7 +11,7 @@ namespace SettlersOfCatan.Events
 
         Board theBoard;
         EvtOwnr owner;
-        public void beginExecution(Board b, EvtOwnr evt)
+        public override void beginExecution(Board b, EvtOwnr evt)
         {
             theBoard = b;
             owner = evt;
@@ -26,7 +26,7 @@ namespace SettlersOfCatan.Events
             }
         }
 
-        public void executeUpdate(Object sender, EventArgs e)
+        public override void executeUpdate(Object sender, EventArgs e)
         {
             if (sender is Dice)
             {
@@ -86,14 +86,13 @@ namespace SettlersOfCatan.Events
             }
         }
 
-        public void endExecution()
+        public override void endExecution()
         {
-
             disableEventObjects();
-            theBoard.subeventEnded();
+            //theBoard.subeventEnded();
         }
 
-        public void enableEventObjects()
+        public override void enableEventObjects()
         {
             theBoard.dice.Click += executeUpdate;
             theBoard.dice.Enabled = true;
@@ -103,7 +102,7 @@ namespace SettlersOfCatan.Events
             theBoard.pbBuildDevelopmentCard.Enabled = false;
         }
 
-        public void disableEventObjects()
+        public override void disableEventObjects()
         {
             theBoard.dice.Click -= executeUpdate;
             
@@ -115,9 +114,10 @@ namespace SettlersOfCatan.Events
 
 
         //Runs when the theif event has finished
-        public void subeventEnded()
+        public bool subeventEnded()
         {
             endExecution();
+            return true;
         }
     }
 }

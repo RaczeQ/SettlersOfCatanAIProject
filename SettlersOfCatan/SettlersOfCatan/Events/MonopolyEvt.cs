@@ -12,14 +12,14 @@ namespace SettlersOfCatan.Events
         TradeWindow tradeWindow;
         EvtOwnr owner;
 
-        public void beginExecution(Board board, EvtOwnr evt)
+        public override void beginExecution(Board board, EvtOwnr evt)
         {
             theBoard = board;
             enableEventObjects();
             owner = evt;
         }
 
-        public void executeUpdate(Object sender, EventArgs e)
+        public override void executeUpdate(Object sender, EventArgs e)
         {
             
             //We know what resource was selected by asking the trade window.
@@ -39,13 +39,14 @@ namespace SettlersOfCatan.Events
             endExecution();
         }
 
-        public void endExecution()
+        public override void endExecution()
         {
             disableEventObjects();
-            owner.subeventEnded();
+            if (!(owner is Board))
+                owner.subeventEnded();
         }
 
-        public void enableEventObjects()
+        public override void enableEventObjects()
         {
             tradeWindow = new TradeWindow();
             tradeWindow.loadMonopoly(theBoard.currentPlayer);
@@ -53,7 +54,7 @@ namespace SettlersOfCatan.Events
             tradeWindow.Closing += executeUpdate;
         }
 
-        public void disableEventObjects()
+        public override void disableEventObjects()
         {
             tradeWindow = null;
         }

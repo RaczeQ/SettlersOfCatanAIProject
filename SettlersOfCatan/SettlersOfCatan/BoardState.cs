@@ -24,7 +24,7 @@ namespace SettlersOfCatan
         public IEnumerable<Settlement> availableSettlements { get { return settlements
                     .Where(s => s.checkForOtherSettlement()); } }
         public IEnumerable<Settlement> canBuildNewSettlements { get { return availableSettlements
-                    .Where(s => s.checkForConnection(player) && Bank.hasPayment(player, Bank.SETTLEMENT_COST)); } }
+                    .Where(s => s.owningPlayer == null && s.checkForConnection(player) && Bank.hasPayment(player, Bank.SETTLEMENT_COST)); } }
         public IEnumerable<Settlement> canUpgradeSettlement { get { return player.settlements
                 .Where(s => !s.isCity && Bank.hasPayment(player, Bank.CITY_COST)); } }
         public IEnumerable<Road> roads { get; private set; }
