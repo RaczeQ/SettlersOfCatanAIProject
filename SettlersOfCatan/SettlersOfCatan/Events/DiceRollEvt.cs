@@ -80,9 +80,9 @@ namespace SettlersOfCatan.Events
                             }
                         }
                     }
-                    //Event resolved
-                    endExecution();
                 }
+                //Event resolved
+                endExecution();
             }
         }
 
@@ -90,6 +90,7 @@ namespace SettlersOfCatan.Events
         {
             disableEventObjects();
             //theBoard.subeventEnded();
+            PlayerSemaphore.unlockGame();
         }
 
         public override void enableEventObjects()

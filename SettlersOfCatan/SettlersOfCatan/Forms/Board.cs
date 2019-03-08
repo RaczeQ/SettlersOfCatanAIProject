@@ -160,21 +160,24 @@ namespace SettlersOfCatan
             this.numberOfPlayersLabel.Hide();
             this.currentGameState = GameState.FirstPlayer;
             foreach (Player p in this.playerPanels) p.lockPlayerComboBox();
-            _runNextMove();
+            this.Refresh();
+            _runNextMoveAsync();
         }
 
-        private void _runNextMove()
+        private async void _runNextMoveAsync()
         {
             while (subeventEnded())
             {
                 System.Threading.Thread.Sleep(50);
                 foreach (Player p in this.playerPanels) p.Refresh();
+                await PlayerSemaphore.waitForEventEnd();
             }
         }
 
         //Runs when an event has sucessfully resolved.
         public bool subeventEnded()
         {
+            PlayerSemaphore.lockGame();
             switch (this.currentGameState)
             {
                 case GameState.FirstPlayer:
@@ -736,7 +739,7 @@ namespace SettlersOfCatan
             {
                 currentGameState = GameState.End;
                 currentGameEvent.endExecution();
-                MessageBox.Show(winningPlayer.getName() + " has won!");
+                addEventText(winningPlayer.getName() + " has won!");
             }
         }
 

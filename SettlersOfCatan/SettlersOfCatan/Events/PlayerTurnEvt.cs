@@ -18,21 +18,24 @@ namespace SettlersOfCatan.Events
         {
             theBoard = board;
 
+            foreach (DevelopmentCard devC in board.currentPlayer.getDevelopmentCards())
+            {
+                devC.setPlayable(true);
+            }
+
             if (!theBoard.currentPlayer.isAI)
             {
                 enableEventObjects();
             }
             else
             {
-                var move = theBoard.currentPlayer.agent.makeMove(theBoard.getBoardState());
-                executeUpdate(move, null);
+                while (PlayerSemaphore.isLocked)
+                {
+                    var move = theBoard.currentPlayer.agent.makeMove(theBoard.getBoardState());
+                    executeUpdate(move, null);
+                    System.Threading.Thread.Sleep(50);
+                }
             }
-
-            foreach (DevelopmentCard devC in board.currentPlayer.getDevelopmentCards())
-            {
-                devC.setPlayable(true);
-            }
-
         }
 
         public override void executeUpdate(Object sender, EventArgs e)
@@ -182,11 +185,11 @@ namespace SettlersOfCatan.Events
                     break;
 
             }
-            if (theBoard.currentPlayer.isAI)
-            { 
-                var move = theBoard.currentPlayer.agent.makeMove(theBoard.getBoardState());
-                executeUpdate(move, null);
-            }
+            //if (theBoard.currentPlayer.isAI)
+            //{ 
+            //    var move = theBoard.currentPlayer.agent.makeMove(theBoard.getBoardState());
+            //    executeUpdate(move, null);
+            //}
         }
 
         public void bankTrade(Object sender, EventArgs e)
@@ -230,6 +233,7 @@ namespace SettlersOfCatan.Events
         {
             disableEventObjects();
             //theBoard.subeventEnded();
+            PlayerSemaphore.unlockGame();
         }
 
         public override void enableEventObjects()

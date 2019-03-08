@@ -137,6 +137,8 @@ namespace SettlersOfCatan.Events
             disableEventObjects();
             if (!(owner is Board))
                 owner.subeventEnded();
+            else
+                PlayerSemaphore.unlockGame();
         }
 
         public bool chitHasPlayers()

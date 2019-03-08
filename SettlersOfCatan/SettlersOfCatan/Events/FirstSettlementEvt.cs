@@ -87,6 +87,7 @@ namespace SettlersOfCatan.Events
                     disableEventObjects();
                     Road road = theBoard.currentPlayer.agent.placeFreeRoad(theBoard.getBoardState());
                     executeUpdate(road, null);
+                    return;
                 }
                 else
                 {
@@ -131,6 +132,7 @@ namespace SettlersOfCatan.Events
                         disableEventObjects();
                         Settlement settlement = theBoard.currentPlayer.agent.placeFreeSettlement(theBoard.getBoardState());
                         executeUpdate(settlement, null);
+                        return;
                     }
                     else
                     {
@@ -146,7 +148,8 @@ namespace SettlersOfCatan.Events
             disableEventObjects();
             if (!(owner is Board))
                 owner.subeventEnded();
-
+            else
+                PlayerSemaphore.unlockGame();
         }
 
         public override void enableEventObjects()

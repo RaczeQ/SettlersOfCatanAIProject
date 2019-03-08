@@ -37,6 +37,7 @@ namespace SettlersOfCatan.Events
         public override void endExecution()
         {
             //theBoard.subeventEnded();
+            PlayerSemaphore.unlockGame();
         }
 
         public override void enableEventObjects()
