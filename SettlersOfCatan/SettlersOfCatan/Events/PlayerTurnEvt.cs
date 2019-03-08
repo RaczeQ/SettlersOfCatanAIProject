@@ -34,7 +34,7 @@ namespace SettlersOfCatan.Events
                 {
                     var move = theBoard.currentPlayer.agent.makeMove(theBoard.getBoardState());
                     executeUpdate(move, null);
-                    System.Threading.Thread.Sleep(50);
+                    System.Threading.Thread.Sleep(Board.AITurnDelayMilliseconds);
                 }
             }
         }

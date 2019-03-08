@@ -21,6 +21,8 @@ namespace SettlersOfCatan
     {
         public static Bank TheBank = new Bank();
 
+        public const int AITurnDelayMilliseconds = 10;
+
         public enum ResourceType { Wood=0, Brick, Ore, Wheat, Sheep, Desert};
         public static String[] RESOURCE_NAMES = { "Wood", "Brick", "Ore", "Wheat", "Sheep", "NoResource" };
         public static String[] TILE_NAMES = { "Forest", "Hills", "Mountains", "Farms", "Fields", "Desert" };
@@ -169,7 +171,7 @@ namespace SettlersOfCatan
         {
             while (subeventEnded())
             {
-                System.Threading.Thread.Sleep(50);
+                System.Threading.Thread.Sleep(AITurnDelayMilliseconds);
                 foreach (Player p in this.playerPanels) p.Refresh();
                 await PlayerSemaphore.waitForEventEnd();
             }
