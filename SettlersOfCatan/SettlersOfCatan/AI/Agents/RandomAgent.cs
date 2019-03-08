@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SettlersOfCatan.AI
+namespace SettlersOfCatan.AI.Agents
 {
     public class RandomAgent : IAgent
     {
         private Random _r = new Random();
+        private const int minResourceAmount = 4;
 
         public object makeMove(BoardState state)
         {
@@ -23,6 +24,22 @@ namespace SettlersOfCatan.AI
             else if (state.canBuildRoad.Count() > 0)
             {
                 return state.canBuildRoad.ElementAt(_r.Next(0, state.canBuildRoad.Count()));
+            }
+            else if (state.playerResourcesAmounts.Any(kv => kv.Value < minResourceAmount)
+                && state.playerResourcesAmounts.Any(kv => kv.Value >= state.bankTradePrices[kv.Key])
+            )
+            {
+                // Buy resource with lowest amount for resource with highest amount left after buy
+                var amountLeft = state.playerResourcesAmounts.ToDictionary(k => k.Key, v => v.Value - state.bankTradePrices[v.Key]);
+                var boughtResource = state.playerResourcesAmounts.OrderBy(kv => kv.Value).Select(kv => kv.Key).ToList()[0];
+                var selledResource = amountLeft.OrderBy(kv => -kv.Value).Select(kv => kv.Key).ToList()[0];
+                TradeProposition proposition = new TradeProposition()
+                {
+                    boughtResource = boughtResource,
+                    selledResource = selledResource,
+                    boughtResourceAmount = 1
+                };
+                return proposition;
             }
             else
             {

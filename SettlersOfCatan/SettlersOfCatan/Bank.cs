@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
+using SettlersOfCatan.AI;
 
 namespace SettlersOfCatan
 {
@@ -176,6 +177,29 @@ namespace SettlersOfCatan
 
             //We passed the previous checks, give the player a card
             return (DevelopmentCard)developmentCards.drawTopCard();
+        }
+
+        public bool tradeWithBank(Player player, TradeProposition proposition, IDictionary<Board.ResourceType, int> paymentCosts)
+        {
+            var selledResourceAmount = proposition.boughtResourceAmount * paymentCosts[proposition.selledResource];
+            if (!canGiveOutResource(proposition.boughtResource, proposition.boughtResourceAmount)
+                || player.getResourceCount(proposition.selledResource) < selledResourceAmount) {
+                return false;
+            }
+
+            //Give bank this resource
+            for (int i = 0; i < selledResourceAmount; i++)
+            {
+                ResourceCard rc = player.takeResource(proposition.selledResource);
+                Board.TheBank.putResourceCard(rc);
+            }
+
+            //Get cards
+            for (int i = 0; i < proposition.boughtResourceAmount; i++)
+            {
+                player.giveResource(Board.TheBank.giveOutResource(proposition.boughtResource));
+            }
+            return true;
         }
     }
 }

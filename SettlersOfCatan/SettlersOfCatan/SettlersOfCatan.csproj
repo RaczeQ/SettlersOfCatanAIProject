@@ -52,9 +52,10 @@
   <ItemGroup>
     <Compile Include="AI\AgentManager.cs" />
     <Compile Include="AI\IAgent.cs" />
-    <Compile Include="AI\RandomAgent.cs" />
+    <Compile Include="AI\Agents\RandomAgent.cs" />
+    <Compile Include="AI\TradeProposition.cs" />
     <Compile Include="Bank.cs" />
-    <Compile Include="BoardState.cs" />
+    <Compile Include="AI\BoardState.cs" />
     <Compile Include="DevelopmentCard.cs">
       <SubType>Component</SubType>
     </Compile>

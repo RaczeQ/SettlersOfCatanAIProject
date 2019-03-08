@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SettlersOfCatan.AI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -178,6 +179,15 @@ namespace SettlersOfCatan.Events
                         {
                             theBoard.addEventText(UserMessages.PlayerDoesNotHaveAdjascentSettlement);
                         }
+                    } else if (sender is TradeProposition)
+                    {
+                        var proposition = (TradeProposition)sender;
+                        Board.TheBank.tradeWithBank(
+                            theBoard.currentPlayer,
+                            proposition,
+                            theBoard.getPlayerBankCosts(theBoard.currentPlayer)
+                        );
+                        theBoard.addEventText($"{theBoard.currentPlayer.getName()} traded {proposition.selledResource} for {proposition.boughtResource}");
                     }
                     break;
                 case State.Trade:

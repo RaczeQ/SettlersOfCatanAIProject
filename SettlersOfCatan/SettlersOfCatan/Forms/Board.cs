@@ -13,6 +13,7 @@ using System.Reflection;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
+using SettlersOfCatan.AI;
 
 namespace SettlersOfCatan
 {
@@ -150,7 +151,7 @@ namespace SettlersOfCatan
 
         public BoardState getBoardState()
         {
-            return new BoardState(currentPlayer, boardTiles, settlementLocations, roadLocations, btnEndTurn);
+            return new BoardState(this);
         }
 
         private void _startGame()
@@ -741,6 +742,30 @@ namespace SettlersOfCatan
                 currentGameEvent.endExecution();
                 addEventText(winningPlayer.getName() + " has won!");
             }
+        }
+
+        public IDictionary<ResourceType, int> getPlayerBankCosts(Player p)
+        {
+            var result = new Dictionary<ResourceType, int>();
+            foreach (ResourceType rt in Enum.GetValues(typeof(ResourceType)))
+            {
+                result.Add(rt, 4);
+            }
+            foreach (Harbor hb in harbors.Where(h => h.playerHasValidSettlement(p)))
+            {
+                var harborResource = hb.getTradeOutputResource();
+                if (harborResource == ResourceType.Desert)
+                {
+                    foreach (ResourceType rt in Enum.GetValues(typeof(ResourceType)))
+                    {
+                        if (result[rt] > 3) result[rt] = 3;
+                    }
+                } else
+                {
+                    result[harborResource] = 2;
+                }
+            }
+            return result;
         }
 
         /**
