@@ -15,9 +15,6 @@ namespace SettlersOfCatan.AI
             roads = b.roadLocations;
             endTurnButton = b.btnEndTurn;
             bankTradePrices = b.getPlayerBankCosts(player);
-            playerResourcesAmounts = Enum.GetValues(typeof(Board.ResourceType))
-                .Cast<Board.ResourceType>()
-                .ToDictionary(k => k, v => player.getResourceCount(v));
         }
         public Player player { get; private set; }
         public IEnumerable<Tile> tiles { get; private set; }
@@ -65,7 +62,14 @@ namespace SettlersOfCatan.AI
             }
         }
         public Button endTurnButton { get; private set; }
-        public IDictionary<Board.ResourceType, int> playerResourcesAmounts { get; private set; }
+        public IDictionary<Board.ResourceType, int> playerResourcesAmounts { 
+            get
+            { 
+                return Enum.GetValues(typeof(Board.ResourceType))
+                    .Cast<Board.ResourceType>()
+                    .ToDictionary(k => k, v => player.getResourceCount(v));
+            }
+        }
         public IDictionary<Board.ResourceType, int> bankTradePrices { get; private set; }
         public IDictionary<Board.ResourceType, bool> resourcesAvailableToBuy
         {
@@ -73,6 +77,21 @@ namespace SettlersOfCatan.AI
             {
                 return playerResourcesAmounts
                     .ToDictionary(k => k.Key, v => v.Value >= bankTradePrices[v.Key]);
+            }
+        }
+        public IDictionary<Board.ResourceType, int> resourcesAcquiredEachTurn
+        {
+            get
+            {
+                var result = Enum.GetValues(typeof(Board.ResourceType))
+                    .Cast<Board.ResourceType>()
+                    .ToDictionary(k => k, v => 0);
+                foreach (Settlement s in player.settlements) {
+                    foreach (TerrainTile tt in s.adjacentTiles) {
+                        result[tt.getResourceType()] += s.isCity ? 2 : 1;
+                    }
+                }
+                return result;
             }
         }
     }
