@@ -12,7 +12,8 @@ namespace SettlersOfCatan.AI
         private static IDictionary<string, IAgent> _agents = new Dictionary<string, IAgent>
         {
             { "Player", null },
-            { "Random", new RandomAgent() }
+            { "Random", new RandomAgent() },
+            { "Aggressive", new AggressiveAgent() }
         };
         
         public static IEnumerable<string> availableAgents {

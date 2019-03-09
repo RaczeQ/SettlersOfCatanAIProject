@@ -1,11 +1,13 @@
 ﻿using SettlersOfCatan.AI;
+using SettlersOfCatan.AI.AssesmetFunctions;
+using SettlersOfCatan.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SettlersOfCatan.Events
+namespace SettlersOfCatan.Eventss
 {
     class PlayerTurnEvt : Event, EvtOwnr
     {
@@ -23,7 +25,7 @@ namespace SettlersOfCatan.Events
             {
                 devC.setPlayable(true);
             }
-
+            
             if (!theBoard.currentPlayer.isAI)
             {
                 enableEventObjects();

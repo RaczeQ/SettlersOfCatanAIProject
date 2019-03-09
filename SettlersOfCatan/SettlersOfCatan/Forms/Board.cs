@@ -14,6 +14,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using SettlersOfCatan.AI;
+using SettlersOfCatan.Eventss;
 
 namespace SettlersOfCatan
 {
