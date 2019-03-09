@@ -29,20 +29,21 @@ namespace SettlersOfCatan.AI.Agents
             {
                 // Buy resource with lowest amount for resource with highest amount left after buy
                 var amountLeft = state.playerResourcesAmounts.ToDictionary(k => k.Key, v => v.Value - state.bankTradePrices[v.Key]);
-                var boughtResource = state.playerResourcesAmounts.OrderBy(kv => kv.Value).Select(kv => kv.Key).ToList()[0];
+                //var boughtResource = state.playerResourcesAmounts.OrderBy(kv => kv.Value).Select(kv => kv.Key).ToList()[0];
+                var boughtResource = state.playerResourcesAcquiredPerResource.OrderBy(kv => kv.Value).Select(kv => kv.Key).ToList()[0];
                 var selledResource = amountLeft.OrderBy(kv => -kv.Value).Select(kv => kv.Key).ToList()[0];
-                TradeProposition proposition = new TradeProposition()
+                if (boughtResource != selledResource)
                 {
-                    boughtResource = boughtResource,
-                    selledResource = selledResource,
-                    boughtResourceAmount = 1
-                };
-                return proposition;
+                    TradeProposition proposition = new TradeProposition()
+                    {
+                        boughtResource = boughtResource,
+                        selledResource = selledResource,
+                        boughtResourceAmount = 1
+                    };
+                    return proposition;
+                }
             }
-            else
-            {
-                return state.endTurnButton;
-            }
+            return state.endTurnButton;
         }
 
         public Road placeFreeRoad(BoardState state)
