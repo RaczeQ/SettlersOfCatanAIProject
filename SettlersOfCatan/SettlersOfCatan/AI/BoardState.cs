@@ -19,6 +19,33 @@ namespace SettlersOfCatan.AI
         public Player player { get; private set; }
         public IEnumerable<Tile> tiles { get; private set; }
         public IEnumerable<TerrainTile> terrainTiles { get { return tiles.OfType<TerrainTile>(); } }
+        public IEnumerable<TerrainTile> playerAdjacentTerrainTiles
+        {
+            get
+            {
+                return terrainTiles
+                    .Where(t => t.adjascentSettlements
+                        .Any(s => s.owningPlayer == player)
+                    );
+            }
+        }
+        public IDictionary<TerrainTile, int> playerResourceAcqirementPerTile
+        {
+            get
+            {
+                var result = new Dictionary<TerrainTile, int>();
+                foreach (TerrainTile tt in playerAdjacentTerrainTiles)
+                {
+                    result.Add(tt, 0);
+                    foreach (Settlement s in tt.adjascentSettlements
+                        .Where(s => s.owningPlayer == player))
+                    {
+                        result[tt] += s.isCity ? 2 : 1;
+                    }
+                }
+                return result;
+            }
+        }
         public IEnumerable<Settlement> settlements { get; private set; }
         public IEnumerable<Settlement> availableSettlements
         {
@@ -79,15 +106,17 @@ namespace SettlersOfCatan.AI
                     .ToDictionary(k => k.Key, v => v.Value >= bankTradePrices[v.Key]);
             }
         }
-        public IDictionary<Board.ResourceType, int> resourcesAcquiredEachTurn
+        public IDictionary<Board.ResourceType, int> playerResourcesAcquiredPerResource
         {
             get
             {
                 var result = Enum.GetValues(typeof(Board.ResourceType))
                     .Cast<Board.ResourceType>()
                     .ToDictionary(k => k, v => 0);
-                foreach (Settlement s in player.settlements) {
-                    foreach (TerrainTile tt in s.adjacentTiles) {
+                foreach (Settlement s in player.settlements)
+                {
+                    foreach (TerrainTile tt in s.adjacentTiles)
+                    {
                         result[tt.getResourceType()] += s.isCity ? 2 : 1;
                     }
                 }
