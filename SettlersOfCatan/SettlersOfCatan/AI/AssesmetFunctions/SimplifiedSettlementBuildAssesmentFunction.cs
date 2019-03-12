@@ -24,7 +24,7 @@ namespace SettlersOfCatan.AI.AssesmetFunctions
         int findTheBestSettlementIndex(BoardState state)
         {
             var player = state.player;
-            var potentialSettlements = state.settlements
+            var potentialSettlements = state.availableSettlements
                        .Where(x => x.owningPlayer == null
                        && x.connectedRoads.Any(y => y.owningPlayer != null && y.owningPlayer != player))
                        .Select( x=> new SimplifiedSettlement
@@ -40,10 +40,10 @@ namespace SettlersOfCatan.AI.AssesmetFunctions
                                }
                                ).ToList(),
                            OccupiedRoads = x.connectedRoads.Where(z => z.owningPlayer != null && z.owningPlayer != player).Count()
-                        });
-            var t = potentialSettlements.OrderByDescending(x => x.ConnectedRoads);
-            var index = potentialSettlements.OrderByDescending(x => x.ConnectedRoads).FirstOrDefault().Id;
-            return index;
+                        }).ToList();
+            var res = potentialSettlements.OrderByDescending(x => x.OccupiedRoads).ToList();
+            var resultId = res.FirstOrDefault().Id;
+            return resultId;
         }
     }
 

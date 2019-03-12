@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SettlersOfCatan.SimplifiedModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,17 +14,16 @@ namespace SettlersOfCatan.AI.Agents
 
         public object makeMove(BoardState state)
         {
-            if (state.canUpgradeSettlement.Count() > 0)
-            {
-                return state.canUpgradeSettlement.ElementAt(_r.Next(0, state.canUpgradeSettlement.Count()));
-            }
-            else if (state.canBuildNewSettlements.Count() > 0)
-            {
-                var t= state.canBuildNewSettlements.ElementAt(_r.Next(0, state.canBuildNewSettlements.Count()));
+            if (state.canBuildNewSettlements.Count() > 0)
+            {   
                 return state.canBuildNewSettlements.ElementAt(_r.Next(0, state.canBuildNewSettlements.Count()));
             }
-            else if (state.canBuildRoad.Count() > 0)
+            else if (state.canUpgradeSettlement.Count() > 0)
             {
+                return state.canUpgradeSettlement.ElementAt(_r.Next(0, state.canUpgradeSettlement.Count()));
+            }           
+            else if (state.canBuildRoad.Count() > 0)
+            {             
                 return state.canBuildRoad.ElementAt(_r.Next(0, state.canBuildRoad.Count()));
             }
             else if (state.resourcesAvailableToBuy.Values.Any(x => x))

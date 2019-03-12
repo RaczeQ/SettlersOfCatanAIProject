@@ -13,7 +13,8 @@ namespace SettlersOfCatan.AI
         {
             { "Player", null },
             { "Random", new RandomAgent() },
-            { "Aggressive", new AggressiveAgent() }
+            { "Aggressive", new AggressiveAgent() },
+            { "Controlling", new ControllingAgent() }
         };
         
         public static IEnumerable<string> availableAgents {

@@ -53,6 +53,7 @@
     <Compile Include="AI\AgentManager.cs" />
     <Compile Include="AI\Agents\AggressiveAgent.cs" />
     <Compile Include="AI\Agents\ControllingAgent.cs" />
+    <Compile Include="AI\AssesmetFunctions\ControllingResourceAssesmentFunction.cs" />
     <Compile Include="AI\AssesmetFunctions\SettlementAssesmentFunction.cs" />
     <Compile Include="AI\AssesmetFunctions\IAssesmentFunction.cs" />
     <Compile Include="AI\AssesmetFunctions\SimplifiedSettlementBuildAssesmentFunction.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimplifiedModels\SimplifiedRoad.cs" />
     <Compile Include="SimplifiedModels\SimplifiedSettlement.cs" />
+    <Compile Include="SimplifiedModels\SimplifiedTitle.cs" />
     <Compile Include="Tile.cs">
       <SubType>Component</SubType>
     </Compile>

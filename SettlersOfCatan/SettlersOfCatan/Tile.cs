@@ -46,8 +46,7 @@ namespace SettlersOfCatan
 
     /**
      */
-    public class TerrainTile : Tile
-    {
+    public class TerrainTile : Tile { 
 
         public NumberChip numberChip { get; private set; }
         public int gatherChance { get; private set; } = 0;
@@ -157,6 +156,7 @@ namespace SettlersOfCatan
             str += " )";
             return str;
         }
+
     }
 
     /**

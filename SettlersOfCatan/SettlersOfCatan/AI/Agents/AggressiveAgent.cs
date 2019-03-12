@@ -1,4 +1,5 @@
 ﻿using SettlersOfCatan.AI.AssesmetFunctions;
+using SettlersOfCatan.SimplifiedModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,16 +16,17 @@ namespace SettlersOfCatan.AI.Agents
 
         public object makeMove(BoardState state)
         {
-            if (state.canUpgradeSettlement.Count() > 0)
-            {
-                //TODO
-                return state.canUpgradeSettlement.ElementAt(_r.Next(0, state.canUpgradeSettlement.Count()));
-            }
-            else if (state.canBuildNewSettlements.Count() > 0)
+            if (state.canBuildNewSettlements.Count() > 0)
             {
                 var index = settlementBuildAssesmentFunction.getNewSettlementIndex(state);
                 return state.canBuildNewSettlements.ElementAt(index);
             }
+            else if (state.canUpgradeSettlement.Count() > 0)
+            {
+                //TODO
+                return state.canUpgradeSettlement.ElementAt(_r.Next(0, state.canUpgradeSettlement.Count()));
+            }
+           
             else if (state.canBuildRoad.Count() > 0)
             {
                 //TODO
@@ -59,8 +61,45 @@ namespace SettlersOfCatan.AI.Agents
 
         public Settlement placeFreeSettlement(BoardState state)
         {
-            //TODO
-            return state.availableSettlements.ElementAt(_r.Next(0, state.availableSettlements.Count()));
+            List<SimplifiedSettlement> selected = null;
+            var currentSettlements = state.player.settlements
+                .Select(x => new SimplifiedSettlement
+                {
+                    Id = x.id,
+                    Weight = x.adjacentTiles.Sum(y => getTileWeightBasedOnCreatingNewSettlementsStrategy(y.tileType)),
+                    TitleWeight = x.adjacentTiles.Select(y => y.tileType).ToList()
+                }).ToList();
+
+            var possible_settlements = state.availableSettlements.
+                Select(x => new SimplifiedSettlement
+                {
+                    Id = x.id,
+                    Weight = x.adjacentTiles.Sum(y => getTileWeightBasedOnCreatingNewSettlementsStrategy(y.tileType)),
+                    TitleWeight = x.adjacentTiles.Select(y=> y.tileType).ToList()
+                }).ToList();
+
+            if (currentSettlements.Count()>0)
+            {
+                selected = possible_settlements.OrderByDescending(x => x.TitleWeight.Distinct().Count()).ThenByDescending(z => z.Weight).ToList();
+                var result = selected.Where(x => !currentSettlements.Any(y => y.TitleWeight.OrderBy(z => z.ToString()) == x.TitleWeight.OrderBy(z => z.ToString()))).FirstOrDefault();
+                return state.availableSettlements.ElementAt(result.Id);
+            }
+            else
+            {
+                selected = possible_settlements.OrderByDescending(x => x.TitleWeight.Distinct().Count()).ThenByDescending(z => z.Weight).ToList();
+                var t = selected.FirstOrDefault();
+                return state.availableSettlements.ElementAt(t.Id);
+            }
         }
-    }
+
+        private int getTileWeightBasedOnCreatingNewSettlementsStrategy(Board.ResourceType type)
+        {
+            if (type == Board.ResourceType.Brick || type == Board.ResourceType.Wood)
+                return 2;
+            else if (type == Board.ResourceType.Sheep || type == Board.ResourceType.Ore)
+                return 1;
+            else return 0;
+        }
+        
+    }  
 }
