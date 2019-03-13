@@ -25,7 +25,8 @@ namespace SettlersOfCatan.AI.Agents
             }
             else if (state.canBuildRoad.Count() > 0)
             {
-                return state.canBuildRoad.ElementAt(_r.Next(0, state.canBuildRoad.Count()));
+                var roadId =  getTheBestRoadId(state);
+                return state.canBuildRoad.ElementAt(state.canBuildRoad.ToList().IndexOf(state.canBuildRoad.Where(x => x.id == roadId).FirstOrDefault()));
             }
             else if (state.resourcesAvailableToBuy.Values.Any(x => x))
             {
@@ -55,43 +56,85 @@ namespace SettlersOfCatan.AI.Agents
 
         public Settlement placeFreeSettlement(BoardState state)
         {
+            int settlementId = 0;
             var possible_settlements = state.availableSettlements.
                 Select(x => new SimplifiedSettlement
                 {
                     Id = x.id,
                     TitleWeight = x.adjacentTiles.Select(y => y.tileType).ToList()
                 }).ToList();
+            var rarestTitle = getOponentTheRarestResources(state);
+            if(rarestTitle!=null && rarestTitle?.FirstOrDefault().Key != Board.ResourceType.Desert)
+                 settlementId = state.availableSettlements.Where(x => x.adjacentTiles.Any(y => y.tileType == rarestTitle.FirstOrDefault().Key)).FirstOrDefault().id;   
+            else
+                settlementId = _r.Next(0, state.availableSettlements.Count());
+            return state.availableSettlements.ElementAt(settlementId);
+        }
 
+        private List<KeyValuePair<Board.ResourceType, int>> getOponentTheRarestResources(BoardState state)
+        {
             var oponentResources = state.settlements
                 .Where(x => x.owningPlayer != null
                 && x.owningPlayer != state.player)
                 .Select(y => new
                 {
-                    Title = y.adjacentTiles.Select(z => z.tileType).ToList()       ,
-                    Wood = y.adjacentTiles.Where(z=> z.tileType == Board.ResourceType.Wood).Count(),
+                    Title = y.adjacentTiles.Select(z => z.tileType).ToList(),
+                    Wood = y.adjacentTiles.Where(z => z.tileType == Board.ResourceType.Wood).Count(),
                     Ore = y.adjacentTiles.Where(z => z.tileType == Board.ResourceType.Ore).Count(),
                     Brick = y.adjacentTiles.Where(z => z.tileType == Board.ResourceType.Brick).Count(),
                     Sheep = y.adjacentTiles.Where(z => z.tileType == Board.ResourceType.Sheep).Count(),
-                    Desert = y.adjacentTiles.Where(z => z.tileType == Board.ResourceType.Desert).Count()
                 }).ToList();
 
-            if (oponentResources != null)
+            if (oponentResources.Count > 0)
             {
-                //var all_tiles = new List<Board.ResourceType>();
-                var res = oponentResources.Sum(x => x.Wood);
-                var t = oponentResources.Sum(x => x.Ore);
-               
+                Dictionary<Board.ResourceType, int> dictionary = new Dictionary<Board.ResourceType, int>();
+                dictionary.Add(Board.ResourceType.Wood, oponentResources.Sum(x => x.Wood));
+                dictionary.Add(Board.ResourceType.Ore, oponentResources.Sum(x => x.Ore));
+                dictionary.Add(Board.ResourceType.Brick, oponentResources.Sum(x => x.Brick));
+                dictionary.Add(Board.ResourceType.Sheep, oponentResources.Sum(x => x.Sheep));
 
-                var hhht = 9;
-
-
-                //var result = possible_settlements.Where(x => !oponentResources.Any(u => u.TitleWeight.OrderBy(z => z.ToString()) == x.TitleWeight.OrderBy(z => z.ToString())))
-              //  var ordered_oponent_resources = oponentResources
-                
+                return dictionary.OrderBy(x => x.Value).ToList();
             }
-            return state.availableSettlements.ElementAt(_r.Next(0, state.availableSettlements.Count()));
+            return null;
+        }
+
+        private int getTheBestRoadId(BoardState state){
+            var rarestResources = getOponentTheRarestResources(state).FirstOrDefault().Key;
+            var availableRoads = state.canBuildRoad;
+
+
+            Dictionary<int, int> roadCosts = new Dictionary<int, int>();
+
+            
+            foreach(var item in availableRoads)
+            {
+                var score = getSettlementsCosts(item.id, item.connectedSettlements.Where(x => x.owningPlayer == state.player)?.FirstOrDefault()?.id, 0, item, rarestResources, 0);
+                roadCosts.Add(item.id, score);
+            }
+            return roadCosts.OrderBy(x => x.Value).FirstOrDefault().Key;
         }
 
 
+        private int getSettlementsCosts(int startRoadId, int? startSettlementId,  int i, Road road, Board.ResourceType type, int costs)
+        {
+            i++;
+            if (i < 10)
+            {
+                foreach (var item in road.connectedSettlements.Where( x=> x.id!=startSettlementId))
+                {
+                    if (item.adjacentTiles.Any(x => x.tileType == type) && !item.connectedRoads.Any(x=> x.connectedSettlements.Any(y=> y.id==startSettlementId)))
+                        return costs;
+                    else
+                    {
+                        costs++;
+                        foreach (var r in item.connectedRoads.Where(x=> x.id!=startRoadId))
+                        {
+                            return getSettlementsCosts(r.id, startSettlementId, i, r, type, costs);
+                        }
+                    }
+                }
+            }
+            return costs;
+        }
     }
 }
