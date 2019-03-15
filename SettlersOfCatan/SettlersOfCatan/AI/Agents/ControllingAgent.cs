@@ -56,7 +56,7 @@ namespace SettlersOfCatan.AI.Agents
 
         public Settlement placeFreeSettlement(BoardState state)
         {
-            int settlementId = 0;
+            int indexId = 0;
             var possible_settlements = state.availableSettlements.
                 Select(x => new SimplifiedSettlement
                 {
@@ -65,10 +65,10 @@ namespace SettlersOfCatan.AI.Agents
                 }).ToList();
             var rarestTitle = getOponentTheRarestResources(state);
             if(rarestTitle!=null && rarestTitle?.FirstOrDefault().Key != Board.ResourceType.Desert)
-                 settlementId = state.availableSettlements.Where(x => x.adjacentTiles.Any(y => y.tileType == rarestTitle.FirstOrDefault().Key)).FirstOrDefault().id;   
+                indexId = state.availableSettlements.ToList().IndexOf( state.availableSettlements.Where(x => x.adjacentTiles.Any(y => y.tileType == rarestTitle.FirstOrDefault().Key)).FirstOrDefault());   
             else
-                settlementId = _r.Next(0, state.availableSettlements.Count());
-            return state.availableSettlements.ElementAt(settlementId);
+                indexId = _r.Next(0, state.availableSettlements.Count());
+            return state.availableSettlements.ElementAt(indexId);
         }
 
         private List<KeyValuePair<Board.ResourceType, int>> getOponentTheRarestResources(BoardState state)

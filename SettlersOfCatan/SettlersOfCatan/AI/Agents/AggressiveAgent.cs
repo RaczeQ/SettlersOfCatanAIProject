@@ -82,13 +82,13 @@ namespace SettlersOfCatan.AI.Agents
             {
                 selected = possible_settlements.OrderByDescending(x => x.TitleWeight.Distinct().Count()).ThenByDescending(z => z.Weight).ToList();
                 var result = selected.Where(x => !currentSettlements.Any(y => y.TitleWeight.OrderBy(z => z.ToString()) == x.TitleWeight.OrderBy(z => z.ToString()))).FirstOrDefault();
-                return state.availableSettlements.ElementAt(result.Id);
+                return state.availableSettlements.ElementAt(state.availableSettlements.ToList().IndexOf(state.availableSettlements.Where(x => x.id == result.Id).FirstOrDefault()));
             }
             else
             {
                 selected = possible_settlements.OrderByDescending(x => x.TitleWeight.Distinct().Count()).ThenByDescending(z => z.Weight).ToList();
-                var t = selected.FirstOrDefault();
-                return state.availableSettlements.ElementAt(t.Id);
+                var result = selected.FirstOrDefault();
+                return state.availableSettlements.ElementAt(state.availableSettlements.ToList().IndexOf(state.availableSettlements.Where(x => x.id == result.Id).FirstOrDefault()));
             }
         }
 
