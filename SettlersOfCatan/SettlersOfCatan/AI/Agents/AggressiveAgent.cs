@@ -108,6 +108,11 @@ namespace SettlersOfCatan.AI.Agents
                 return 1;
             else return 0;
         }
-        
+
+
+        private bool agent_can_build_road()
+        {
+            return false;
+        }
     }  
 }

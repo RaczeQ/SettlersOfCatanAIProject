@@ -130,7 +130,7 @@ namespace SettlersOfCatan.AI.Agents
         private int getSettlementsCosts(int startRoadId, int? startSettlementId,  int i, Road road, Board.ResourceType type, int costs)
         {
             i++;
-            if (i < 10)
+            if (i < 15)
             {
                 foreach (var item in road.connectedSettlements.Where( x=> x.id!=startSettlementId))
                 {
