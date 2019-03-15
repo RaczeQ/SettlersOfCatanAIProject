@@ -9,15 +9,11 @@ namespace SettlersOfCatan.AI
     {
         public BoardState(Board b)
         {
-            player = b.currentPlayer;
-            tiles = b.boardTiles;
-            settlements = b.settlementLocations;
-            roads = b.roadLocations;
-            endTurnButton = b.btnEndTurn;
-            bankTradePrices = b.getPlayerBankCosts(player);
+            _board = b;
         }
-        public Player player { get; private set; }
-        public IEnumerable<Tile> tiles { get; private set; }
+        private Board _board { get; set; }
+        public Player player { get { return _board.currentPlayer; } }
+        public IEnumerable<Tile> tiles { get { return _board.boardTiles; } }
         public IEnumerable<TerrainTile> terrainTiles { get { return tiles.OfType<TerrainTile>(); } }
         public IEnumerable<TerrainTile> playerAdjacentTerrainTiles
         {
@@ -46,7 +42,7 @@ namespace SettlersOfCatan.AI
                 return result;
             }
         }
-        public IEnumerable<Settlement> settlements { get; private set; }
+        public IEnumerable<Settlement> settlements { get { return _board.settlementLocations; } }
         public IEnumerable<Settlement> availableSettlements
         {
             get
@@ -71,7 +67,7 @@ namespace SettlersOfCatan.AI
                     .Where(s => !s.isCity && Bank.hasPayment(player, Bank.CITY_COST));
             }
         }
-        public IEnumerable<Road> roads { get; private set; }
+        public IEnumerable<Road> roads { get { return _board.roadLocations; } }
         public IEnumerable<Road> availableRoads
         {
             get
@@ -88,7 +84,7 @@ namespace SettlersOfCatan.AI
                     .Where(r => Bank.hasPayment(player, Bank.ROAD_COST));
             }
         }
-        public Button endTurnButton { get; private set; }
+        public Button endTurnButton { get { return _board.btnEndTurn; } }
         public IDictionary<Board.ResourceType, int> playerResourcesAmounts { 
             get
             { 
@@ -97,7 +93,7 @@ namespace SettlersOfCatan.AI
                     .ToDictionary(k => k, v => player.getResourceCount(v));
             }
         }
-        public IDictionary<Board.ResourceType, int> bankTradePrices { get; private set; }
+        public IDictionary<Board.ResourceType, int> bankTradePrices { get { return _board.getPlayerBankCosts(player); } }
         public IDictionary<Board.ResourceType, bool> resourcesAvailableToSell
         {
             get
@@ -121,6 +117,30 @@ namespace SettlersOfCatan.AI
                     }
                 }
                 return result;
+            }
+        }
+
+        public IEnumerable<DevelopmentCard> playerCards
+        {
+            get
+            {
+                return player.onHandDevelopmentCards;
+            }
+        }
+
+        public IEnumerable<DevelopmentCard> playerPlayableCards
+        {
+            get
+            {
+                return playerCards.Where(c => c.isPlayable());
+            }
+        }
+
+        public bool canBuyDevelopmentCard
+        {
+            get
+            {
+                return Board.TheBank.developmentCards.cardCount() > 0 && Bank.hasPayment(player, Bank.DEV_CARD_COST);
             }
         }
     }
