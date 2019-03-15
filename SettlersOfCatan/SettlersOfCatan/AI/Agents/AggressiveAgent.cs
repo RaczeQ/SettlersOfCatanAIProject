@@ -19,7 +19,10 @@ namespace SettlersOfCatan.AI.Agents
             if (state.canBuildNewSettlements.Count() > 0)
             {
                 var index = settlementBuildAssesmentFunction.getNewSettlementIndex(state);
-                return state.canBuildNewSettlements.ElementAt(state.canBuildNewSettlements.ToList().IndexOf(state.canBuildNewSettlements.Where(x=> x.id==index).FirstOrDefault()));
+                if(index==null)
+                    return state.canBuildNewSettlements.ElementAt(_r.Next(0, state.canBuildNewSettlements.Count()));
+                else
+                    return state.canBuildNewSettlements.ElementAt(state.canBuildNewSettlements.ToList().IndexOf(state.canBuildNewSettlements.Where(x=> x.id==index).FirstOrDefault()));
             }
             else if (state.canUpgradeSettlement.Count() > 0)
             {
@@ -30,7 +33,10 @@ namespace SettlersOfCatan.AI.Agents
             else if (state.canBuildRoad.Count() > 0)
             {
                 var index = settlementBuildAssesmentFunction.getNewRoadIndex(state);
-                return state.canBuildRoad.ElementAt(state.canBuildRoad.ToList().IndexOf(state.canBuildRoad.Where(x=> x.id==index).FirstOrDefault()));
+                if(index==null)
+                    return state.canBuildRoad.ElementAt(_r.Next(0, state.canBuildRoad.Count()));
+                else
+                    return state.canBuildRoad.ElementAt(state.canBuildRoad.ToList().IndexOf(state.canBuildRoad.Where(x=> x.id==index).FirstOrDefault()));
             }
             else if (state.resourcesAvailableToSell.Values.Any(x => x))
             {
