@@ -98,7 +98,7 @@ namespace SettlersOfCatan.AI
             }
         }
         public IDictionary<Board.ResourceType, int> bankTradePrices { get; private set; }
-        public IDictionary<Board.ResourceType, bool> resourcesAvailableToBuy
+        public IDictionary<Board.ResourceType, bool> resourcesAvailableToSell
         {
             get
             {

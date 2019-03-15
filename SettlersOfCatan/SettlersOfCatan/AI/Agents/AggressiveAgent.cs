@@ -32,11 +32,13 @@ namespace SettlersOfCatan.AI.Agents
                 var index = settlementBuildAssesmentFunction.getNewRoadIndex(state);
                 return state.canBuildRoad.ElementAt(state.canBuildRoad.ToList().IndexOf(state.canBuildRoad.Where(x=> x.id==index).FirstOrDefault()));
             }
-            else if (state.resourcesAvailableToBuy.Values.Any(x => x))
+            else if (state.resourcesAvailableToSell.Values.Any(x => x))
             {
                 //TODO
                 // Buy resource with lowest amount for resource with highest amount left after buy
-                var amountLeft = state.playerResourcesAmounts.ToDictionary(k => k.Key, v => v.Value - state.bankTradePrices[v.Key]);
+                var amountLeft = state.playerResourcesAmounts
+                    .Where(x => state.resourcesAvailableToSell[x.Key])
+                    .ToDictionary(k => k.Key, v => v.Value - state.bankTradePrices[v.Key]);
                 var boughtResource = state.playerResourcesAmounts.OrderBy(kv => kv.Value).Select(kv => kv.Key).ToList()[0];
                 var selledResource = amountLeft.OrderBy(kv => -kv.Value).Select(kv => kv.Key).ToList()[0];
                 TradeProposition proposition = new TradeProposition()
