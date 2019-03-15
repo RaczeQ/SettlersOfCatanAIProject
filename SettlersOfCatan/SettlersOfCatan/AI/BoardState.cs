@@ -102,6 +102,14 @@ namespace SettlersOfCatan.AI
                     .ToDictionary(k => k.Key, v => v.Value >= bankTradePrices[v.Key]);
             }
         }
+        public IDictionary<Board.ResourceType, bool> resourcesAvailableToBuy
+        {
+            get
+            {
+                return playerResourcesAmounts
+                    .ToDictionary(k => k.Key, v => Board.TheBank.canGiveOutResource(v.Key, 1));
+            }
+        }
         public IDictionary<Board.ResourceType, int> playerResourcesAcquiredPerResource
         {
             get
