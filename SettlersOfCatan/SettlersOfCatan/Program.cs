@@ -16,6 +16,7 @@ namespace SettlersOfCatan
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            AutoMapperRegister.RegisterMapping();
             Application.Run(new Board(true));
             //var board = new Board();
             //board.Show();

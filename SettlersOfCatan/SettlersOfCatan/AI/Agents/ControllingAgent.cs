@@ -1,13 +1,12 @@
-﻿using SettlersOfCatan.SimplifiedModels;
+﻿using AutoMapper;
+using SettlersOfCatan.SimplifiedModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SettlersOfCatan.AI.Agents
 {
-   
+
     public class ControllingAgent : IAgent
     {
         private Random _r = new Random();
@@ -62,12 +61,9 @@ namespace SettlersOfCatan.AI.Agents
         public Settlement placeFreeSettlement(BoardState state)
         {
             int indexId = 0;
-            var possible_settlements = state.availableSettlements.
-                Select(x => new SimplifiedSettlement
-                {
-                    Id = x.id,
-                    TitleWeight = x.adjacentTiles.Select(y => y.tileType).ToList()
-                }).ToList();
+            var possible_settlements = state.availableSettlements
+                .Select(x => Mapper.Map<SimplifiedSettlement>(x))
+                .ToList();
             var rarestTitle = getOponentTheRarestResources(state);
             if(rarestTitle!=null && rarestTitle?.FirstOrDefault().Key != Board.ResourceType.Desert)
                 indexId = state.availableSettlements.ToList().IndexOf( state.availableSettlements.Where(x => x.adjacentTiles.Any(y => y.tileType == rarestTitle.FirstOrDefault().Key)).FirstOrDefault());   
