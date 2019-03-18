@@ -8,8 +8,8 @@ namespace SettlersOfCatan.AI.AssesmetFunctions
 {
     public interface IAssesmentFunction
     {
-        int getNewSettlementIndex(BoardState state);
+        int? getNewSettlementIndex(BoardState state);
 
-        int getNewRoadIndex(BoardState state);
+        int? getNewRoadIndex(BoardState state);
     }
 }

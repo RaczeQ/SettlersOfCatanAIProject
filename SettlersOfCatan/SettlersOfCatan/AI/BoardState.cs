@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -7,12 +8,44 @@ namespace SettlersOfCatan.AI
 {
     public class BoardState
     {
+        private static readonly double SETTLEMENT_VALUE = 3;
+        private static readonly double CITY_VALUE = 5;
+        private static readonly double ROAD_VALUE = 1;
+        private static readonly double VICTORY_POINT_MULTIPLIER = 100;
+        private static readonly double LONGEST_ROAD_MULTIPLIER = 1.5;
+        private static readonly Dictionary<int, double> CHIP_MULTIPLIERS = new Dictionary<int, double>()
+        {
+            { 6, 5 }, {  8, 5 },
+            { 5, 4 }, {  9, 4 },
+            { 4, 3 }, { 10, 3 },
+            { 3, 2 }, { 11, 2 },
+            { 2, 1 }, { 12, 1 },
+        };
         public BoardState(Board b)
         {
             _board = b;
         }
         private Board _board { get; set; }
         public Player player { get { return _board.currentPlayer; } }
+        public double score { get
+            { 
+                double victory_points_score = Player.calculateVictoryPoints(true, player) * VICTORY_POINT_MULTIPLIER;
+                double roads_score = 
+                    player.roads.Count * ROAD_VALUE + 
+                    player.getLongestRoadCount() * (player.pbLongestRoad.Visible ? LONGEST_ROAD_MULTIPLIER : 0);
+                double settlements_score = 0;
+                double resources_score = 0;
+                foreach (Settlement s in player.settlements) {
+                    settlements_score += s.isCity ? CITY_VALUE : SETTLEMENT_VALUE;
+                    foreach (TerrainTile tt in s.adjacentTiles) {
+                        if (tt.getResourceType() != Board.ResourceType.Desert) {
+                            resources_score += CHIP_MULTIPLIERS[tt.numberChip.numberValue] * (s.isCity ? 2 : 1);
+                        }
+                    }
+                }
+                return victory_points_score + roads_score + settlements_score + resources_score;
+            }
+        }
         public IEnumerable<Tile> tiles { get { return _board.boardTiles; } }
         public IEnumerable<TerrainTile> terrainTiles { get { return tiles.OfType<TerrainTile>(); } }
         public IEnumerable<TerrainTile> playerAdjacentTerrainTiles

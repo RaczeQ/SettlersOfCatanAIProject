@@ -9,17 +9,16 @@ namespace SettlersOfCatan.AI.AssesmetFunctions
     public class SettlementAssesmentFunction : IAssesmentFunction
     {
        
-        public int getNewRoadIndex(BoardState state)
+        public int? getNewRoadIndex(BoardState state)
         {
             return 0;
         }
 
-        public int getNewSettlementIndex(BoardState state)
+        public int? getNewSettlementIndex(BoardState state)
         {
             var availableSettlements = state.availableSettlements;
             return 0;
         }
-
 
     }
 }

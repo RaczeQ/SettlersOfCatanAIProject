@@ -25,7 +25,11 @@ namespace SettlersOfCatan.AI.Agents
             else if (state.canBuildRoad.Count() > 0)
             {
                 var roadId =  getTheBestRoadId(state);
-                return state.canBuildRoad.ElementAt(state.canBuildRoad.ToList().IndexOf(state.canBuildRoad.Where(x => x.id == roadId).FirstOrDefault()));
+                if(roadId == null)
+                    return state.canBuildRoad.ElementAt(_r.Next(0, state.canBuildRoad.Count()));
+                else
+                    return state.canBuildRoad.ElementAt(state.canBuildRoad.ToList().IndexOf(state.canBuildRoad.Where(x => x.id == roadId).FirstOrDefault()));
+
             }
             else if (state.resourcesAvailableToSell.Values.Any(x => x) &&
                 state.resourcesAvailableToBuy.Values.Any(x => x))
@@ -56,6 +60,9 @@ namespace SettlersOfCatan.AI.Agents
         public Road placeFreeRoad(BoardState state)
         {
             return state.availableRoads.ElementAt(_r.Next(0, state.availableRoads.Count()));
+            //var roadId = getTheBestRoadId(state);
+            //return state.canBuildRoad.ElementAt(state.canBuildRoad.ToList().IndexOf(state.canBuildRoad.Where(x => x.id == roadId).FirstOrDefault()));
+
         }
 
         public Settlement placeFreeSettlement(BoardState state)
@@ -99,7 +106,7 @@ namespace SettlersOfCatan.AI.Agents
             return null;
         }
 
-        private int getTheBestRoadId(BoardState state){
+        private int? getTheBestRoadId(BoardState state){
             var rarestResources = getOponentTheRarestResources(state).FirstOrDefault().Key;
             var availableRoads = state.canBuildRoad;
 
@@ -112,14 +119,17 @@ namespace SettlersOfCatan.AI.Agents
                 var score = getSettlementsCosts(item.id, item.connectedSettlements.Where(x => x.owningPlayer == state.player)?.FirstOrDefault()?.id, 0, item, rarestResources, 0);
                 roadCosts.Add(item.id, score);
             }
-            return roadCosts.OrderBy(x => x.Value).FirstOrDefault().Key;
+            if (roadCosts.Count > 0)
+                return roadCosts.OrderBy(x => x.Value).FirstOrDefault().Key;
+            else
+                return null;
         }
 
 
         private int getSettlementsCosts(int startRoadId, int? startSettlementId,  int i, Road road, Board.ResourceType type, int costs)
         {
             i++;
-            if (i < 10)
+            if (i < 15)
             {
                 foreach (var item in road.connectedSettlements.Where( x=> x.id!=startSettlementId))
                 {
