@@ -72,35 +72,42 @@ namespace SettlersOfCatan.AI.Agents
 
         public Settlement placeFreeSettlement(BoardState state)
         {
-            List<SimplifiedSettlement> selected = null;
-            var currentSettlements = state.player.settlements
-                .Select(x => new SimplifiedSettlement
-                {
-                    Id = x.id,
-                    Weight = x.adjacentTiles.Sum(y => getTileWeightBasedOnCreatingNewSettlementsStrategy(y.tileType)),
-                    TitleWeight = x.adjacentTiles.Select(y => y.tileType).ToList()
-                }).ToList();
+            var sortedSettlements = state.availableSettlements
+                .OrderByDescending(
+                    s => s.adjacentTiles
+                        .Sum(t => t.getResourceType() != Board.ResourceType.Desert ? t.numberChip.numberValue : 0)
+                );
+            return sortedSettlements.First();
+            
+            // List<SimplifiedSettlement> selected = null;
+            // var currentSettlements = state.player.settlements
+            //     .Select(x => new SimplifiedSettlement
+            //     {
+            //         Id = x.id,
+            //         Weight = x.adjacentTiles.Sum(y => getTileWeightBasedOnCreatingNewSettlementsStrategy(y.tileType)),
+            //         TitleWeight = x.adjacentTiles.Select(y => y.tileType).ToList()
+            //     }).ToList();
 
-            var possible_settlements = state.availableSettlements.
-                Select(x => new SimplifiedSettlement
-                {
-                    Id = x.id,
-                    Weight = x.adjacentTiles.Sum(y => getTileWeightBasedOnCreatingNewSettlementsStrategy(y.tileType)),
-                    TitleWeight = x.adjacentTiles.Select(y=> y.tileType).ToList()
-                }).ToList();
+            // var possible_settlements = state.availableSettlements.
+            //     Select(x => new SimplifiedSettlement
+            //     {
+            //         Id = x.id,
+            //         Weight = x.adjacentTiles.Sum(y => getTileWeightBasedOnCreatingNewSettlementsStrategy(y.tileType)),
+            //         TitleWeight = x.adjacentTiles.Select(y=> y.tileType).ToList()
+            //     }).ToList();
 
-            if (currentSettlements.Count()>0)
-            {
-                selected = possible_settlements.OrderByDescending(x => x.TitleWeight.Distinct().Count()).ThenByDescending(z => z.Weight).ToList();
-                var result = selected.Where(x => !currentSettlements.Any(y => y.TitleWeight.OrderBy(z => z.ToString()) == x.TitleWeight.OrderBy(z => z.ToString()))).FirstOrDefault();
-                return state.availableSettlements.ElementAt(state.availableSettlements.ToList().IndexOf(state.availableSettlements.Where(x => x.id == result.Id).FirstOrDefault()));
-            }
-            else
-            {
-                selected = possible_settlements.OrderByDescending(x => x.TitleWeight.Distinct().Count()).ThenByDescending(z => z.Weight).ToList();
-                var result = selected.FirstOrDefault();
-                return state.availableSettlements.ElementAt(state.availableSettlements.ToList().IndexOf(state.availableSettlements.Where(x => x.id == result.Id).FirstOrDefault()));
-            }
+            // if (currentSettlements.Count()>0)
+            // {
+            //     selected = possible_settlements.OrderByDescending(x => x.TitleWeight.Distinct().Count()).ThenByDescending(z => z.Weight).ToList();
+            //     var result = selected.Where(x => !currentSettlements.Any(y => y.TitleWeight.OrderBy(z => z.ToString()) == x.TitleWeight.OrderBy(z => z.ToString()))).FirstOrDefault();
+            //     return state.availableSettlements.ElementAt(state.availableSettlements.ToList().IndexOf(state.availableSettlements.Where(x => x.id == result.Id).FirstOrDefault()));
+            // }
+            // else
+            // {
+            //     selected = possible_settlements.OrderByDescending(x => x.TitleWeight.Distinct().Count()).ThenByDescending(z => z.Weight).ToList();
+            //     var result = selected.FirstOrDefault();
+            //     return state.availableSettlements.ElementAt(state.availableSettlements.ToList().IndexOf(state.availableSettlements.Where(x => x.id == result.Id).FirstOrDefault()));
+            // }
         }
 
         private int getTileWeightBasedOnCreatingNewSettlementsStrategy(Board.ResourceType type)
