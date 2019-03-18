@@ -8,12 +8,12 @@ namespace SettlersOfCatan.AI
 {
     public class BoardState
     {
-        private static readonly double SETTLEMENT_VALUE = 3;
-        private static readonly double CITY_VALUE = 5;
-        private static readonly double ROAD_VALUE = 1;
-        private static readonly double VICTORY_POINT_MULTIPLIER = 100;
-        private static readonly double LONGEST_ROAD_MULTIPLIER = 1.5;
-        private static readonly Dictionary<int, double> CHIP_MULTIPLIERS = new Dictionary<int, double>()
+        public static readonly double SETTLEMENT_VALUE = 3;
+        public static readonly double CITY_VALUE = 5;
+        public static readonly double ROAD_VALUE = 1;
+        public static readonly double VICTORY_POINT_MULTIPLIER = 100;
+        public static readonly double LONGEST_ROAD_MULTIPLIER = 1.5;
+        public static readonly Dictionary<int, double> CHIP_MULTIPLIERS = new Dictionary<int, double>()
         {
             { 6, 5 }, {  8, 5 },
             { 5, 4 }, {  9, 4 },
@@ -32,7 +32,7 @@ namespace SettlersOfCatan.AI
                 double victory_points_score = Player.calculateVictoryPoints(true, player) * VICTORY_POINT_MULTIPLIER;
                 double roads_score = 
                     player.roads.Count * ROAD_VALUE + 
-                    player.getLongestRoadCount() * (player.pbLongestRoad.Visible ? LONGEST_ROAD_MULTIPLIER : 0);
+                    player.getLongestRoadCount() * (player == _board.getPlayerWithLongestRoad() ? LONGEST_ROAD_MULTIPLIER : 0);
                 double settlements_score = 0;
                 double resources_score = 0;
                 foreach (Settlement s in player.settlements) {

@@ -23,7 +23,7 @@ namespace SettlersOfCatan.AI.AssesmetFunctions
         int? findTheBestSettlementIndex(BoardState state)
         {
             var player = state.player;
-            var potentialSettlements = state.availableSettlements
+            var potentialSettlements = state.canBuildNewSettlements
                        .Where(x => x.owningPlayer == null
                        && x.connectedRoads.Any(y => y.owningPlayer != null && y.owningPlayer != player))
                        .Select(x => new SimplifiedSettlement

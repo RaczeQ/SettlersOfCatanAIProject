@@ -675,6 +675,26 @@ namespace SettlersOfCatan
             pbBuildDevelopmentCard.MouseLeave -= hideDevelopmentCardToolTip;
         }
 
+        public Player getPlayerWithLongestRoad()
+        {
+            int _longestRoad = 0;
+            Player llpl = null;
+            foreach (Player pl in playerOrder)
+            {
+                int road = pl.getLongestRoadCount();
+                if (road > _longestRoad)
+                {
+                    llpl = pl;
+                    _longestRoad = road;
+                }
+            }
+            if (_longestRoad < 5)
+            {
+                llpl = null;
+            }
+            return llpl;
+        }
+
         public void checkForWinner()
         {
             //Yay!

@@ -75,7 +75,7 @@ namespace SettlersOfCatan.AI.Agents
             var sortedSettlements = state.availableSettlements
                 .OrderByDescending(
                     s => s.adjacentTiles
-                        .Sum(t => t.getResourceType() != Board.ResourceType.Desert ? t.numberChip.numberValue : 0)
+                        .Sum(t => t.getResourceType() != Board.ResourceType.Desert ? BoardState.CHIP_MULTIPLIERS[t.numberChip.numberValue] : 0)
                 );
             return sortedSettlements.First();
             
