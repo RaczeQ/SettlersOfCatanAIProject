@@ -189,8 +189,8 @@ namespace SettlersOfCatan
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lblPlayerColorName;
         private System.Windows.Forms.Panel pnlPlayerColor;
-        private System.Windows.Forms.PictureBox pbLongestRoad;
-        private System.Windows.Forms.PictureBox pbLargestArmy;
+        public System.Windows.Forms.PictureBox pbLongestRoad { get; private set; }
+        public System.Windows.Forms.PictureBox pbLargestArmy { get; private set; }
         private System.Windows.Forms.Label lblTurn;
         private System.Windows.Forms.Panel pnlDevCards;
         private System.Windows.Forms.Panel pnlResources;
