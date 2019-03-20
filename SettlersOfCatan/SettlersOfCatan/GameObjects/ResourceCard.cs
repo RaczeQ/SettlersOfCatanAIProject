@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SettlersOfCatan
+namespace SettlersOfCatan.GameObjects
 {
     [Serializable]
     public class ResourceCard

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SettlersOfCatan
 {
-    public interface Card
+    public class GameMaster
     {
     }
 }

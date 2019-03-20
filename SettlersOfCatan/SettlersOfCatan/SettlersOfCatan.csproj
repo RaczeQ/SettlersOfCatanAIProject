@@ -67,16 +67,20 @@
     <Compile Include="AI\IAgent.cs" />
     <Compile Include="AI\Agents\RandomAgent.cs" />
     <Compile Include="AI\TradeProposition.cs" />
-    <Compile Include="AutoMapper.cs" />
-    <Compile Include="Bank.cs" />
+    <Compile Include="GameMaster.cs" />
+    <Compile Include="Moves\IMove.cs" />
+    <Compile Include="SimplifiedModels\SimplifiedHarbor.cs" />
+    <Compile Include="SimplifiedModels\SimplifiedPlayer.cs" />
+    <Compile Include="Utils\AutoMapper.cs" />
+    <Compile Include="GameObjects\Bank.cs" />
     <Compile Include="AI\BoardState.cs" />
-    <Compile Include="DevelopmentCard.cs">
+    <Compile Include="GameObjects\DevelopmentCard.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Dice.cs">
+    <Compile Include="GameObjects\Dice.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Dice.Designer.cs">
+    <Compile Include="GameObjects\Dice.Designer.cs">
       <DependentUpon>Dice.cs</DependentUpon>
     </Compile>
     <Compile Include="Events\BankTradeEvt.cs" />
@@ -96,15 +100,16 @@
     <Compile Include="Events\RobberStealEvt.cs" />
     <Compile Include="Events\ThiefEvt.cs" />
     <Compile Include="Events\YearOfPlentyEvt.cs" />
-    <Compile Include="Exeptions.cs" />
+    <Compile Include="Utils\BoardFunctions.cs" />
+    <Compile Include="Utils\Exceptions.cs" />
     <Compile Include="Forms\Board.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Board.Designer.cs">
       <DependentUpon>Board.cs</DependentUpon>
     </Compile>
-    <Compile Include="Card.cs" />
-    <Compile Include="Deck.cs" />
+    <Compile Include="GameObjects\Card.cs" />
+    <Compile Include="GameObjects\Deck.cs" />
     <Compile Include="Forms\MainMenu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -117,43 +122,43 @@
     <Compile Include="Forms\ResourceSelector.Designer.cs">
       <DependentUpon>ResourceSelector.cs</DependentUpon>
     </Compile>
-    <Compile Include="Harbor.cs">
+    <Compile Include="GameObjects\Harbor.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="NumberChip.cs">
+    <Compile Include="GameObjects\NumberChip.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Player.cs">
+    <Compile Include="GameObjects\Player.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Player.Designer.cs">
+    <Compile Include="GameObjects\Player.Designer.cs">
       <DependentUpon>Player.cs</DependentUpon>
     </Compile>
-    <Compile Include="PlayerSemaphore.cs" />
+    <Compile Include="Utils\PlayerSemaphore.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ResourceCard.cs" />
-    <Compile Include="ResourceDisplay.cs">
+    <Compile Include="GameObjects\ResourceCard.cs" />
+    <Compile Include="GameObjects\ResourceDisplay.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ResourceDisplay.Designer.cs">
+    <Compile Include="GameObjects\ResourceDisplay.Designer.cs">
       <DependentUpon>ResourceDisplay.cs</DependentUpon>
     </Compile>
-    <Compile Include="Road.cs">
+    <Compile Include="GameObjects\Road.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Settlement.cs">
+    <Compile Include="GameObjects\Settlement.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimplifiedModels\SimplifiedRoad.cs" />
     <Compile Include="SimplifiedModels\SimplifiedSettlement.cs" />
-    <Compile Include="SimplifiedModels\SimplifiedTitle.cs" />
-    <Compile Include="Tile.cs">
+    <Compile Include="SimplifiedModels\SimplifiedTile.cs" />
+    <Compile Include="GameObjects\Tile.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Forms\TradeWindow.cs">
@@ -171,8 +176,8 @@
     <Compile Include="TransparencyFix\PanelFix.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UserMessages.cs" />
-    <EmbeddedResource Include="Dice.resx">
+    <Compile Include="Utils\UserMessages.cs" />
+    <EmbeddedResource Include="GameObjects\Dice.resx">
       <DependentUpon>Dice.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -182,10 +187,10 @@
     <EmbeddedResource Include="Forms\ResourceSelector.resx">
       <DependentUpon>ResourceSelector.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ResourceDisplay.resx">
+    <EmbeddedResource Include="GameObjects\ResourceDisplay.resx">
       <DependentUpon>ResourceDisplay.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Road.resx">
+    <EmbeddedResource Include="GameObjects\Road.resx">
       <DependentUpon>Road.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
@@ -209,7 +214,7 @@
     <EmbeddedResource Include="Forms\TradeWindow.resx">
       <DependentUpon>TradeWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Player.resx">
+    <EmbeddedResource Include="GameObjects\Player.resx">
       <DependentUpon>Player.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

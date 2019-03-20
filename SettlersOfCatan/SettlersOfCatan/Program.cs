@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SettlersOfCatan.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,8 +19,6 @@ namespace SettlersOfCatan
             Application.SetCompatibleTextRenderingDefault(false);
             AutoMapperRegister.RegisterMapping();
             Application.Run(new Board(true));
-            //var board = new Board();
-            //board.Show();
         }
 
     }

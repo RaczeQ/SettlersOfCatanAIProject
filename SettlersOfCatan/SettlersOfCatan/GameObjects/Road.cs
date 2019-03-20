@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Imaging;
+using SettlersOfCatan.Utils;
 
-namespace SettlersOfCatan
+namespace SettlersOfCatan.GameObjects
 {
     [Serializable]
     public class Road : PictureBox
@@ -17,9 +18,9 @@ namespace SettlersOfCatan
 
         public List<Settlement> connectedSettlements { get; protected set; } = new List<Settlement>();
 
-        public Player owningPlayer { get; private set; }
+        public Player owningPlayer { get; set; }
 
-        public Road(Point position, int index)
+        public Road(Point position)
         {
             this.position = position;
             BackColor = Color.Transparent;
@@ -28,7 +29,6 @@ namespace SettlersOfCatan
             Size = new Size(12, 12);
             this.Paint += Road_Paint;
             this.Click += Road_Click;
-
         }
 
         /*
@@ -185,6 +185,16 @@ namespace SettlersOfCatan
             //this.BackColor = currentPlayer.getPlayerColor();
             currentPlayer.addRoad(this);
             this.Refresh();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            if (this.GetType() != obj.GetType()) return false;
+
+            Road r = (Road)obj;
+            return this.id == r.id;
         }
     }
 }

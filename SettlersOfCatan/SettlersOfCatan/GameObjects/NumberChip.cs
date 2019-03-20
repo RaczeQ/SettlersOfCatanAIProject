@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace SettlersOfCatan
+namespace SettlersOfCatan.GameObjects
 {
     [Serializable]
     public class NumberChip : PictureBox, Card

@@ -59,7 +59,7 @@
             this.numberOfPlayers = new System.Windows.Forms.NumericUpDown();
             this.numberOfPlayers.ValueChanged += new System.EventHandler(this.numberOfPlayersChanged);
             this.btnStartGame = new System.Windows.Forms.Button();
-            this.dice = new SettlersOfCatan.Dice();
+            this.dice = new SettlersOfCatan.GameObjects.Dice();
             this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
@@ -676,7 +676,7 @@
         private System.Windows.Forms.Label label5;
         public System.Windows.Forms.Panel pnlDevelopmentCardToolTip;
         public System.Windows.Forms.PictureBox pbBuildDevelopmentCard;
-        public Dice dice;
+        public SettlersOfCatan.GameObjects.Dice dice;
         public System.Windows.Forms.Button btnEndTurn;
         public System.Windows.Forms.Button btnBankTrade;
         private System.Windows.Forms.Button btnSetupBoard;

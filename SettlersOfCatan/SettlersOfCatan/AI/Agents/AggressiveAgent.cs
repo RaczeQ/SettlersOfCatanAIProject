@@ -1,4 +1,5 @@
 ﻿using SettlersOfCatan.AI.AssesmetFunctions;
+using SettlersOfCatan.GameObjects;
 using SettlersOfCatan.SimplifiedModels;
 using System;
 using System.Collections.Generic;
@@ -85,7 +86,7 @@ namespace SettlersOfCatan.AI.Agents
             //     {
             //         Id = x.id,
             //         Weight = x.adjacentTiles.Sum(y => getTileWeightBasedOnCreatingNewSettlementsStrategy(y.tileType)),
-            //         TitleWeight = x.adjacentTiles.Select(y => y.tileType).ToList()
+            //         TileWeights = x.adjacentTiles.Select(y => y.tileType).ToList()
             //     }).ToList();
 
             // var possible_settlements = state.availableSettlements.
@@ -93,18 +94,18 @@ namespace SettlersOfCatan.AI.Agents
             //     {
             //         Id = x.id,
             //         Weight = x.adjacentTiles.Sum(y => getTileWeightBasedOnCreatingNewSettlementsStrategy(y.tileType)),
-            //         TitleWeight = x.adjacentTiles.Select(y=> y.tileType).ToList()
+            //         TileWeights = x.adjacentTiles.Select(y=> y.tileType).ToList()
             //     }).ToList();
 
             // if (currentSettlements.Count()>0)
             // {
-            //     selected = possible_settlements.OrderByDescending(x => x.TitleWeight.Distinct().Count()).ThenByDescending(z => z.Weight).ToList();
-            //     var result = selected.Where(x => !currentSettlements.Any(y => y.TitleWeight.OrderBy(z => z.ToString()) == x.TitleWeight.OrderBy(z => z.ToString()))).FirstOrDefault();
+            //     selected = possible_settlements.OrderByDescending(x => x.TileWeights.Distinct().Count()).ThenByDescending(z => z.Weight).ToList();
+            //     var result = selected.Where(x => !currentSettlements.Any(y => y.TileWeights.OrderBy(z => z.ToString()) == x.TileWeights.OrderBy(z => z.ToString()))).FirstOrDefault();
             //     return state.availableSettlements.ElementAt(state.availableSettlements.ToList().IndexOf(state.availableSettlements.Where(x => x.id == result.Id).FirstOrDefault()));
             // }
             // else
             // {
-            //     selected = possible_settlements.OrderByDescending(x => x.TitleWeight.Distinct().Count()).ThenByDescending(z => z.Weight).ToList();
+            //     selected = possible_settlements.OrderByDescending(x => x.TileWeights.Distinct().Count()).ThenByDescending(z => z.Weight).ToList();
             //     var result = selected.FirstOrDefault();
             //     return state.availableSettlements.ElementAt(state.availableSettlements.ToList().IndexOf(state.availableSettlements.Where(x => x.id == result.Id).FirstOrDefault()));
             // }

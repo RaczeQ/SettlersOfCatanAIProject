@@ -1,8 +1,13 @@
+using SettlersOfCatan.GameObjects;
+using SettlersOfCatan.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using AutoMapper;
+using SettlersOfCatan.Moves;
+using SettlersOfCatan.SimplifiedModels;
 
 namespace SettlersOfCatan.AI
 {
@@ -21,18 +26,136 @@ namespace SettlersOfCatan.AI
             { 3, 2 }, { 11, 2 },
             { 2, 1 }, { 12, 1 },
         };
+
+        private List<Road> _roads = new List<Road>();
+        private List<Settlement> _settlements = new List<Settlement>();
+        private List<Harbor> _harbors = new List<Harbor>();
+        private List<TerrainTile> _terrainTiles = new List<TerrainTile>();
+        private List<Player> _players = new List<Player>();
+
+        public Bank bank { get; set; }
+        public Player player { get; set; }
+        public Button endTurnButton { get; set; }
+
+        private void CopyGameState(List<Road> roads, List<Settlement> settlements, List<Harbor> harbors,
+            List<TerrainTile> terrainTiles, List<Player> players, Player currentPlayer)
+        {
+            // Copy every object
+            _roads = Mapper.Map<List<Road>>(roads);
+            _settlements = Mapper.Map<List<Settlement>>(settlements);
+            _harbors = Mapper.Map<List<Harbor>>(harbors);
+            _terrainTiles = Mapper.Map<List<TerrainTile>>(terrainTiles);
+            _players = Mapper.Map<List<Player>>(players);
+
+            // Find current player
+            player = _players[players.IndexOf(currentPlayer)];
+
+            // Repair road references
+            for (int idxR = 0; idxR < roads.Count; idxR++)
+            {
+                // Set owning player
+                if (roads[idxR].owningPlayer != null)
+                {
+                    _roads[idxR].owningPlayer = _players[players.IndexOf(roads[idxR].owningPlayer)];
+                }
+                // Set connected settlements
+                foreach (var settlement in roads[idxR].connectedSettlements)
+                {
+                    _roads[idxR].connectedSettlements.Add(_settlements[settlements.IndexOf(settlement)]);
+                }
+            }
+
+            // Repair settlement references
+            for (int idxS = 0; idxS < settlements.Count; idxS++)
+            {
+                // Set owning player
+                if (settlements[idxS].owningPlayer != null)
+                {
+                    _settlements[idxS].owningPlayer = _players[players.IndexOf(settlements[idxS].owningPlayer)];
+                }
+                // Set connected roads
+                foreach (var road in settlements[idxS].connectedRoads)
+                {
+                    _settlements[idxS].connectedRoads.Add(_roads[roads.IndexOf(road)]);
+                }
+                // Set adjacent tiles
+                foreach (var terrainTile in settlements[idxS].adjacentTiles)
+                {
+                    _settlements[idxS].adjacentTiles.Add(_terrainTiles[terrainTiles.IndexOf(terrainTile)]);
+                }
+            }
+
+            // Repair harbor references
+            for (int idxH = 0; idxH < harbors.Count; idxH++)
+            {
+                // Set valid trade locations
+                foreach (var settlement in harbors[idxH].validTradeLocations)
+                {
+                    _harbors[idxH].validTradeLocations.Add(_settlements[settlements.IndexOf(settlement)]);
+                }
+            }
+
+            // Repair terrain tiles references
+            for (int idxT = 0; idxT < terrainTiles.Count; idxT++)
+            {
+                // Set adjacent roads
+                foreach (var road in terrainTiles[idxT].adjascentRoads)
+                {
+                    _terrainTiles[idxT].adjascentRoads.Add(_roads[roads.IndexOf(road)]);
+                }
+
+                // Set adjacent settlements
+                foreach (var settlement in terrainTiles[idxT].adjascentSettlements)
+                {
+                    _terrainTiles[idxT].adjascentSettlements.Add(_settlements[settlements.IndexOf(settlement)]);
+                }
+            }
+
+            // Repair player references
+            for (int idxP = 0; idxP < players.Count; idxP++)
+            {
+                // Set adjacent roads
+                foreach (var road in players[idxP].roads)
+                {
+                    _players[idxP].roads.Add(_roads[roads.IndexOf(road)]);
+                }
+
+                // Set adjacent settlements
+                foreach (var settlement in players[idxP].settlements)
+                {
+                    _players[idxP].settlements.Add(_settlements[settlements.IndexOf(settlement)]);
+                }
+            }
+        }
+
         public BoardState(Board b)
         {
-            _board = b;
+            endTurnButton = b.btnEndTurn;
+            bank = Mapper.Map<Bank>(Board.TheBank);
+            CopyGameState(b.roadLocations, b.settlementLocations, b.harbors,
+                b.boardTiles.OfType<TerrainTile>().ToList(), b.playerOrder.ToList(), b.currentPlayer);
         }
-        private Board _board { get; set; }
-        public Player player { get { return _board.currentPlayer; } }
-        public double score { get
+
+        public BoardState(BoardState b)
+        {
+            endTurnButton = b.endTurnButton;
+            bank = Mapper.Map<Bank>(b.bank);
+            CopyGameState(b._roads, b._settlements, b._harbors, b._terrainTiles, b._players, b.player);
+        }
+
+        public BoardState MakeMove(IMove m)
+        {
+            var b = new BoardState(this);
+            m.MakeMove();
+            return b;
+        }
+
+        public double GetScore { get
             { 
                 double victory_points_score = Player.calculateVictoryPoints(true, player) * VICTORY_POINT_MULTIPLIER;
                 double roads_score = 
                     player.roads.Count * ROAD_VALUE + 
-                    player.getLongestRoadCount() * (player == _board.getPlayerWithLongestRoad() ? LONGEST_ROAD_MULTIPLIER : 0);
+                    player.getLongestRoadCount() * (player == BoardFunctions.GetPlayerWithLongestRoad(_players) ? LONGEST_ROAD_MULTIPLIER : 0);
                 double settlements_score = 0;
                 double resources_score = 0;
                 foreach (Settlement s in player.settlements) {
@@ -46,8 +169,7 @@ namespace SettlersOfCatan.AI
                 return victory_points_score + roads_score + settlements_score + resources_score;
             }
         }
-        public IEnumerable<Tile> tiles { get { return _board.boardTiles; } }
-        public IEnumerable<TerrainTile> terrainTiles { get { return tiles.OfType<TerrainTile>(); } }
+        public IEnumerable<TerrainTile> terrainTiles { get { return _terrainTiles; } }
         public IEnumerable<TerrainTile> playerAdjacentTerrainTiles
         {
             get
@@ -75,7 +197,7 @@ namespace SettlersOfCatan.AI
                 return result;
             }
         }
-        public IEnumerable<Settlement> settlements { get { return _board.settlementLocations; } }
+        public IEnumerable<Settlement> settlements { get { return _settlements; } }
         public IEnumerable<Settlement> availableSettlements
         {
             get
@@ -100,7 +222,7 @@ namespace SettlersOfCatan.AI
                     .Where(s => !s.isCity && Bank.hasPayment(player, Bank.CITY_COST));
             }
         }
-        public IEnumerable<Road> roads { get { return _board.roadLocations; } }
+        public IEnumerable<Road> roads { get { return _roads; } }
         public IEnumerable<Road> availableRoads
         {
             get
@@ -117,7 +239,6 @@ namespace SettlersOfCatan.AI
                     .Where(r => Bank.hasPayment(player, Bank.ROAD_COST));
             }
         }
-        public Button endTurnButton { get { return _board.btnEndTurn; } }
         public IDictionary<Board.ResourceType, int> playerResourcesAmounts { 
             get
             { 
@@ -126,7 +247,8 @@ namespace SettlersOfCatan.AI
                     .ToDictionary(k => k, v => player.getResourceCount(v));
             }
         }
-        public IDictionary<Board.ResourceType, int> bankTradePrices { get { return _board.getPlayerBankCosts(player); } }
+        public IDictionary<Board.ResourceType, int> bankTradePrices => BoardFunctions.GetPlayerBankCosts(player, _harbors);
+
         public IDictionary<Board.ResourceType, bool> resourcesAvailableToSell
         {
             get

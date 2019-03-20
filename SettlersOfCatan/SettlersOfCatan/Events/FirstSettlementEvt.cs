@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SettlersOfCatan.GameObjects;
+using SettlersOfCatan.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -66,14 +68,15 @@ namespace SettlersOfCatan.Events
             //Determine what the player is trying to do.
             if (sender is Settlement)
             {
+                var settlement = theBoard.settlementLocations.Find(s => Equals(s, sender));
                 //Check if the player has any more settlements they are allowed to build.
                 if ((firstPass && p.getSettlementCount() < 1) || (!firstPass && p.getSettlementCount() < 2))
                 {
                     try
                     {
-                        ((Settlement)sender).buildSettlement(p, false, false);
+                        settlement.buildSettlement(p, false, false);
                         theBoard.addEventText(UserMessages.PlayerPlacedASettlement(p));
-                        theBoard.checkForWinner();
+                        theBoard.CheckForWinner();
                     } catch(BuildError be)
                     {
                         theBoard.addEventText(be.Message);
@@ -96,14 +99,15 @@ namespace SettlersOfCatan.Events
             }
             else if (sender is Road)
             {
+                var road = theBoard.roadLocations.Find(r => Equals(r, sender));
                 //Check if the player is allowed to build another road.
                 if ((firstPass && p.getRoadCount() < 1) || (!firstPass && p.getRoadCount() < 2))
                 {
                     try
                     {
-                        ((Road)sender).buildRoad(p, false);
+                        road.buildRoad(p, false);
                         theBoard.addEventText(UserMessages.PlayerPlacedARoad(p));
-                        theBoard.checkForWinner();
+                        theBoard.CheckForWinner();
                     } catch (BuildError be)
                     {
                         theBoard.addEventText(be.Message);

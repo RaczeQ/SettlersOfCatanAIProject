@@ -1,4 +1,4 @@
-﻿namespace SettlersOfCatan
+﻿namespace SettlersOfCatan.GameObjects
 {
     partial class ResourceDisplay
     {

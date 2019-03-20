@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 
-namespace SettlersOfCatan
+namespace SettlersOfCatan.GameObjects
 {
     /*
         Deck represents a stack of cards.
@@ -22,6 +23,14 @@ namespace SettlersOfCatan
             cardRandom = new Random();
             maxCards = maxCardsInDeck;
             cardsInDeck = new List<Card>();
+        }
+
+        public Deck CopyDeck()
+        {
+            var deck = new Deck(maxCards);
+            deck.cardRandom = cardRandom;
+            deck.cardsInDeck = Mapper.Map<List<Card>>(cardsInDeck);
+            return deck;
         }
 
         public void putCard(Card c)

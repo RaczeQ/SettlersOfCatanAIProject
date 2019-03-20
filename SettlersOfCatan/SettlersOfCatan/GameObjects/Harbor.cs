@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SettlersOfCatan
+namespace SettlersOfCatan.GameObjects
 {
     public class Harbor : PictureBox
     {
@@ -14,7 +14,7 @@ namespace SettlersOfCatan
         //If a harbor has resource type of desert, the player can choose their desired resource to trade for.
         private Board.ResourceType tradeOutputResource = Board.ResourceType.Desert;
 
-        private List<Settlement> validTradeLocations;
+        public List<Settlement> validTradeLocations;
 
         public Harbor(int requiredCount, Board.ResourceType resource) {
             tradeRequiredResourceCount = requiredCount;

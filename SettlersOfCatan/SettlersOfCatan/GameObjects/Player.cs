@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SettlersOfCatan.AI;
 
-namespace SettlersOfCatan
+namespace SettlersOfCatan.GameObjects
 {
     public partial class Player : UserControl
     {
@@ -423,6 +423,16 @@ namespace SettlersOfCatan
         private void Player_Name_Clicked(object sender, EventArgs e)
         {
             this.OnClick(e);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            if (this.GetType() != obj.GetType()) return false;
+
+            Player p = (Player)obj;
+            return this.playerNumber == p.playerNumber;
         }
     }
 }

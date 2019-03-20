@@ -1,6 +1,8 @@
 ﻿using SettlersOfCatan.AI;
 using SettlersOfCatan.AI.AssesmetFunctions;
 using SettlersOfCatan.Events;
+using SettlersOfCatan.GameObjects;
+using SettlersOfCatan.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,24 +56,24 @@ namespace SettlersOfCatan.Eventss
                         return;
                     } else if (sender is Settlement)
                     {
-                        Settlement location = (Settlement)sender;
+                        var location = theBoard.settlementLocations.Find(s => Equals(s, sender));
                         try
                         {
                             //Try to build the settlement/upgrade city.
-                            ((Settlement)sender).buildSettlement(theBoard.currentPlayer, true, true);
+                            location.buildSettlement(theBoard.currentPlayer, true, true);
                             //Take resources
                             if (location.city())
                             {
                                 //take city resources
                                 Board.TheBank.takePayment(theBoard.currentPlayer, Bank.CITY_COST);
                                 theBoard.addEventText(UserMessages.PlayerBuiltACity(theBoard.currentPlayer));
-                                theBoard.checkForWinner();
+                                theBoard.CheckForWinner();
                             } else
                             {
                                 //take settlement resources
                                 Board.TheBank.takePayment(theBoard.currentPlayer, Bank.SETTLEMENT_COST);
                                 theBoard.addEventText(UserMessages.PlayerPlacedASettlement(theBoard.currentPlayer));
-                                theBoard.checkForWinner();
+                                theBoard.CheckForWinner();
                             }
                         } catch (BuildError be)
                         {
@@ -80,15 +82,16 @@ namespace SettlersOfCatan.Eventss
 
                     } else if (sender is Road)
                     {
+                        var road = theBoard.roadLocations.Find(r => Equals(r, sender));
                         //Try to build the road
                         try
                         {
-                            ((Road)sender).buildRoad(theBoard.currentPlayer, true);
+                            road.buildRoad(theBoard.currentPlayer, true);
                             //Take the resources.
                             Board.TheBank.takePayment(theBoard.currentPlayer, Bank.ROAD_COST);
                             theBoard.addEventText(UserMessages.PlayerPlacedARoad(theBoard.currentPlayer));
                             //RUN LONGEST ROAD CHECK
-                            theBoard.checkForWinner();
+                            theBoard.CheckForWinner();
                         } catch (BuildError be)
                         {
                             theBoard.addEventText(be.Message);
@@ -104,7 +107,7 @@ namespace SettlersOfCatan.Eventss
                             Board.TheBank.takePayment(theBoard.currentPlayer, Bank.DEV_CARD_COST);
                             theBoard.addEventText(UserMessages.PlayerPurchasedADevCard(theBoard.currentPlayer));
 
-                            theBoard.checkForWinner();
+                            theBoard.CheckForWinner();
                         } catch (BuildError be)
                         {
                             theBoard.addEventText(be.Message);
@@ -140,7 +143,7 @@ namespace SettlersOfCatan.Eventss
                                         thevt.beginExecution(theBoard, this);
                                         disableEventObjects();
                                         card.used = true;
-                                        theBoard.checkForWinner();
+                                        theBoard.CheckForWinner();
                                     }
                                     break;
                                 case DevelopmentCard.DevCardType.Monopoly:

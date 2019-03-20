@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SettlersOfCatan.SimplifiedModels
+namespace SettlersOfCatan.GameObjects
 {
-    public class SimplifiedTitle
+    public interface Card
     {
-        public int Weight { get
-           ; set; }
-
     }
 }

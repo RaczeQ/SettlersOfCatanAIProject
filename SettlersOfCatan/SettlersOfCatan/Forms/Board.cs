@@ -15,6 +15,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using SettlersOfCatan.AI;
 using SettlersOfCatan.Eventss;
+using SettlersOfCatan.GameObjects;
+using SettlersOfCatan.Utils;
 
 namespace SettlersOfCatan
 {
@@ -38,7 +40,6 @@ namespace SettlersOfCatan
         public List<Settlement> settlementLocations = new List<Settlement>();
         public List<Harbor> harbors = new List<Harbor>();
         private int largestArmy = 0;
-        private int longestRoad = 0;
         //This is the distribution of terrain resources for a four player game.
         public static Board.ResourceType[] fourPlayerTiles = 
             {
@@ -388,7 +389,7 @@ namespace SettlersOfCatan
                         //If not already created we need to make a new location
                         if (settlementLocation == null)
                         {
-                            settlementLocation = new Settlement(setPoint, 0);
+                            settlementLocation = new Settlement(setPoint);
                             settlementLocation.id = settlementLocations.Count;
                             settlementLocations.Add(settlementLocation);
                             pnlBoardArea.Controls.Add(settlementLocation);
@@ -413,7 +414,7 @@ namespace SettlersOfCatan
                         Road roadLocation = findRoadWithPosition(roadPoint);
                         if (roadLocation == null)
                         {
-                            roadLocation = new Road(roadPoint, 0);
+                            roadLocation = new Road(roadPoint);
                             pnlBoardArea.Controls.Add(roadLocation);
                             roadLocation.id = roadLocations.Count;
                             roadLocations.Add(roadLocation);
@@ -675,95 +676,35 @@ namespace SettlersOfCatan
             pbBuildDevelopmentCard.MouseLeave -= hideDevelopmentCardToolTip;
         }
 
-        public Player getPlayerWithLongestRoad()
-        {
-            int _longestRoad = 0;
-            Player llpl = null;
-            foreach (Player pl in playerOrder)
-            {
-                int road = pl.getLongestRoadCount();
-                if (road > _longestRoad)
-                {
-                    llpl = pl;
-                    _longestRoad = road;
-                }
-            }
-            if (_longestRoad < 5)
-            {
-                llpl = null;
-            }
-            return llpl;
-        }
-
-        public void checkForWinner()
+        public void CheckForWinner()
         {
             //Yay!
 
             //Update the largest army and longest road stuff
-            Player lapl = null;
-            Player llpl = null;
-            foreach (Player pl in playerOrder)
-            {
-                int arm = pl.getArmySize();
-                if (arm > largestArmy)
-                {
-                    lapl = pl;
-                    largestArmy = arm;
-                }
+            var lapl = BoardFunctions.GetPlayerWithBiggestArmy(playerOrder);
+            var llpl = BoardFunctions.GetPlayerWithLongestRoad(playerOrder);
 
-                arm = pl.getLongestRoadCount();
-                if (arm > longestRoad)
-                {
-                    llpl = pl;
-                    longestRoad = arm;
-                }
+            foreach (var pl in playerOrder)
+            {
                 pl.setLongestRoad(false);
                 pl.setLargestArmy(false);
-                
-            }
-            if (largestArmy >= 3)
-            {
-                if (lapl != null)
-                {
-                    foreach (Player pl in playerOrder)
-                    {
-                        pl.setLargestArmy(false);
-                    }
-                    lapl.setLargestArmy(true);
-                }
-            }
-            if (longestRoad >= 5)
-            {
-                if (llpl != null)
-                {
-                    foreach (Player pl in playerOrder)
-                    {
-                        pl.setLongestRoad(false);
-                    }
-                    llpl.setLongestRoad(true);
-                }
             }
 
-            bool winner = false;
-            Player winningPlayer = null;
-            foreach (Player pl in playerOrder)
+            lapl?.setLargestArmy(true);
+
+            llpl?.setLongestRoad(true);
+
+            foreach (var pl in playerOrder)
             {
-                int vps = Player.calculateVictoryPoints(true, pl);
-                if (vps >= 10)
-                {
-                    winningPlayer = pl;
-                    winner = true;
-                }
-                else
-                {
-                    pl.updateScore();
-                }
+                pl.updateScore();
             }
-            if (winner)
+            var winningPlayer = BoardFunctions.GetWinner(playerOrder);
+            if (winningPlayer != null)
             {
                 currentGameState = GameState.End;
                 currentGameEvent.endExecution();
                 addEventText(winningPlayer.getName() + " has won!");
+                this.Refresh();
             }
         }
 

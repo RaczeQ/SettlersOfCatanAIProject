@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SettlersOfCatan.GameObjects;
 using SettlersOfCatan.SimplifiedModels;
 using System;
 using System.Collections.Generic;

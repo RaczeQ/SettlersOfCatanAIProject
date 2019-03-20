@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SettlersOfCatan.GameObjects;
+using SettlersOfCatan.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,7 +39,7 @@ namespace SettlersOfCatan.Events
                     rd.buildRoad(theBoard.currentPlayer, false);
                     builtRoads++;
                     theBoard.addEventText(UserMessages.PlayerPlacedARoad(theBoard.currentPlayer));
-                    theBoard.checkForWinner();
+                    theBoard.CheckForWinner();
                 } catch (BuildError be)
                 {
                     theBoard.addEventText(be.Message);

@@ -1,7 +1,7 @@
 ﻿using SettlersOfCatan.AI;
 using System.Linq;
 
-namespace SettlersOfCatan
+namespace SettlersOfCatan.GameObjects
 {
     partial class Player
     {

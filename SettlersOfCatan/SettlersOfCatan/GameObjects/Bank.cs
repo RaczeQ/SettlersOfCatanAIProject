@@ -5,9 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
+using AutoMapper;
 using SettlersOfCatan.AI;
+using SettlersOfCatan.Utils;
 
-namespace SettlersOfCatan
+namespace SettlersOfCatan.GameObjects
 {
     [Serializable]
     public class Bank
@@ -54,7 +56,7 @@ namespace SettlersOfCatan
         };
 
         public Deck developmentCards;
-        private List<ResourceCard> resources;
+        public List<ResourceCard> resources;
 
         public Bank()
         {

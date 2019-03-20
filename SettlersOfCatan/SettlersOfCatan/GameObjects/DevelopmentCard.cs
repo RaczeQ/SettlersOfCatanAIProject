@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace SettlersOfCatan
+namespace SettlersOfCatan.GameObjects
 {
     [Serializable]
     public class DevelopmentCard : PictureBox, Card

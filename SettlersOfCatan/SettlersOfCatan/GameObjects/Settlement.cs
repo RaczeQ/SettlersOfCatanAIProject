@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Imaging;
+using SettlersOfCatan.Utils;
 
-namespace SettlersOfCatan
+namespace SettlersOfCatan.GameObjects
 {
     [Serializable]
     public class Settlement : PictureBox
@@ -18,12 +19,12 @@ namespace SettlersOfCatan
         public List<Road> connectedRoads { get; private set; } = new List<Road>();
         public List<TerrainTile> adjacentTiles { get; private set; } = new List<TerrainTile>();
 
-        public Player owningPlayer { get; private set; }
+        public Player owningPlayer { get; set; }
         public bool isCity { get; private set; } = false;
         private Bitmap image = new Bitmap("Resources/settlement.png");
 
 
-        public Settlement(Point position, int index)
+        public Settlement(Point position)
         {
             this.Paint += Settlement_Paint;
             this.position = position;
@@ -225,6 +226,16 @@ namespace SettlersOfCatan
                 throw new BuildError(BuildError.LocationOwnedBy(owningPlayer));
             }
             this.Refresh();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            if (this.GetType() != obj.GetType()) return false;
+
+            Settlement s = (Settlement)obj;
+            return this.id == s.id;
         }
     }
 }

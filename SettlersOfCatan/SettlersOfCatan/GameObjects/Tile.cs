@@ -6,15 +6,16 @@ using System.IO;
 using System.Windows.Forms;
 
 
-namespace SettlersOfCatan
+namespace SettlersOfCatan.GameObjects
 {
     public abstract class Tile : PictureBox, Card
     {
-        public int index = 0;
+        public int index = -1;
+        private Guid randomGuid = Guid.NewGuid();
 
         private Point position;
 
-        private Panel container;
+        public Panel container { get; private set; }
 
         public Tile(Panel p)
         {
@@ -42,6 +43,20 @@ namespace SettlersOfCatan
         }
 
         public abstract string toString();
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            if (this.GetType() != obj.GetType()) return false;
+
+            Tile t = (Tile)obj;
+            if (this.index == -1 && t.index == -1)
+            {
+                return this.randomGuid == t.randomGuid;
+            }
+            return this.index == t.index;
+        }
     }
 
     /**

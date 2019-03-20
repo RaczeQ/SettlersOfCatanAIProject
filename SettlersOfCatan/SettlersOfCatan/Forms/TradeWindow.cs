@@ -1,5 +1,7 @@
 ﻿using SettlersOfCatan.Events;
 using SettlersOfCatan.Forms;
+using SettlersOfCatan.GameObjects;
+using SettlersOfCatan.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

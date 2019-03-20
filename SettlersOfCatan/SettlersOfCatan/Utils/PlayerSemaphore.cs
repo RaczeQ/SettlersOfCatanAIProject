@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SettlersOfCatan
+namespace SettlersOfCatan.Utils
 {
     public static class PlayerSemaphore
     {
