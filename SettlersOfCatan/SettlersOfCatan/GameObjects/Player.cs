@@ -17,7 +17,7 @@ namespace SettlersOfCatan.GameObjects
         public static String[] playerColorNames = { "Red", "Blue", "Purple", "Orange", "Green", "Brown" };
         public static Color[] playerColors = { Color.Red, Color.RoyalBlue, Color.Purple, Color.Orange, Color.Green, Color.Brown };
 
-        private int playerNumber = 0;
+        public int playerNumber = 0;
         public List<ResourceCard> resources { get; private set; }
         public List<DevelopmentCard> onHandDevelopmentCards { get; private set; }
         public List<Settlement> settlements { get; private set; }

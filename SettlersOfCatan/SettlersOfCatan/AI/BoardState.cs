@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using AutoMapper;
+using SettlersOfCatan.AI.Agents;
 using SettlersOfCatan.Moves;
 using SettlersOfCatan.SimplifiedModels;
 
@@ -18,13 +19,14 @@ namespace SettlersOfCatan.AI
         public static readonly double ROAD_VALUE = 1;
         public static readonly double VICTORY_POINT_MULTIPLIER = 100;
         public static readonly double LONGEST_ROAD_MULTIPLIER = 1.5;
+
         public static readonly Dictionary<int, double> CHIP_MULTIPLIERS = new Dictionary<int, double>()
         {
-            { 6, 5 }, {  8, 5 },
-            { 5, 4 }, {  9, 4 },
-            { 4, 3 }, { 10, 3 },
-            { 3, 2 }, { 11, 2 },
-            { 2, 1 }, { 12, 1 },
+            {6, 5}, {8, 5},
+            {5, 4}, {9, 4},
+            {4, 3}, {10, 3},
+            {3, 2}, {11, 2},
+            {2, 1}, {12, 1},
         };
 
         private List<Road> _roads = new List<Road>();
@@ -57,6 +59,7 @@ namespace SettlersOfCatan.AI
                 {
                     _roads[idxR].owningPlayer = _players[players.IndexOf(roads[idxR].owningPlayer)];
                 }
+
                 // Set connected settlements
                 foreach (var settlement in roads[idxR].connectedSettlements)
                 {
@@ -72,11 +75,13 @@ namespace SettlersOfCatan.AI
                 {
                     _settlements[idxS].owningPlayer = _players[players.IndexOf(settlements[idxS].owningPlayer)];
                 }
+
                 // Set connected roads
                 foreach (var road in settlements[idxS].connectedRoads)
                 {
                     _settlements[idxS].connectedRoads.Add(_roads[roads.IndexOf(road)]);
                 }
+
                 // Set adjacent tiles
                 foreach (var terrainTile in settlements[idxS].adjacentTiles)
                 {
@@ -147,31 +152,109 @@ namespace SettlersOfCatan.AI
             return b;
         }
 
-        public double GetScore { get
-            { 
+        public BoardState ChangeToNextPlayer()
+        {
+            var currentPlayerIndex = _players.IndexOf(player);
+            var index = (currentPlayerIndex == _players.Count() - 1) ? 0 : _players.IndexOf(player) + 1;
+//            player = _players[index];
+            var b = new BoardState(this);
+            b.player = b._players.ElementAt(index);
+//            player = _players[currentPlayerIndex];
+            return b;
+        }
+
+        public Player GetWinnerOfRandomGame()
+        {
+            var state = new BoardState(this);
+            var agent = new RandomAgent();
+            var turnsCount = 0;
+            var dice = new Dice()
+            {
+                diceRandomizer = new Random()
+            };
+            var maxMovesPerTurn = 3;
+            while (state.Winner == null)
+            {
+                var rollValue = dice.roll();
+                if (rollValue != 7)
+                {
+                    foreach (TerrainTile tt in state.terrainTiles)
+                    {
+                        if (tt.getGatherChance() != rollValue || tt.isGatherBlocked()) continue;
+                        foreach (Settlement set in tt.adjascentSettlements)
+                        {
+                            if (set.getOwningPlayer() == null) continue;
+                            ResourceCard rc = state.bank.giveOutResource(tt.getResourceType());
+                            if (rc == null) continue;
+                            set.getOwningPlayer().giveResource(rc);
+                            if (set.city())
+                            {
+                                //Give an extra for cities
+                                set.getOwningPlayer().giveResource(rc);
+                            }
+                        }
+                    }
+                }
+
+                Move move;
+                int moves = 0;
+                do
+                {
+                    move = agent.makeMove(state);
+                    move.MakeMove(ref state);
+                    moves++;
+                } while (!(move is EndMove) && moves < maxMovesPerTurn);
+
+                state = state.ChangeToNextPlayer();
+                turnsCount++;
+            }
+
+            return state.Winner;
+        }
+
+        public double GetScore
+        {
+            get
+            {
                 double victory_points_score = Player.calculateVictoryPoints(true, player) * VICTORY_POINT_MULTIPLIER;
-                double roads_score = 
-                    player.roads.Count * ROAD_VALUE + 
-                    player.getLongestRoadCount() * (player == BoardFunctions.GetPlayerWithLongestRoad(_players) ? LONGEST_ROAD_MULTIPLIER : 0);
+                double roads_score =
+                    player.roads.Count * ROAD_VALUE +
+                    player.getLongestRoadCount() * (player == BoardFunctions.GetPlayerWithLongestRoad(_players)
+                        ? LONGEST_ROAD_MULTIPLIER
+                        : 0);
                 double settlements_score = 0;
                 double resources_score = 0;
-                foreach (Settlement s in player.settlements) {
+                foreach (Settlement s in player.settlements)
+                {
                     settlements_score += s.isCity ? CITY_VALUE : SETTLEMENT_VALUE;
-                    foreach (TerrainTile tt in s.adjacentTiles) {
-                        if (tt.getResourceType() != Board.ResourceType.Desert) {
+                    foreach (TerrainTile tt in s.adjacentTiles)
+                    {
+                        if (tt.getResourceType() != Board.ResourceType.Desert)
+                        {
                             resources_score += CHIP_MULTIPLIERS[tt.numberChip.numberValue] * (s.isCity ? 2 : 1);
                         }
                     }
                 }
+
                 return victory_points_score + roads_score + settlements_score + resources_score;
             }
         }
 
-        public Player Winner { get { return BoardFunctions.GetWinner(_players); } }
+        public Player Winner
+        {
+            get { return BoardFunctions.GetWinner(_players, bank); }
+        }
 
-        public IEnumerable<TerrainTile> terrainTiles { get { return _terrainTiles; } }
+        public IEnumerable<TerrainTile> terrainTiles
+        {
+            get { return _terrainTiles; }
+        }
 
-        public IEnumerable<Harbor> harbors { get { return _harbors; } }
+        public IEnumerable<Harbor> harbors
+        {
+            get { return _harbors; }
+        }
+
         public IEnumerable<TerrainTile> playerAdjacentTerrainTiles
         {
             get
@@ -182,6 +265,7 @@ namespace SettlersOfCatan.AI
                     );
             }
         }
+
         public IDictionary<TerrainTile, int> playerResourceAcqirementPerTile
         {
             get
@@ -196,10 +280,16 @@ namespace SettlersOfCatan.AI
                         result[tt] += s.isCity ? 2 : 1;
                     }
                 }
+
                 return result;
             }
         }
-        public IEnumerable<Settlement> settlements { get { return _settlements; } }
+
+        public IEnumerable<Settlement> settlements
+        {
+            get { return _settlements; }
+        }
+
         public IEnumerable<Settlement> availableSettlements
         {
             get
@@ -208,6 +298,7 @@ namespace SettlersOfCatan.AI
                     .Where(s => s.owningPlayer == null && s.checkForOtherSettlement());
             }
         }
+
         public IEnumerable<Settlement> canBuildNewSettlements
         {
             get
@@ -216,6 +307,7 @@ namespace SettlersOfCatan.AI
                     .Where(s => s.checkForConnection(player) && Bank.hasPayment(player, Bank.SETTLEMENT_COST));
             }
         }
+
         public IEnumerable<Settlement> canUpgradeSettlement
         {
             get
@@ -224,7 +316,12 @@ namespace SettlersOfCatan.AI
                     .Where(s => !s.isCity && Bank.hasPayment(player, Bank.CITY_COST));
             }
         }
-        public IEnumerable<Road> roads { get { return _roads; } }
+
+        public IEnumerable<Road> roads
+        {
+            get { return _roads; }
+        }
+
         public IEnumerable<Road> availableRoads
         {
             get
@@ -233,6 +330,7 @@ namespace SettlersOfCatan.AI
                     .Where(r => r.owningPlayer == null && r.checkForConnection(player));
             }
         }
+
         public IEnumerable<Road> canBuildRoad
         {
             get
@@ -241,15 +339,19 @@ namespace SettlersOfCatan.AI
                     .Where(r => Bank.hasPayment(player, Bank.ROAD_COST));
             }
         }
-        public IDictionary<Board.ResourceType, int> playerResourcesAmounts { 
+
+        public IDictionary<Board.ResourceType, int> playerResourcesAmounts
+        {
             get
-            { 
+            {
                 return Enum.GetValues(typeof(Board.ResourceType))
                     .Cast<Board.ResourceType>()
                     .ToDictionary(k => k, v => player.getResourceCount(v));
             }
         }
-        public IDictionary<Board.ResourceType, int> bankTradePrices => BoardFunctions.GetPlayerBankCosts(player, _harbors);
+
+        public IDictionary<Board.ResourceType, int> bankTradePrices =>
+            BoardFunctions.GetPlayerBankCosts(player, _harbors);
 
         public IDictionary<Board.ResourceType, bool> resourcesAvailableToSell
         {
@@ -259,6 +361,7 @@ namespace SettlersOfCatan.AI
                     .ToDictionary(k => k.Key, v => v.Value >= bankTradePrices[v.Key]);
             }
         }
+
         public IDictionary<Board.ResourceType, bool> resourcesAvailableToBuy
         {
             get
@@ -267,6 +370,7 @@ namespace SettlersOfCatan.AI
                     .ToDictionary(k => k.Key, v => Board.TheBank.canGiveOutResource(v.Key, 1));
             }
         }
+
         public IDictionary<Board.ResourceType, int> playerResourcesAcquiredPerResource
         {
             get
@@ -281,24 +385,19 @@ namespace SettlersOfCatan.AI
                         result[tt.getResourceType()] += s.isCity ? 2 : 1;
                     }
                 }
+
                 return result;
             }
         }
 
         public IEnumerable<DevelopmentCard> playerCards
         {
-            get
-            {
-                return player.onHandDevelopmentCards;
-            }
+            get { return player.onHandDevelopmentCards; }
         }
 
         public IEnumerable<DevelopmentCard> playerPlayableCards
         {
-            get
-            {
-                return playerCards.Where(c => c.isPlayable());
-            }
+            get { return playerCards.Where(c => c.isPlayable()); }
         }
 
         public bool canBuyDevelopmentCard
