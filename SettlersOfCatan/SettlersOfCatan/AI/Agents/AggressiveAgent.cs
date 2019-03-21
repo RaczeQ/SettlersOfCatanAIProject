@@ -6,63 +6,61 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SettlersOfCatan.Moves;
 
 namespace SettlersOfCatan.AI.Agents
 {
     public class AggressiveAgent : IAgent
     {
-        SimplifiedSettlementBuildAssesmentFunction settlementBuildAssesmentFunction = new SimplifiedSettlementBuildAssesmentFunction();
+        SimplifiedSettlementBuildAssesmentFunction settlementBuildAssesmentFunction =
+            new SimplifiedSettlementBuildAssesmentFunction();
+
         private Random _r = new Random();
         private const int minResourceAmount = 4;
 
-        public object makeMove(BoardState state)
+        public Move makeMove(BoardState state)
         {
-            if (state.canBuildNewSettlements.Count() > 0)
+            if (state.canBuildNewSettlements.Any())
             {
                 var index = settlementBuildAssesmentFunction.getNewSettlementIndex(state);
-                if(index==null)
-                    return state.canBuildNewSettlements.ElementAt(_r.Next(0, state.canBuildNewSettlements.Count()));
-                else
-                    return state.canBuildNewSettlements.ElementAt(state.canBuildNewSettlements.ToList().IndexOf(state.canBuildNewSettlements.Where(x=> x.id==index).FirstOrDefault()));
+                var settlement = state.canBuildNewSettlements.ElementAt(index == null
+                    ? _r.Next(0, state.canBuildNewSettlements.Count())
+                    : state.canBuildNewSettlements.ToList()
+                        .IndexOf(state.canBuildNewSettlements.FirstOrDefault(x => x.id == index)));
+                return new BuildSettlementMove(settlement);
             }
-            else if (state.canUpgradeSettlement.Count() > 0)
+            else if (state.canUpgradeSettlement.Any())
             {
                 //TODO
-                return state.canUpgradeSettlement.ElementAt(_r.Next(0, state.canUpgradeSettlement.Count()));
+                return new BuildCityMove(
+                    state.canUpgradeSettlement.ElementAt(_r.Next(0, state.canUpgradeSettlement.Count())));
             }
-           
-            else if (state.canBuildRoad.Count() > 0)
+
+            else if (state.canBuildRoad.Any())
             {
                 var index = settlementBuildAssesmentFunction.getNewRoadIndex(state);
-                if(index==null)
-                    return state.canBuildRoad.ElementAt(_r.Next(0, state.canBuildRoad.Count()));
-                else
-                    return state.canBuildRoad.ElementAt(state.canBuildRoad.ToList().IndexOf(state.canBuildRoad.Where(x=> x.id==index).FirstOrDefault()));
+                var road = state.canBuildRoad.ElementAt(index == null
+                    ? _r.Next(0, state.canBuildRoad.Count())
+                    : state.canBuildRoad.ToList().IndexOf(state.canBuildRoad.FirstOrDefault(x => x.id == index)));
+                return new BuildRoadMove(road);
             }
             else if (state.resourcesAvailableToSell.Values.Any(x => x) &&
-                state.resourcesAvailableToBuy.Values.Any(x => x))
+                     state.resourcesAvailableToBuy.Values.Any(x => x))
             {
-                // Buy resource with lowest amount for resource with highest amount left after buy
                 var amountLeft = state.playerResourcesAmounts
                     .Where(x => state.resourcesAvailableToSell[x.Key])
                     .ToDictionary(k => k.Key, v => v.Value - state.bankTradePrices[v.Key]);
-                //var boughtResource = state.playerResourcesAmounts.OrderBy(kv => kv.Value).Select(kv => kv.Key).ToList()[0];
                 var boughtResource = state.playerResourcesAcquiredPerResource
                     .Where(x => state.resourcesAvailableToBuy[x.Key])
                     .OrderBy(kv => kv.Value).Select(kv => kv.Key).ToList()[0];
                 var selledResource = amountLeft.OrderBy(kv => -kv.Value).Select(kv => kv.Key).ToList()[0];
-                TradeProposition proposition = new TradeProposition()
+                if (boughtResource != selledResource)
                 {
-                    boughtResource = boughtResource,
-                    selledResource = selledResource,
-                    boughtResourceAmount = 1
-                };
-                return proposition;
+                    return new BankTradeMove(boughtResource, selledResource, 1);
+                }
             }
-            else
-            {
-                return state.endTurnButton;
-            }
+
+            return new EndMove();
         }
 
         public Road placeFreeRoad(BoardState state)
@@ -76,10 +74,12 @@ namespace SettlersOfCatan.AI.Agents
             var sortedSettlements = state.availableSettlements
                 .OrderByDescending(
                     s => s.adjacentTiles
-                        .Sum(t => t.getResourceType() != Board.ResourceType.Desert ? BoardState.CHIP_MULTIPLIERS[t.numberChip.numberValue] : 0)
+                        .Sum(t => t.getResourceType() != Board.ResourceType.Desert
+                            ? BoardState.CHIP_MULTIPLIERS[t.numberChip.numberValue]
+                            : 0)
                 );
             return sortedSettlements.First();
-            
+
             // List<SimplifiedSettlement> selected = null;
             // var currentSettlements = state.player.settlements
             //     .Select(x => new SimplifiedSettlement
@@ -125,5 +125,5 @@ namespace SettlersOfCatan.AI.Agents
         {
             return false;
         }
-    }  
+    }
 }

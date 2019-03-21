@@ -676,10 +676,10 @@ namespace SettlersOfCatan
             pbBuildDevelopmentCard.MouseLeave -= hideDevelopmentCardToolTip;
         }
 
-        public void CheckForWinner()
+        public bool CheckForWinner()
         {
             //Yay!
-
+            bool endGame = false;
             //Update the largest army and longest road stuff
             var lapl = BoardFunctions.GetPlayerWithBiggestArmy(playerOrder);
             var llpl = BoardFunctions.GetPlayerWithLongestRoad(playerOrder);
@@ -705,31 +705,10 @@ namespace SettlersOfCatan
                 currentGameEvent.endExecution();
                 addEventText(winningPlayer.getName() + " has won!");
                 this.Refresh();
+                endGame = true;
             }
-        }
 
-        public IDictionary<ResourceType, int> getPlayerBankCosts(Player p)
-        {
-            var result = new Dictionary<ResourceType, int>();
-            foreach (ResourceType rt in Enum.GetValues(typeof(ResourceType)))
-            {
-                result.Add(rt, 4);
-            }
-            foreach (Harbor hb in harbors.Where(h => h.playerHasValidSettlement(p)))
-            {
-                var harborResource = hb.getTradeOutputResource();
-                if (harborResource == ResourceType.Desert)
-                {
-                    foreach (ResourceType rt in Enum.GetValues(typeof(ResourceType)))
-                    {
-                        if (result[rt] > 3) result[rt] = 3;
-                    }
-                } else
-                {
-                    result[harborResource] = 2;
-                }
-            }
-            return result;
+            return endGame;
         }
 
         /**

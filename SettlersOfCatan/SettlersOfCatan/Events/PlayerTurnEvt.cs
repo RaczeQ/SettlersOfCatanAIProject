@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SettlersOfCatan.Moves;
 
 namespace SettlersOfCatan.Eventss
 {
@@ -48,7 +49,7 @@ namespace SettlersOfCatan.Eventss
             switch (currentState)
             {
                 case State.Wait:
-                    if (sender == theBoard.btnEndTurn)
+                    if (sender == theBoard.btnEndTurn || sender is EndMove)
                     {
                         //End turn.
                         theBoard.addEventText(UserMessages.PlayerEndedTurn(theBoard.currentPlayer));
@@ -57,45 +58,18 @@ namespace SettlersOfCatan.Eventss
                     } else if (sender is Settlement)
                     {
                         var location = theBoard.settlementLocations.Find(s => Equals(s, sender));
-                        try
+                        if (location.owningPlayer != null)
                         {
-                            //Try to build the settlement/upgrade city.
-                            location.buildSettlement(theBoard.currentPlayer, true, true);
-                            //Take resources
-                            if (location.city())
-                            {
-                                //take city resources
-                                Board.TheBank.takePayment(theBoard.currentPlayer, Bank.CITY_COST);
-                                theBoard.addEventText(UserMessages.PlayerBuiltACity(theBoard.currentPlayer));
-                                theBoard.CheckForWinner();
-                            } else
-                            {
-                                //take settlement resources
-                                Board.TheBank.takePayment(theBoard.currentPlayer, Bank.SETTLEMENT_COST);
-                                theBoard.addEventText(UserMessages.PlayerPlacedASettlement(theBoard.currentPlayer));
-                                theBoard.CheckForWinner();
-                            }
-                        } catch (BuildError be)
+                            makeMove(new BuildCityMove((Settlement)sender));
+                        }
+                        else
                         {
-                            theBoard.addEventText(be.Message);
+                            makeMove(new BuildSettlementMove((Settlement)sender));
                         }
 
                     } else if (sender is Road)
                     {
-                        var road = theBoard.roadLocations.Find(r => Equals(r, sender));
-                        //Try to build the road
-                        try
-                        {
-                            road.buildRoad(theBoard.currentPlayer, true);
-                            //Take the resources.
-                            Board.TheBank.takePayment(theBoard.currentPlayer, Bank.ROAD_COST);
-                            theBoard.addEventText(UserMessages.PlayerPlacedARoad(theBoard.currentPlayer));
-                            //RUN LONGEST ROAD CHECK
-                            theBoard.CheckForWinner();
-                        } catch (BuildError be)
-                        {
-                            theBoard.addEventText(be.Message);
-                        }
+                        makeMove(new BuildRoadMove((Road) sender));
                     } else if (sender == theBoard.pbBuildDevelopmentCard)
                     {
                         //We want to give the player a development card.
@@ -184,15 +158,9 @@ namespace SettlersOfCatan.Eventss
                         {
                             theBoard.addEventText(UserMessages.PlayerDoesNotHaveAdjascentSettlement);
                         }
-                    } else if (sender is TradeProposition)
+                    } else if (sender is Move)
                     {
-                        var proposition = (TradeProposition)sender;
-                        Board.TheBank.tradeWithBank(
-                            theBoard.currentPlayer,
-                            proposition,
-                            theBoard.getPlayerBankCosts(theBoard.currentPlayer)
-                        );
-                        theBoard.addEventText($"{theBoard.currentPlayer.getName()} traded {proposition.selledResource} for {proposition.boughtResource}");
+                        makeMove((Move) sender);
                     }
                     break;
                 case State.Trade:
@@ -205,6 +173,19 @@ namespace SettlersOfCatan.Eventss
             //    var move = theBoard.currentPlayer.agent.makeMove(theBoard.getBoardState());
             //    executeUpdate(move, null);
             //}
+        }
+
+        private void makeMove(Move move)
+        {
+            try
+            {
+                move.MakeMove(ref theBoard);
+                theBoard.CheckForWinner();
+            }
+            catch (Exception e)
+            {
+                theBoard.addEventText(e.Message);
+            }
         }
 
         public void bankTrade(Object sender, EventArgs e)
