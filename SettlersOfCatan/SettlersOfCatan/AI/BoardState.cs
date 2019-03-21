@@ -143,10 +143,10 @@ namespace SettlersOfCatan.AI
             CopyGameState(b._roads, b._settlements, b._harbors, b._terrainTiles, b._players, b.player);
         }
 
-        public BoardState MakeMove(IMove m)
+        public BoardState MakeMove(Move m)
         {
             var b = new BoardState(this);
-            m.MakeMove();
+            m.MakeMove(ref b);
             return b;
         }
 
