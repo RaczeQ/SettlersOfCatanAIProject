@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SettlersOfCatan.AI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,9 @@ namespace SettlersOfCatan.MCTS.Models
 {
     public class Node
     {
-        public State State { get; set; }
+        public int WinsNum { get; set; }
+        public int VisitsNum { get; set; }
+        public BoardState BoardState { get; set; }
         public List<Node> Children { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using SettlersOfCatan.MCTS.Interfaces;
+﻿using SettlersOfCatan.AI;
+using SettlersOfCatan.MCTS.Interfaces;
 using SettlersOfCatan.MCTS.Models;
 using System;
 using System.Collections.Generic;
@@ -14,47 +15,40 @@ namespace SettlersOfCatan.MCTS.Algorithm
 
         public Node GetNextMove(Node root)
         {
+            var i = 0;
            //czas sie skonczy
-            while (true)
+            while (i < 10)
             {
                 root = MakeSelection(root);
+                i++;
             }
 
-            return root.Children.OrderByDescending(x => x.State.WinsNum).FirstOrDefault();
+            return root.Children.OrderByDescending(x => x.WinsNum).FirstOrDefault();
         }
 
         Node MakeSelection(Node root)
         {
             var node = UCT.SelectNodeBasedOnUcb(root);
 
-            if (node.Children.Count() == 0)
+            if (node.VisitsNum == 0)
             {
-                if (node.State.VisitsNum == 0)
-                {
-                    var score = MakeRollout(node);
-                    node.State.WinsNum += score;
-                    node.State.VisitsNum += 1;
-                }
-                else
-                    node = MakeSelection(node);
+                var score = MakeRollout(node);
+                node.WinsNum += score;
+                node.VisitsNum += 1;
             }
-            root.State.VisitsNum += 1;
-            root.State.WinsNum += node.State.WinsNum;
+            else
+                node = MakeSelection(node);
+          
+            root.VisitsNum += 1;
+            root.WinsNum += node.WinsNum;
             return root;
         }
 
      
-       
-
-        void MakeBackPropagation()
-        {
-
-        }
-
         int MakeRollout(Node node)
         {
-            //tutaj random leci
-            return 0;
+            Random r = new Random();
+            return r.Next(0, 2);
         }
 
 
