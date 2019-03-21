@@ -12,6 +12,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
     public class MonteCarloTreeSearch : IMonteCarloTreeSearch
     {
         readonly int MAX_TIME = 2000;
+        Tree tree = new Tree();
 
         public Node GetNextMove(Node root)
         {
@@ -19,14 +20,16 @@ namespace SettlersOfCatan.MCTS.Algorithm
            //czas sie skonczy
             while (i < 10)
             {
-                root = MakeSelection(root);
+                MakeSelection(root);
                 i++;
             }
 
+            var ttt = root;
+            var temp = 5;
             return root.Children.OrderByDescending(x => x.WinsNum).FirstOrDefault();
         }
 
-        Node MakeSelection(Node root)
+        void MakeSelection(Node root)
         {
             var node = UCT.SelectNodeBasedOnUcb(root);
 
@@ -37,13 +40,19 @@ namespace SettlersOfCatan.MCTS.Algorithm
                 node.VisitsNum += 1;
             }
             else
-                node = MakeSelection(node);
-          
+            {
+                MakeExpantion(node);
+                MakeSelection(node);
+            }
             root.VisitsNum += 1;
             root.WinsNum += node.WinsNum;
-            return root;
+            
         }
 
+        void MakeExpantion(Node node)
+        {
+            node = tree.ExtendChildrenNode(node.BoardState, node);
+        }
      
         int MakeRollout(Node node)
         {

@@ -24,8 +24,12 @@ namespace SettlersOfCatan.AI.Agents
 
             Tree tree = new Tree();
             var root = tree.CreateRoot(newState);
+            if (root.Children.Count == 0)
+                return new EndMove();
+
             var result = mcts.GetNextMove(root);
-            return null;
+            return new EndMove();
+
 
         }
 

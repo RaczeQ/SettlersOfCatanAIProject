@@ -20,39 +20,44 @@ namespace SettlersOfCatan.MCTS.Models
                 BoardState = state,
                 Children = new List<Node>()
             };
-            DefineRootChildren(state);
-            return Root;
+
+            return ExtendChildrenNode(state, Root);
         }
 
-        public void DefineRootChildren(BoardState state)
+        public Node ExtendChildrenNode(BoardState state, Node node )
         {
-            Root.Children = new List<Node>();
-           
-            foreach(var item in state.canBuildRoad.ToList())
+            
+            node.Children = new List<Node>();
+
+            var roads = state.canBuildRoad.ToList();
+            var settlements = state.canBuildNewSettlements.ToList();
+            var cites = state.canUpgradeSettlement.ToList();
+            foreach (var item in roads)
             {
                 var copy = state;
                 var road = new BuildRoadMove(item);
-                Root.Children.Add(new Node()
-                { 
+                node.Children.Add(new Node()
+                {
                     BoardState = copy.MakeMove(road)
                 });
             }
-            foreach(var item in state.canBuildNewSettlements.ToList())
+            foreach (var item in settlements)
             {
                 var copy = state;
-                Root.Children.Add(new Node()
+                node.Children.Add(new Node()
                 {
                     BoardState = copy.MakeMove(new BuildSettlementMove(item))
                 });
             }
-            foreach(var item in state.canUpgradeSettlement.ToList())
+            foreach (var item in cites)
             {
                 var copy = state;
-                Root.Children.Add(new Node()
+                node.Children.Add(new Node()
                 {
                     BoardState = state.MakeMove(new BuildCityMove(item))
                 });
             }
+            return node;
         }
 
     }
