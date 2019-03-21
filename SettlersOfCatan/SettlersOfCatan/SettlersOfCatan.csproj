@@ -68,6 +68,12 @@
     <Compile Include="AI\Agents\RandomAgent.cs" />
     <Compile Include="AI\TradeProposition.cs" />
     <Compile Include="GameMaster.cs" />
+    <Compile Include="MCTS\Algorithm\MonteCarloTreeSearch.cs" />
+    <Compile Include="MCTS\Algorithm\UCT.cs" />
+    <Compile Include="MCTS\Interfaces\IMonteCarloTreeSearch.cs" />
+    <Compile Include="MCTS\Models\Node.cs" />
+    <Compile Include="MCTS\Models\State.cs" />
+    <Compile Include="MCTS\Models\Tree.cs" />
     <Compile Include="Moves\IMove.cs" />
     <Compile Include="SimplifiedModels\SimplifiedHarbor.cs" />
     <Compile Include="SimplifiedModels\SimplifiedPlayer.cs" />
