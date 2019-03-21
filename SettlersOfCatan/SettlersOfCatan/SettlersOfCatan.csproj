@@ -74,7 +74,7 @@
     <Compile Include="MCTS\Models\Node.cs" />
     <Compile Include="MCTS\Models\State.cs" />
     <Compile Include="MCTS\Models\Tree.cs" />
-    <Compile Include="Moves\IMove.cs" />
+    <Compile Include="Moves\Move.cs" />
     <Compile Include="SimplifiedModels\SimplifiedHarbor.cs" />
     <Compile Include="SimplifiedModels\SimplifiedPlayer.cs" />
     <Compile Include="Utils\AutoMapper.cs" />

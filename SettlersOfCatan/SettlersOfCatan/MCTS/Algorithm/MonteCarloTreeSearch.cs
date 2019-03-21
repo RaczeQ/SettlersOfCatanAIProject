@@ -10,18 +10,17 @@ namespace SettlersOfCatan.MCTS.Algorithm
 {
     public class MonteCarloTreeSearch : IMonteCarloTreeSearch
     {
-
         readonly int MAX_TIME = 2000;
-        readonly int INFINITY = int.MaxValue;
 
-        public void GetNextMove(Node root)
+        public Node GetNextMove(Node root)
         {
-            // while() dopoki czas sie nie skonczy
+           //czas sie skonczy
             while (true)
             {
                 root = MakeSelection(root);
             }
-           
+
+            return root.Children.OrderByDescending(x => x.State.WinsNum).FirstOrDefault();
         }
 
         Node MakeSelection(Node root)
@@ -37,33 +36,15 @@ namespace SettlersOfCatan.MCTS.Algorithm
                     node.State.VisitsNum += 1;
                 }
                 else
-                    MakeExpansion(node);
+                    node = MakeSelection(node);
             }
             root.State.VisitsNum += 1;
             root.State.WinsNum += node.State.WinsNum;
             return root;
         }
 
-        Node FindTheBestMove(Node node)
-        {
-            //if (node.Children.Count == 0)
-            //    return node;
-            //else
-            //{
-            //    var calculationResult = MakeSelection(node);
-            //    calculationResult.Children.OrderByDescending(x => (x.State.WinsNum / x.State.SimulationNum));
-            //    return calculationResult.Children.FirstOrDefault();
-            //}
-
-            MakeSelection(node);
-            return null;
-        }
-
      
-        void MakeExpansion(Node node)
-        {
-
-        }
+       
 
         void MakeBackPropagation()
         {
