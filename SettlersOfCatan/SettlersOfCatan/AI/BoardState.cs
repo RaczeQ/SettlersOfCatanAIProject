@@ -166,6 +166,9 @@ namespace SettlersOfCatan.AI
                 return victory_points_score + roads_score + settlements_score + resources_score;
             }
         }
+
+        public Player Winner { get { return BoardFunctions.GetWinner(_players); } }
+
         public IEnumerable<TerrainTile> terrainTiles { get { return _terrainTiles; } }
 
         public IEnumerable<Harbor> harbors { get { return _harbors; } }
