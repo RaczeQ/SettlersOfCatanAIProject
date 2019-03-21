@@ -57,7 +57,7 @@ namespace SettlersOfCatan.Utils
             return llpl;
         }
 
-        public static Player GetWinner(IEnumerable<Player> players)
+        public static Player GetWinner(IEnumerable<Player> players, Bank bank)
         {
             foreach (Player pl in players)
             {
@@ -67,7 +67,8 @@ namespace SettlersOfCatan.Utils
                     return pl;
                 }
             }
-            return null;
+
+            return bank.resources.Count == 0 ? players.OrderByDescending(p => Player.calculateVictoryPoints(true, p)).First() : null;
         }
 
         public static IDictionary<Board.ResourceType, int> GetPlayerBankCosts(Player p, IEnumerable<Harbor> harbors)

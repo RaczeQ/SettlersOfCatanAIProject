@@ -74,6 +74,8 @@ namespace SettlersOfCatan.Utils
 
                     cfg.CreateMap<Player, Player>()
                         .IncludeBase<Control, Control>()
+                        .ForMember(dest => dest.playerNumber,
+                            src => src.MapFrom(s => s.playerNumber))
                         .ForMember(dest => dest.resources,
                             src => src.MapFrom(s => Mapper.Map<List<ResourceCard>>(s.resources)))
                         .ForMember(dest => dest.onHandDevelopmentCards,

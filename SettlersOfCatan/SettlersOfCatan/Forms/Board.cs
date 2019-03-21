@@ -698,7 +698,7 @@ namespace SettlersOfCatan
             {
                 pl.updateScore();
             }
-            var winningPlayer = BoardFunctions.GetWinner(playerOrder);
+            var winningPlayer = BoardFunctions.GetWinner(playerOrder, Board.TheBank);
             if (winningPlayer != null)
             {
                 currentGameState = GameState.End;

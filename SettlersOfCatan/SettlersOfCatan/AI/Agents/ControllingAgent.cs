@@ -47,7 +47,11 @@ namespace SettlersOfCatan.AI.Agents
                 var selledResource = amountLeft.OrderBy(kv => -kv.Value).Select(kv => kv.Key).ToList()[0];
                 if (boughtResource != selledResource)
                 {
-                    return new BankTradeMove(boughtResource, selledResource, 1);
+                    var move = new BankTradeMove(boughtResource, selledResource, 1);
+                    if (move.CanMakeMove(state))
+                    {
+                        return new BankTradeMove(boughtResource, selledResource, 1);
+                    }
                 }
             }
 

@@ -28,7 +28,7 @@ namespace SettlersOfCatan.GameObjects
 
         private int diceValue1 = 0;
         private int diceValue2 = 0;
-        private Random diceRandomizer;
+        public Random diceRandomizer;
         private int lastRollValue = 0;
 
         public DialogResult DialogResult { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
