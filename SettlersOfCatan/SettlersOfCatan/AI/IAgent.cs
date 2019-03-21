@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SettlersOfCatan.Moves;
 
 namespace SettlersOfCatan.AI
 {
@@ -12,6 +13,6 @@ namespace SettlersOfCatan.AI
         Settlement placeFreeSettlement(BoardState state);
         Road placeFreeRoad(BoardState state);
         //TerrainTile moveRobber(BoardState state);
-        Object makeMove(BoardState state);
+        Move makeMove(BoardState state);
     }
 }

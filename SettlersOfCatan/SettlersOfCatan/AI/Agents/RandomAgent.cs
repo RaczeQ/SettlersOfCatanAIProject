@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SettlersOfCatan.Moves;
 
 namespace SettlersOfCatan.AI.Agents
 {
@@ -13,44 +14,39 @@ namespace SettlersOfCatan.AI.Agents
         private Random _r = new Random();
         private const int minResourceAmount = 4;
 
-        public object makeMove(BoardState state)
+        public Move makeMove(BoardState state)
         {
-            if (state.canBuildNewSettlements.Count() > 0)
-            {   
-                return state.canBuildNewSettlements.ElementAt(_r.Next(0, state.canBuildNewSettlements.Count()));
-            }
-            else if (state.canUpgradeSettlement.Count() > 0)
+            if (state.canBuildNewSettlements.Any())
             {
-                return state.canUpgradeSettlement.ElementAt(_r.Next(0, state.canUpgradeSettlement.Count()));
-            }           
-            else if (state.canBuildRoad.Count() > 0)
-            {             
-                return state.canBuildRoad.ElementAt(_r.Next(0, state.canBuildRoad.Count()));
+                return new BuildSettlementMove(
+                    state.canBuildNewSettlements.ElementAt(_r.Next(0, state.canBuildNewSettlements.Count())));
+            }
+            else if (state.canUpgradeSettlement.Any())
+            {
+                return new BuildCityMove(
+                    state.canUpgradeSettlement.ElementAt(_r.Next(0, state.canUpgradeSettlement.Count())));
+            }
+            else if (state.canBuildRoad.Any())
+            {
+                return new BuildRoadMove(state.canBuildRoad.ElementAt(_r.Next(0, state.canBuildRoad.Count())));
             }
             else if (state.resourcesAvailableToSell.Values.Any(x => x) &&
-                state.resourcesAvailableToBuy.Values.Any(x => x))
+                     state.resourcesAvailableToBuy.Values.Any(x => x))
             {
-                // Buy resource with lowest amount for resource with highest amount left after buy
                 var amountLeft = state.playerResourcesAmounts
                     .Where(x => state.resourcesAvailableToSell[x.Key])
                     .ToDictionary(k => k.Key, v => v.Value - state.bankTradePrices[v.Key]);
-                //var boughtResource = state.playerResourcesAmounts.OrderBy(kv => kv.Value).Select(kv => kv.Key).ToList()[0];
                 var boughtResource = state.playerResourcesAcquiredPerResource
                     .Where(x => state.resourcesAvailableToBuy[x.Key])
                     .OrderBy(kv => kv.Value).Select(kv => kv.Key).ToList()[0];
                 var selledResource = amountLeft.OrderBy(kv => -kv.Value).Select(kv => kv.Key).ToList()[0];
                 if (boughtResource != selledResource)
                 {
-                    TradeProposition proposition = new TradeProposition()
-                    {
-                        boughtResource = boughtResource,
-                        selledResource = selledResource,
-                        boughtResourceAmount = 1
-                    };
-                    return proposition;
+                    return new BankTradeMove(boughtResource, selledResource, 1);
                 }
             }
-            return state.endTurnButton;
+
+            return new EndMove();
         }
 
         public Road placeFreeRoad(BoardState state)

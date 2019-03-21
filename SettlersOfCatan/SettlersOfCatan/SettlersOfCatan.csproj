@@ -68,6 +68,11 @@
     <Compile Include="AI\Agents\RandomAgent.cs" />
     <Compile Include="AI\TradeProposition.cs" />
     <Compile Include="GameMaster.cs" />
+    <Compile Include="Moves\BankTradeMove.cs" />
+    <Compile Include="Moves\BuildCityMove.cs" />
+    <Compile Include="Moves\BuildSettlementMove.cs" />
+    <Compile Include="Moves\BuildRoadMove.cs" />
+    <Compile Include="Moves\EndMove.cs" />
     <Compile Include="Moves\Move.cs" />
     <Compile Include="SimplifiedModels\SimplifiedHarbor.cs" />
     <Compile Include="SimplifiedModels\SimplifiedPlayer.cs" />

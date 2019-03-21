@@ -35,7 +35,6 @@ namespace SettlersOfCatan.AI
 
         public Bank bank { get; set; }
         public Player player { get; set; }
-        public Button endTurnButton { get; set; }
 
         private void CopyGameState(List<Road> roads, List<Settlement> settlements, List<Harbor> harbors,
             List<TerrainTile> terrainTiles, List<Player> players, Player currentPlayer)
@@ -130,7 +129,6 @@ namespace SettlersOfCatan.AI
 
         public BoardState(Board b)
         {
-            endTurnButton = b.btnEndTurn;
             bank = Mapper.Map<Bank>(Board.TheBank);
             CopyGameState(b.roadLocations, b.settlementLocations, b.harbors,
                 b.boardTiles.OfType<TerrainTile>().ToList(), b.playerOrder.ToList(), b.currentPlayer);
@@ -138,7 +136,6 @@ namespace SettlersOfCatan.AI
 
         public BoardState(BoardState b)
         {
-            endTurnButton = b.endTurnButton;
             bank = Mapper.Map<Bank>(b.bank);
             CopyGameState(b._roads, b._settlements, b._harbors, b._terrainTiles, b._players, b.player);
         }
@@ -170,6 +167,8 @@ namespace SettlersOfCatan.AI
             }
         }
         public IEnumerable<TerrainTile> terrainTiles { get { return _terrainTiles; } }
+
+        public IEnumerable<Harbor> harbors { get { return _harbors; } }
         public IEnumerable<TerrainTile> playerAdjacentTerrainTiles
         {
             get
