@@ -147,6 +147,12 @@ namespace SettlersOfCatan.AI
             return b;
         }
 
+        public void ChangeToNextPlayer()
+        {
+            var index = (_players.IndexOf(player) == _players.Count() - 1) ? 0 : _players.IndexOf(player) + 1;
+            player = _players[index];
+        }
+
         public double GetScore { get
             { 
                 double victory_points_score = Player.calculateVictoryPoints(true, player) * VICTORY_POINT_MULTIPLIER;
