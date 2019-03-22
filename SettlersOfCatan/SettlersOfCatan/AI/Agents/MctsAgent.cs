@@ -36,23 +36,21 @@ namespace SettlersOfCatan.AI.Agents
         }
 
         public Road placeFreeRoad(BoardState state)
-        {
-            //var newState = Mapper.Map<BoardState>(state);
-            //Tree tree = new Tree();
-            //var root = tree.CreateRootToPlaceFreeRoad(newState);          
-            //var result = mcts.GetNextMove(root);
-
+        { 
             return state.availableRoads.ElementAt(_r.Next(0, state.availableRoads.Count()));
         }
 
         public Settlement placeFreeSettlement(BoardState state)
         {
-            //var newState = Mapper.Map<BoardState>(state);
-            //Tree tree = new Tree();
-            //var root = tree.CreateRootToPlaceFreeSettlement(newState);
-            //var result = mcts.GetNextMove(root);
-
-            return state.availableSettlements.ElementAt(_r.Next(0, state.availableSettlements.Count()));
+            
+            var sortedSettlements = state.availableSettlements
+               .OrderByDescending(
+                   s => s.adjacentTiles
+                       .Sum(t => t.getResourceType() != Board.ResourceType.Desert
+                           ? BoardState.CHIP_MULTIPLIERS[t.numberChip.numberValue]
+                           : 0)
+               );
+            return sortedSettlements.First();
         }
     }
 }
