@@ -13,27 +13,28 @@ namespace SettlersOfCatan.MCTS.Algorithm
     {
         readonly int MAX_TIME = 2000;
         Tree tree = new Tree();
+        int CurrentPlayerNum { get; set; }
 
         public Node GetNextMove(Node root)
         {
+            CurrentPlayerNum = root.BoardState.player.playerNumber;
             var i = 0;
            //czas sie skonczy
-            while (i < 10)
+            while (i < 20)
             {
-                MakeSelection(root);
+                root = MakeSelection(root);
                 i++;
             }
-
-            var ttt = root;
-            var temp = 5;
             return root.Children.OrderByDescending(x => x.WinsNum).FirstOrDefault();
         }
 
-        void MakeSelection(Node root)
+        Node MakeSelection(Node root)
         {
             var node = UCT.SelectNodeBasedOnUcb(root);
 
-            if (node.VisitsNum == 0)
+            if (node == null)
+                return root;
+            else if (node.VisitsNum == 0)
             {
                 var score = MakeRollout(node);
                 node.WinsNum += score;
@@ -46,20 +47,26 @@ namespace SettlersOfCatan.MCTS.Algorithm
             }
             root.VisitsNum += 1;
             root.WinsNum += node.WinsNum;
-            
+            return root;
         }
 
         void MakeExpantion(Node node)
         {
             node = tree.ExtendChildrenNode(node.BoardState, node);
         }
+
+        void MakeBackPropagation(Node node)
+        {
+
+        }
      
         int MakeRollout(Node node)
         {
-            Random r = new Random();
-            return r.Next(0, 2);
+            //var winner =  node.BoardState.GetWinnerOfRandomGame();
+            //return winner.playerNumber == CurrentPlayerNum ? 1 : 0;
+
+            var  r = new Random().Next(0, 2);
+            return r;
         }
-
-
     }
 }

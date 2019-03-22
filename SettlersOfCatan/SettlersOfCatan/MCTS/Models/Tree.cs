@@ -24,24 +24,19 @@ namespace SettlersOfCatan.MCTS.Models
             return ExtendChildrenNode(state, Root);
         }
 
-        public Node ExtendChildrenNode(BoardState state, Node node )
+        public Node ExtendChildrenNode(BoardState state, Node node)
         {
-            
-            node.Children = new List<Node>();
-
-            var roads = state.canBuildRoad.ToList();
-            var settlements = state.canBuildNewSettlements.ToList();
-            var cites = state.canUpgradeSettlement.ToList();
-            foreach (var item in roads)
+            node.Children = new List<Node>();    
+            foreach (var item in state.canBuildRoad.ToList())
             {
                 var copy = state;
-                var road = new BuildRoadMove(item);
+                var roadMove = new BuildRoadMove(item);
                 node.Children.Add(new Node()
                 {
-                    BoardState = copy.MakeMove(road)
+                    BoardState = copy.MakeMove(roadMove)
                 });
             }
-            foreach (var item in settlements)
+            foreach (var item in state.canBuildNewSettlements.ToList())
             {
                 var copy = state;
                 node.Children.Add(new Node()
@@ -49,16 +44,86 @@ namespace SettlersOfCatan.MCTS.Models
                     BoardState = copy.MakeMove(new BuildSettlementMove(item))
                 });
             }
-            foreach (var item in cites)
+            foreach (var item in state.canUpgradeSettlement.ToList())
             {
                 var copy = state;
                 node.Children.Add(new Node()
                 {
-                    BoardState = state.MakeMove(new BuildCityMove(item))
+                    BoardState = copy.MakeMove(new BuildCityMove(item))
+                });
+            }
+            foreach(var toBuy in state.resourcesAvailableToBuy.ToList().Where(x=> x.Value))
+            {
+                var copy = state;
+                foreach(var toSell in state.resourcesAvailableToSell.ToList().Where(x=> x.Value))
+                {
+                    var copy2 = copy;
+                    node.Children.Add(new Node()
+                    {
+                        BoardState = copy2.MakeMove(new BankTradeMove(toBuy.Key, toSell.Key, 1))
+                    });
+                }
+            }
+
+            Console.WriteLine(String.Format("Node children amount:  " + node.Children.Count()));
+            return node;
+        }
+
+
+        public Node CreateRootToPlaceFreeRoad(BoardState state)
+        {
+            Root = new Node()
+            {
+                BoardState = state,
+                Children = new List<Node>()
+            };
+
+            return ExtendRoadChildrenNode(state, Root);
+        }
+        public Node ExtendRoadChildrenNode(BoardState state, Node node)
+        {
+
+            node.Children = new List<Node>();
+            var roads = state.availableRoads.ToList();        
+            foreach (var item in roads)
+            {
+                var copy = state;
+                var roadMove = new BuildRoadMove(item);
+                node.Children.Add(new Node()
+                {
+                    BoardState = copy.MakeMove(roadMove)
                 });
             }
             return node;
         }
 
+
+        public Node CreateRootToPlaceFreeSettlement(BoardState state)
+        {
+            Root = new Node()
+            {
+                BoardState = state,
+                Children = new List<Node>()
+            };
+
+            return ExtendSettlementChildrenNode(state, Root);
+        }
+        public Node ExtendSettlementChildrenNode(BoardState state, Node node)
+        {
+
+            node.Children = new List<Node>();
+            var settlements = state.availableSettlements.ToList();
+            foreach (var item in settlements)
+            {
+                var copy = state;
+                var settlementMove = new BuildSettlementMove(item);
+                node.Children.Add(new Node()
+                {
+                    BoardState = copy.MakeMove(settlementMove)
+                });
+            }
+            return node;
+        }
     }
 }
+
