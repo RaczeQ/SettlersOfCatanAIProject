@@ -20,33 +20,56 @@ namespace SettlersOfCatan.AI.Agents
 
         public Move makeMove(BoardState state)
         {
+            var moves = new List<Tuple<double, Move>>();
+            var currentScore = state.GetScore;
+
             if (state.canBuildNewSettlements.Any())
             {
+                var newState = new BoardState(state);
                 var index = settlementBuildAssesmentFunction.getNewSettlementIndex(state);
                 var settlement = state.canBuildNewSettlements.ElementAt(index == null
                     ? _r.Next(0, state.canBuildNewSettlements.Count())
                     : state.canBuildNewSettlements.ToList()
                         .IndexOf(state.canBuildNewSettlements.FirstOrDefault(x => x.id == index)));
-                return new BuildSettlementMove(settlement);
-            }
-            else if (state.canUpgradeSettlement.Any())
-            {
-                //TODO
-                return new BuildCityMove(
-                    state.canUpgradeSettlement.ElementAt(_r.Next(0, state.canUpgradeSettlement.Count())));
+                var move = new BuildSettlementMove(settlement);
+                move.MakeMove(ref newState);
+                var score = newState.GetScore;
+                moves.Add(new Tuple<double, Move>(score - currentScore, move));
             }
 
-            else if (state.canBuildRoad.Any())
+            if (state.canUpgradeSettlement.Any())
             {
+                var newState = new BoardState(state);
+                var settlement = state.canUpgradeSettlement
+                    .OrderByDescending(
+                        s => s.adjacentTiles
+                            .Sum(t => t.getResourceType() != Board.ResourceType.Desert
+                                ? BoardState.CHIP_MULTIPLIERS[t.numberChip.numberValue]
+                                : 0)
+                    );
+                var move = new BuildCityMove(settlement.First());
+                move.MakeMove(ref newState);
+                var score = newState.GetScore;
+                moves.Add(new Tuple<double, Move>(score - currentScore, move));
+            }
+
+            if (state.canBuildRoad.Any())
+            {
+                var newState = new BoardState(state);
                 var index = settlementBuildAssesmentFunction.getNewRoadIndex(state);
                 var road = state.canBuildRoad.ElementAt(index == null
                     ? _r.Next(0, state.canBuildRoad.Count())
                     : state.canBuildRoad.ToList().IndexOf(state.canBuildRoad.FirstOrDefault(x => x.id == index)));
-                return new BuildRoadMove(road);
+                var move = new BuildRoadMove(road);
+                move.MakeMove(ref newState);
+                var score = newState.GetScore;
+                moves.Add(new Tuple<double, Move>(score - currentScore, move));
             }
-            else if (state.resourcesAvailableToSell.Values.Any(x => x) &&
+
+            if (state.resourcesAvailableToSell.Values.Any(x => x) &&
                      state.resourcesAvailableToBuy.Values.Any(x => x))
             {
+                var newState = new BoardState(state);
                 var amountLeft = state.playerResourcesAmounts
                     .Where(x => state.resourcesAvailableToSell[x.Key])
                     .ToDictionary(k => k.Key, v => v.Value - state.bankTradePrices[v.Key]);
@@ -59,12 +82,16 @@ namespace SettlersOfCatan.AI.Agents
                     var move = new BankTradeMove(boughtResource, selledResource, 1);
                     if (move.CanMakeMove(state))
                     {
-                        return new BankTradeMove(boughtResource, selledResource, 1);
+                        move.MakeMove(ref newState);
+                        var score = newState.GetScore;
+                        moves.Add(new Tuple<double, Move>(score - currentScore, move));
                     }
                 }
             }
 
-            return new EndMove();
+            moves.Add(new Tuple<double, Move>(0, new EndMove()));
+
+            return moves.OrderByDescending(t => t.Item1).First().Item2;
         }
 
         public Road placeFreeRoad(BoardState state)
