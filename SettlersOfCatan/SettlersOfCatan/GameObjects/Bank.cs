@@ -58,14 +58,22 @@ namespace SettlersOfCatan.GameObjects
         public Deck developmentCards;
         public List<ResourceCard> resources;
 
-        public Bank()
+        public Bank(bool loadBitmaps = true)
         {
             resources = new List<ResourceCard>();
             
             //Load the development card images.
             for (int i = 0; i < 6; i++)
             {
-                devCardImages[i] = new Bitmap(devCardImageNames[i]);
+                if (loadBitmaps)
+                {
+                    devCardImages[i] = new Bitmap(devCardImageNames[i]);
+                }
+                else
+                {
+                    devCardImages[i] = new Bitmap(1,1);
+                }
+                
             }
 
             developmentCards = new Deck(25);

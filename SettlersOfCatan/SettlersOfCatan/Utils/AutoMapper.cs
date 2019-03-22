@@ -31,6 +31,7 @@ namespace SettlersOfCatan.Utils
 
                     cfg.CreateMap<NumberChip, NumberChip>()
                         .IncludeBase<Control, Control>()
+                        .ForCtorParam("loadBitmaps", opt => opt.MapFrom(src => false))
                         .ForCtorParam("numberValue", opt => opt.MapFrom(src => src.numberValue));
 
                     cfg.CreateMap<Control.ControlCollection, Control.ControlCollection>()
@@ -38,9 +39,13 @@ namespace SettlersOfCatan.Utils
 
                     cfg.CreateMap<ResourceCard, ResourceCard>()
                         .ForCtorParam("resource", opt => opt.MapFrom(src => src.getResourceType()));
+                    cfg.CreateMap<ResourceDisplay, ResourceDisplay>()
+                        .ForCtorParam("loadBitmaps", opt => opt.MapFrom(src => false));
+
                     cfg.CreateMap<DevelopmentCard, DevelopmentCard>();
                     cfg.CreateMap<TerrainTile, TerrainTile>()
                         .IncludeBase<Control, Control>()
+                        .ForCtorParam("loadBitmaps", opt => opt.MapFrom(src => false))
                         .ForCtorParam("p", opt => opt.MapFrom(src => new BoardArea()))
                         .ForCtorParam("resourceType", opt => opt.MapFrom(src => src.tileType))
                         .ForCtorParam("image", opt => opt.MapFrom(src => src.BackgroundImage))
@@ -56,6 +61,7 @@ namespace SettlersOfCatan.Utils
                     cfg.CreateMap<Settlement, Settlement>()
                         .IncludeBase<Control, Control>()
                         .ForCtorParam("position", opt => opt.MapFrom(src => src.position))
+                        .ForCtorParam("loadBitmaps", opt => opt.MapFrom(src => false))
                         .ForMember(dest => dest.connectedRoads, opt => opt.Ignore())
                         .ForMember(dest => dest.adjacentTiles, opt => opt.Ignore())
                         .ForMember(dest => dest.owningPlayer, opt => opt.Ignore());
@@ -67,6 +73,7 @@ namespace SettlersOfCatan.Utils
                         .ForMember(dest => dest.owningPlayer, opt => opt.Ignore());
 
                     cfg.CreateMap<Bank, Bank>()
+                        .ForCtorParam("loadBitmaps", opt => opt.MapFrom(src => false))
                         .ForMember(dest => dest.developmentCards,
                             src => src.MapFrom(s => s.developmentCards.CopyDeck()))
                         .ForMember(dest => dest.resources,
@@ -74,6 +81,7 @@ namespace SettlersOfCatan.Utils
 
                     cfg.CreateMap<Player, Player>()
                         .IncludeBase<Control, Control>()
+                        .ForCtorParam("loadBitmaps", opt => opt.MapFrom(src => false))
                         .ForMember(dest => dest.playerNumber,
                             src => src.MapFrom(s => s.playerNumber))
                         .ForMember(dest => dest.resources,

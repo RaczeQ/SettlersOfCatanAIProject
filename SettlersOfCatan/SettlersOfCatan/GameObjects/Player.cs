@@ -71,30 +71,34 @@ namespace SettlersOfCatan.GameObjects
             }
         }
 
-        public Player()
+        public Player(bool loadBitmaps = true)
         {
-            InitializeComponent();
             resources = new List<ResourceCard>();
             onHandDevelopmentCards = new List<DevelopmentCard>();
             settlements = new List<Settlement>();
             roads = new List<Road>();
             rand = new Random();
             resourceDisplays = new List<ResourceDisplay>();
-            playerComboBox.SelectedIndex = 0;
 
-            //Prevents designer glitches because Visual Studio is bitches.
-            bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
-            if (!designMode)
+            if (loadBitmaps)
             {
-                for (int i = 0; i < 5; i++)
+                InitializeComponent();
+                playerComboBox.SelectedIndex = 0;
+
+                //Prevents designer glitches because Visual Studio is bitches.
+                bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+                if (!designMode)
                 {
-                    ResourceDisplay resDisp = new ResourceDisplay();
-                    resourceDisplays.Add(resDisp);
-                    resDisp.setType((Board.ResourceType)i);
-                    resDisp.setCount(0);
-                    resDisp.show();
-                    pnlResources.Controls.Add(resDisp);
-                    resDisp.Location = new Point(i * 34 + 32, 2);
+                    for (int i = 0; i < 5; i++)
+                    {
+                        ResourceDisplay resDisp = new ResourceDisplay();
+                        resourceDisplays.Add(resDisp);
+                        resDisp.setType((Board.ResourceType)i, loadBitmaps);
+                        resDisp.setCount(0);
+                        resDisp.show();
+                        pnlResources.Controls.Add(resDisp);
+                        resDisp.Location = new Point(i * 34 + 32, 2);
+                    }
                 }
             }
         }

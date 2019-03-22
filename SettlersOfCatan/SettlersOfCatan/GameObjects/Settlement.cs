@@ -21,10 +21,11 @@ namespace SettlersOfCatan.GameObjects
 
         public Player owningPlayer { get; set; }
         public bool isCity { get; private set; } = false;
-        private Bitmap image = new Bitmap("Resources/settlement.png");
+        private Bitmap image;
+        private bool _loadBitmaps;
 
 
-        public Settlement(Point position)
+        public Settlement(Point position, bool loadBitmaps = true)
         {
             this.Paint += Settlement_Paint;
             this.position = position;
@@ -33,6 +34,11 @@ namespace SettlersOfCatan.GameObjects
             Location = new Point(position.X - 6, position.Y - 6);
             Size = new Size(12, 12);
             Click += forcePaint;
+            _loadBitmaps = loadBitmaps;
+            if (loadBitmaps)
+            {
+                image = new Bitmap("Resources/settlement.png");
+            }
         }
 
         private void forcePaint(object sender, EventArgs e)
@@ -220,7 +226,10 @@ namespace SettlersOfCatan.GameObjects
                 }
 
                 this.isCity = true;
-                this.image = new Bitmap("Resources/city.png");
+                if (_loadBitmaps)
+                {
+                    this.image = new Bitmap("Resources/city.png");
+                }
             } else
             {
                 throw new BuildError(BuildError.LocationOwnedBy(owningPlayer));

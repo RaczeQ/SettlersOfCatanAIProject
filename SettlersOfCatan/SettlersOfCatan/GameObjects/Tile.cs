@@ -70,15 +70,18 @@ namespace SettlersOfCatan.GameObjects
         public List<Settlement> adjascentSettlements;
         public List<Road> adjascentRoads;
 
-        public TerrainTile(Panel p, Board.ResourceType resourceType, Bitmap image ) : base(p)
+        public TerrainTile(Panel p, Board.ResourceType resourceType, Bitmap image, bool loadBitmaps = true) : base(p)
         {
             this.tileType = resourceType;
             adjascentSettlements = new List<Settlement>();
             adjascentRoads = new List<Road>();
 
             //Atuomatically determine what image we need to display depending on the resource type
-            this.BackgroundImage = image;
-            this.Size = BackgroundImage.Size;
+            if (loadBitmaps)
+            {
+                this.BackgroundImage = image;
+                this.Size = BackgroundImage.Size;
+            }
             this.BackColor = Color.Transparent;
 
         }

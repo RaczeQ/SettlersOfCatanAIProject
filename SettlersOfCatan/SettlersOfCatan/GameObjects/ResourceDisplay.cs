@@ -17,16 +17,22 @@ namespace SettlersOfCatan.GameObjects
         public int count = 0;
         public bool hidden = false;
 
-        public ResourceDisplay()
+        public ResourceDisplay(bool loadBitmaps = true)
         {
-            InitializeComponent();
+            if (loadBitmaps)
+            {
+                InitializeComponent();
+            }
         }
 
-        public void setType(Board.ResourceType rType)
+        public void setType(Board.ResourceType rType, bool loadBitmaps)
         {
             type = rType;
             //Set the icon.
-            pbIcon.BackgroundImage = new Bitmap("Resources/" + Board.iconImageResourceNames[(int)type]);
+            if (loadBitmaps)
+            {
+                pbIcon.BackgroundImage = new Bitmap("Resources/" + Board.iconImageResourceNames[(int) type]);
+            }
         }
 
         public void setCount(int rCount)

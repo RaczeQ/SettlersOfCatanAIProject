@@ -156,10 +156,8 @@ namespace SettlersOfCatan.AI
         {
             var currentPlayerIndex = _players.IndexOf(player);
             var index = (currentPlayerIndex == _players.Count() - 1) ? 0 : _players.IndexOf(player) + 1;
-//            player = _players[index];
             var b = new BoardState(this);
             b.player = b._players.ElementAt(index);
-//            player = _players[currentPlayerIndex];
             return b;
         }
 

@@ -15,10 +15,10 @@ namespace SettlersOfCatan.GameObjects
 
         public bool blocked { get; private set; } = false;
 
-        public NumberChip(int numberValue)
+        public NumberChip(int numberValue, bool loadBitmaps = true)
         {
             this.numberValue = numberValue;
-            if (numberValue != 0)
+            if (numberValue != 0 && loadBitmaps)
             {
                 this.BackgroundImage = new Bitmap("Resources/" + numberValue + "_Chip.png");
             }
