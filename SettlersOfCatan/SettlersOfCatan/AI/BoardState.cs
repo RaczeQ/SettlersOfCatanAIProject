@@ -161,6 +161,33 @@ namespace SettlersOfCatan.AI
             state.player = state._players.ElementAt(index);
         }
 
+        public static void RollDice(ref BoardState state)
+        {
+            var dice = new Dice()
+            {
+                diceRandomizer = new Random()
+            };
+            var rollValue = dice.roll();
+            if (rollValue != 7)
+            {
+                foreach (TerrainTile tt in state.terrainTiles)
+                {
+                    if (tt.getGatherChance() != rollValue || tt.isGatherBlocked()) continue;
+                    foreach (Settlement set in tt.adjascentSettlements)
+                    {
+                        if (set.getOwningPlayer() == null) continue;
+                        ResourceCard rc = state.bank.giveOutResource(tt.getResourceType());
+                        if (rc == null) continue;
+                        set.getOwningPlayer().giveResource(rc);
+                        if (set.city())
+                        {
+                            set.getOwningPlayer().giveResource(rc);
+                        }
+                    }
+                }
+            }
+        }
+
         public BoardState ChangeToNextPlayer()
         {
             var b = new BoardState(this);
@@ -173,33 +200,9 @@ namespace SettlersOfCatan.AI
             var state = new BoardState(this);
             var agent = new RandomAgent();
             var turnsCount = 0;
-            var dice = new Dice()
-            {
-                diceRandomizer = new Random()
-            };
             while (state.Winner == null)
             {
-                var rollValue = dice.roll();
-                if (rollValue != 7)
-                {
-                    foreach (TerrainTile tt in state.terrainTiles)
-                    {
-                        if (tt.getGatherChance() != rollValue || tt.isGatherBlocked()) continue;
-                        foreach (Settlement set in tt.adjascentSettlements)
-                        {
-                            if (set.getOwningPlayer() == null) continue;
-                            ResourceCard rc = state.bank.giveOutResource(tt.getResourceType());
-                            if (rc == null) continue;
-                            set.getOwningPlayer().giveResource(rc);
-                            if (set.city())
-                            {
-                                //Give an extra for cities
-                                set.getOwningPlayer().giveResource(rc);
-                            }
-                        }
-                    }
-                }
-
+                RollDice(ref state);
                 Move move;
                 int moves = 0;
                 do
