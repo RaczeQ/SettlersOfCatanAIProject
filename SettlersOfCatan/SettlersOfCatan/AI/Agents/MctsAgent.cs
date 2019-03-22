@@ -25,7 +25,10 @@ namespace SettlersOfCatan.AI.Agents
             Tree tree = new Tree();
             var root = tree.CreateRoot(newState);
             if (root.Children.Count == 0)
+            {
+                Console.WriteLine("No possible moves. Player ended his turn.");
                 return new EndMove();
+            }
 
             var result = mcts.GetNextMove(root);
             return result.Move ?? new EndMove();
