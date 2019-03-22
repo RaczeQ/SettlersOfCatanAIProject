@@ -88,6 +88,17 @@ namespace SettlersOfCatan.GameObjects
             }
         }
 
+        public string ResourcesList()
+        {
+            var resDict = resources.GroupBy(x => x.getResourceType()).ToDictionary(k => k.Key, v => v.Count());
+            var result = new List<string>();
+            foreach (Board.ResourceType r in Enum.GetValues(typeof(Board.ResourceType)))
+            {
+                result.Add($"{r}: {resources.Where(rc => rc.getResourceType() == r).Count()}");
+            }
+            return string.Join(", ", result);
+        }
+
         /*
             Players can get this type of resource. If no resource is available, none is given.
          */
@@ -141,7 +152,8 @@ namespace SettlersOfCatan.GameObjects
         {
             foreach (Board.ResourceType resType in paymentList)
             {
-                this.resources.Add(p.takeResource(resType));
+                var resource = p.takeResource(resType);
+                this.resources.Add(resource);
             }
         }
 
@@ -193,13 +205,13 @@ namespace SettlersOfCatan.GameObjects
             for (int i = 0; i < selledResourceAmount; i++)
             {
                 ResourceCard rc = player.takeResource(proposition.selledResource);
-                Board.TheBank.putResourceCard(rc);
+                putResourceCard(rc);
             }
 
             //Get cards
             for (int i = 0; i < proposition.boughtResourceAmount; i++)
             {
-                player.giveResource(Board.TheBank.giveOutResource(proposition.boughtResource));
+                player.giveResource(giveOutResource(proposition.boughtResource));
             }
             return true;
         }

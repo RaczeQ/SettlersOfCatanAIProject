@@ -14,11 +14,13 @@ namespace SettlersOfCatan.AI
 {
     public class BoardState
     {
-        public static readonly double SETTLEMENT_VALUE = 3;
-        public static readonly double CITY_VALUE = 5;
-        public static readonly double ROAD_VALUE = 1;
+        public static readonly double SETTLEMENT_VALUE = 5;
+        public static readonly double CITY_VALUE = 10;
+        public static readonly double ROAD_VALUE = 2;
+        public static readonly double LONGEST_ROAD_MULTIPLIER = 2;
         public static readonly double VICTORY_POINT_MULTIPLIER = 100;
-        public static readonly double LONGEST_ROAD_MULTIPLIER = 1.5;
+        public static readonly double RESOURCE_TYPE_VALUE = 1;
+        public static readonly double RESOURCE_RATIO_VALUE_LOSS = 4;
 
         public static readonly Dictionary<int, double> CHIP_MULTIPLIERS = new Dictionary<int, double>()
         {
@@ -218,9 +220,11 @@ namespace SettlersOfCatan.AI
         {
             get
             {
+                double road_ratio = player.roads.Count / player.settlements.Count;
+                double road_value = 10 * ROAD_VALUE / Math.Pow(10, road_ratio);
                 double victory_points_score = Player.calculateVictoryPoints(true, player) * VICTORY_POINT_MULTIPLIER;
                 double roads_score =
-                    player.roads.Count * ROAD_VALUE +
+                    player.roads.Count * road_value +
                     player.getLongestRoadCount() * (player == BoardFunctions.GetPlayerWithLongestRoad(_players)
                         ? LONGEST_ROAD_MULTIPLIER
                         : 0);
@@ -235,6 +239,15 @@ namespace SettlersOfCatan.AI
                         {
                             resources_score += CHIP_MULTIPLIERS[tt.numberChip.numberValue] * (s.isCity ? 2 : 1);
                         }
+                    }
+                }
+                foreach (Board.ResourceType type in playerResourcesAmounts.Keys)
+                {
+                    var resource_value = RESOURCE_TYPE_VALUE;
+                    for (int i = 0; i < playerResourcesAmounts[type]; i++)
+                    {
+                        resources_score += resource_value;
+                        resource_value /= RESOURCE_RATIO_VALUE_LOSS;
                     }
                 }
 

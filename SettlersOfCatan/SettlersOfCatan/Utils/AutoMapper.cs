@@ -37,7 +37,8 @@ namespace SettlersOfCatan.Utils
                         .ForCtorParam("owner", opt => opt.MapFrom<Control>(src => null));
 
                     cfg.CreateMap<ResourceCard, ResourceCard>()
-                        .ForCtorParam("resource", opt => opt.MapFrom(src => src.getResourceType()));
+                        .ForCtorParam("resource", opt => opt.MapFrom(src => src.getResourceType()))
+                        .ForMember(dest => dest.guid, opt => opt.MapFrom(src => src.guid));
                     cfg.CreateMap<DevelopmentCard, DevelopmentCard>();
                     cfg.CreateMap<TerrainTile, TerrainTile>()
                         .IncludeBase<Control, Control>()
