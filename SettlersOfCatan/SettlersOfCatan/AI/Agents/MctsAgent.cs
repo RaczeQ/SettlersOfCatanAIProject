@@ -28,7 +28,8 @@ namespace SettlersOfCatan.AI.Agents
                 return new EndMove();
 
             var result = mcts.GetNextMove(root);
-            return result.Move;
+            return result.Move ?? new EndMove();
+           
         }
 
         public Road placeFreeRoad(BoardState state)

@@ -20,7 +20,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
             CurrentPlayerNum = root.BoardState.player.playerNumber;
             var i = 0;
            //czas sie skonczy
-            while (i < 20)
+            while (i < 10)
             {
                 root = MakeSelection(root);
                 i++;
@@ -30,13 +30,13 @@ namespace SettlersOfCatan.MCTS.Algorithm
 
         Node MakeSelection(Node root)
         {
-            var node = UCT.SelectNodeBasedOnUcb(root);
-
-            if (node == null)
+            // if brak możliwości - koniec ruchu
+            if (root.Children.Count == 0)
                 return root;
-            // jesli nie ma ruchu zmień gracza!
 
-            else if (node.VisitsNum == 0)
+            var node = UCT.SelectNodeBasedOnUcb(root);
+            
+            if (node.VisitsNum == 0)
             {
                 var score = MakeRollout(node);
                 node.WinsNum += score;
@@ -47,8 +47,11 @@ namespace SettlersOfCatan.MCTS.Algorithm
                 MakeExpantion(node);
                 node = MakeSelection(node);
             }
-            root.VisitsNum += 1;
-            root.WinsNum += node.WinsNum;
+            if (node.VisitsNum != 0)
+            {
+                root.VisitsNum += 1;
+                root.WinsNum += node.WinsNum;
+            }
             return root;
         }
 
