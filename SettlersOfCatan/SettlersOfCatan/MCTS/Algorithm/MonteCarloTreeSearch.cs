@@ -26,7 +26,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
                 i++;
             }
 
-            var nextMove = root.Children.OrderByDescending(x => x.WinsNum).FirstOrDefault();
+            var nextMove = root.Children.OrderByDescending(x => (x.TotalScore)).FirstOrDefault();
             Console.WriteLine("MCTS: visits number: {0}, wins number {1}, next move: {2}", root.VisitsNum, root.WinsNum, nextMove.Move == null ? "no available moves" : nextMove.Move.ToString());
 
             return nextMove;
@@ -34,12 +34,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
 
         Node MakeSelection(Node root)
         {
-            // if brak możliwości - przełączyć na drugiego gracza -> oprócz korzenia całego drzewa -> POPRAWIc ten syf
-            //if (root.Children.Count == 0 && root.VisitsNum == 0)
-            //{
-            //    root.VisitsNum += 1;
-            //    return root;
-            //}
+            
             // TUTAJ PRZELACZAC GRACZA ! -> ten moment nie działa
             if (root.Children.Count == 0)
                 return root;
