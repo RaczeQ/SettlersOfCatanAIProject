@@ -68,8 +68,12 @@ namespace SettlersOfCatan.Events
                                                 set.getOwningPlayer().giveResource(rc);
                                                 if (set.city())
                                                 {
-                                                    //Give an extra for cities
-                                                    set.getOwningPlayer().giveResource(rc);
+                                                    rc = Board.TheBank.giveOutResource(tt.getResourceType());
+                                                    if (rc != null)
+                                                    {
+                                                        //Give an extra for cities
+                                                        set.getOwningPlayer().giveResource(rc);
+                                                    }
                                                 }
                                             }
                                             else

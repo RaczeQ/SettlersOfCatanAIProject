@@ -181,6 +181,8 @@ namespace SettlersOfCatan.AI
                         set.getOwningPlayer().giveResource(rc);
                         if (set.city())
                         {
+                            rc = state.bank.giveOutResource(tt.getResourceType());
+                            if (rc == null) continue;
                             set.getOwningPlayer().giveResource(rc);
                         }
                     }
