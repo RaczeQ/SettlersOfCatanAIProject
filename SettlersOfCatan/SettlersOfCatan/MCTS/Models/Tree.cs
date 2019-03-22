@@ -30,26 +30,28 @@ namespace SettlersOfCatan.MCTS.Models
             foreach (var item in state.canBuildRoad.ToList())
             {
                 var copy = state;
-                var roadMove = new BuildRoadMove(item);
+                node.Move = new BuildRoadMove(item);
                 node.Children.Add(new Node()
                 {
-                    BoardState = copy.MakeMove(roadMove)
+                    BoardState = copy.MakeMove(node.Move)
                 });
             }
             foreach (var item in state.canBuildNewSettlements.ToList())
             {
                 var copy = state;
+                node.Move = new BuildSettlementMove(item);
                 node.Children.Add(new Node()
                 {
-                    BoardState = copy.MakeMove(new BuildSettlementMove(item))
+                    BoardState = copy.MakeMove(node.Move)
                 });
             }
             foreach (var item in state.canUpgradeSettlement.ToList())
             {
                 var copy = state;
+                node.Move = new BuildCityMove(item);
                 node.Children.Add(new Node()
                 {
-                    BoardState = copy.MakeMove(new BuildCityMove(item))
+                    BoardState = copy.MakeMove(node.Move)
                 });
             }
             foreach(var toBuy in state.resourcesAvailableToBuy.ToList().Where(x=> x.Value))
@@ -58,9 +60,10 @@ namespace SettlersOfCatan.MCTS.Models
                 foreach(var toSell in state.resourcesAvailableToSell.ToList().Where(x=> x.Value))
                 {
                     var copy2 = copy;
+                    node.Move = new BankTradeMove(toBuy.Key, toSell.Key, 1);
                     node.Children.Add(new Node()
                     {
-                        BoardState = copy2.MakeMove(new BankTradeMove(toBuy.Key, toSell.Key, 1))
+                        BoardState = copy2.MakeMove(node.Move)
                     });
                 }
             }

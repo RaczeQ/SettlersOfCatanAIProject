@@ -34,6 +34,8 @@ namespace SettlersOfCatan.MCTS.Algorithm
 
             if (node == null)
                 return root;
+            // jesli nie ma ruchu zmień gracza!
+
             else if (node.VisitsNum == 0)
             {
                 var score = MakeRollout(node);
@@ -43,7 +45,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
             else
             {
                 MakeExpantion(node);
-                MakeSelection(node);
+                node = MakeSelection(node);
             }
             root.VisitsNum += 1;
             root.WinsNum += node.WinsNum;
