@@ -152,14 +152,17 @@ namespace SettlersOfCatan.AI
             return b;
         }
 
+        public static void ChangeToNextPlayer(ref BoardState state)
+        {
+            var currentPlayerIndex = state._players.IndexOf(state.player);
+            var index = (currentPlayerIndex == state._players.Count() - 1) ? 0 : state._players.IndexOf(state.player) + 1;
+            state.player = state._players.ElementAt(index);
+        }
+
         public BoardState ChangeToNextPlayer()
         {
-            var currentPlayerIndex = _players.IndexOf(player);
-            var index = (currentPlayerIndex == _players.Count() - 1) ? 0 : _players.IndexOf(player) + 1;
-//            player = _players[index];
             var b = new BoardState(this);
-            b.player = b._players.ElementAt(index);
-//            player = _players[currentPlayerIndex];
+            ChangeToNextPlayer(ref b);
             return b;
         }
 
@@ -172,7 +175,6 @@ namespace SettlersOfCatan.AI
             {
                 diceRandomizer = new Random()
             };
-            var maxMovesPerTurn = 3;
             while (state.Winner == null)
             {
                 var rollValue = dice.roll();
@@ -203,9 +205,9 @@ namespace SettlersOfCatan.AI
                     move = agent.makeMove(state);
                     move.MakeMove(ref state);
                     moves++;
-                } while (!(move is EndMove) && moves < maxMovesPerTurn);
+                } while (!(move is EndMove));
 
-                state = state.ChangeToNextPlayer();
+                ChangeToNextPlayer(ref state);
                 turnsCount++;
             }
 

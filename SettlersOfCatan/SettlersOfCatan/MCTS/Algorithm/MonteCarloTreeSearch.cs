@@ -79,11 +79,11 @@ namespace SettlersOfCatan.MCTS.Algorithm
      
         int MakeRollout(Node node)
         {
-            //var winner = node.BoardState.GetWinnerOfRandomGame();
-            //return winner.playerNumber == CurrentPlayerNum ? 1 : 0;
+            var winner = node.BoardState.GetWinnerOfRandomGame();
+            return winner.playerNumber == CurrentPlayerNum ? 1 : 0;
 
-            var r = new Random().Next(0, 2);
-            return r;
+            //var r = new Random().Next(0, 2);
+            //return r;
         }
     }
 }
