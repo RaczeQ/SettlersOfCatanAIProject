@@ -14,11 +14,11 @@ namespace SettlersOfCatan.AI
 {
     public class BoardState
     {
-        public static readonly double SETTLEMENT_VALUE = 5;
-        public static readonly double CITY_VALUE = 10;
-        public static readonly double ROAD_VALUE = 2;
-        public static readonly double LONGEST_ROAD_MULTIPLIER = 2;
-        public static readonly double VICTORY_POINT_MULTIPLIER = 100;
+        public static readonly double SETTLEMENT_VALUE = 50;
+        public static readonly double CITY_VALUE = 100;
+        public static readonly double ROAD_VALUE = 10;
+        public static readonly double LONGEST_ROAD_MULTIPLIER = 20;
+        public static readonly double VICTORY_POINT_MULTIPLIER = 1000;
         public static readonly double RESOURCE_TYPE_VALUE = 1;
         public static readonly double RESOURCE_RATIO_VALUE_LOSS = 4;
 
@@ -225,11 +225,11 @@ namespace SettlersOfCatan.AI
         {
             get
             {
-                double road_ratio = player.roads.Count / player.settlements.Count;
-                double road_value = 10 * ROAD_VALUE / Math.Pow(10, road_ratio);
+                double road_ratio = player.roads.Count / Math.Pow(player.settlements.Count, 2);
+                double road_value = 10 / Math.Sqrt(Math.Pow(10, road_ratio));
                 double victory_points_score = Player.calculateVictoryPoints(true, player) * VICTORY_POINT_MULTIPLIER;
                 double roads_score =
-                    player.roads.Count * road_value +
+                    player.roads.Count * ROAD_VALUE * road_value +
                     player.getLongestRoadCount() * (player == BoardFunctions.GetPlayerWithLongestRoad(_players)
                         ? LONGEST_ROAD_MULTIPLIER
                         : 0);
