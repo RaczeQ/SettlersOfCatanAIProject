@@ -30,40 +30,48 @@ namespace SettlersOfCatan.MCTS.Models
             foreach (var item in state.canBuildRoad.ToList())
             {
                 var copy = state;
-                node.Move = new BuildRoadMove(item);
+                var move = new BuildRoadMove(item);
                 node.Children.Add(new Node()
                 {
-                    BoardState = copy.MakeMove(node.Move)
-                });
+                    Move = move,
+                    BoardState = copy.MakeMove(move),
+ 
+                 });
+               
             }
             foreach (var item in state.canBuildNewSettlements.ToList())
             {
                 var copy = state;
-                node.Move = new BuildSettlementMove(item);
+                var move = new BuildSettlementMove(item);
                 node.Children.Add(new Node()
                 {
-                    BoardState = copy.MakeMove(node.Move)
+                    Move = move,
+                    BoardState = copy.MakeMove(move)
                 });
+
             }
             foreach (var item in state.canUpgradeSettlement.ToList())
             {
                 var copy = state;
-                node.Move = new BuildCityMove(item);
+                var move = new BuildCityMove(item);
                 node.Children.Add(new Node()
                 {
-                    BoardState = copy.MakeMove(node.Move)
+                    Move = move,
+                    BoardState = copy.MakeMove(move)
                 });
+
             }
-            foreach(var toBuy in state.resourcesAvailableToBuy.ToList().Where(x=> x.Value))
+            foreach (var toBuy in state.resourcesAvailableToBuy.ToList().Where(x=> x.Value))
             {
                 var copy = state;
                 foreach(var toSell in state.resourcesAvailableToSell.ToList().Where(x=> x.Value))
                 {
                     var copy2 = copy;
-                    node.Move = new BankTradeMove(toBuy.Key, toSell.Key, 1);
+                    var move= new BankTradeMove(toBuy.Key, toSell.Key, 1);
                     node.Children.Add(new Node()
                     {
-                        BoardState = copy2.MakeMove(node.Move)
+                        Move = move,
+                        BoardState = copy2.MakeMove(move)
                     });
                 }
             }

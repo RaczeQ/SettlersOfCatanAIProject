@@ -10,6 +10,7 @@ namespace SettlersOfCatan.MCTS.Models
 {
     public class Node
     {
+        public int RolloutScore { get; set; }
         public int WinsNum { get; set; }
         public int VisitsNum { get; set; }
         public Move Move { get; set; }
