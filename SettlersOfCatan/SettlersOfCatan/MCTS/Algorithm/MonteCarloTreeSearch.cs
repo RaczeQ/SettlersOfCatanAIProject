@@ -22,7 +22,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
             Console.WriteLine(String.Format("Start MCTS. Current player number: {0}", CurrentPlayerNum));
             var i = 0;
            //czas sie skonczy
-            while (i < 10)
+            while (i < 20)
             {
                 root = MakeSelection(root);
                 i++;
@@ -44,35 +44,35 @@ namespace SettlersOfCatan.MCTS.Algorithm
                 root = ChangeToNextPlayer(root.BoardState);
                 Console.WriteLine(String.Format("Player switched to {0}", root.BoardState.player.playerNumber));
                 root = MakeSelection(root);
-            }
-
-            //
-
-            var node = UCT.SelectNodeBasedOnUcb(root);
-
-            if (node.VisitsNum == 0)
-            {
-
-                node.Depth = root.Depth + 1;
-                Console.WriteLine("Current node depth {0}. Children index {1} ", node.Depth, root.Children.IndexOf(node));
-
-
-                var score = MakeRollout(node);
-                node.RolloutScore = score;
-                node.WinsNum += score;
-                node.VisitsNum += 1;
+                Console.WriteLine("Swich ended. Wins {0}", (root!=null ? root.WinsNum.ToString() : "not known"));
             }
             else
             {
-                MakeExpantion(node);
-                node = MakeSelection(node);
+                var node = UCT.SelectNodeBasedOnUcb(root);
+
+                if (node.VisitsNum == 0)
+                {
+
+                    node.Depth = root.Depth + 1;
+                    Console.WriteLine("Current node depth {0}. Children index {1} ", node.Depth, root.Children.IndexOf(node));
+                    var score = MakeRollout(node);
+                    node.RolloutScore = score;
+                    node.WinsNum += score;
+                    node.VisitsNum += 1;
+                }
+                else
+                {
+                    MakeExpantion(node);
+                    node = MakeSelection(node);
+                }
+                if (node.VisitsNum != 0)
+                {
+                    root.VisitsNum += 1;
+                    root.WinsNum += node.RolloutScore;
+                    root.RolloutScore = node.RolloutScore;
+                }
             }
-            if (node.VisitsNum != 0)
-            {
-                root.VisitsNum += 1;
-                root.WinsNum += node.RolloutScore;
-            }
-            Console.WriteLine("Return one node above. Player {0}", root.BoardState.player.playerNumber);
+            Console.WriteLine("Return from node. Player {0}. Wins: {1}. Visits {2}", root.BoardState.player.playerNumber, root.WinsNum, root.VisitsNum);
             return root;
         }
 
