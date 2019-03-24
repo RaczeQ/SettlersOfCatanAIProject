@@ -18,6 +18,8 @@ namespace SettlersOfCatan.MCTS.Algorithm
         public Node GetNextMove(Node root)
         {
             CurrentPlayerNum = root.BoardState.player.playerNumber;
+            root.Depth = 0;
+            Console.WriteLine(String.Format("Start MCTS. Current player number: {0}", CurrentPlayerNum));
             var i = 0;
            //czas sie skonczy
             while (i < 10)
@@ -34,21 +36,32 @@ namespace SettlersOfCatan.MCTS.Algorithm
 
         Node MakeSelection(Node root)
         {
-            
-            // TUTAJ PRZELACZAC GRACZA ! -> ten moment nie działa
+            Console.WriteLine("Start execute node. Current player: {0}. Available children: {1}. Depth: {2}. Wins: {3}. Visits {4}",
+                root.BoardState.player.playerNumber, root.Children.Count(), root.Depth, root.WinsNum, root.VisitsNum);
+
             if (root.Children.Count == 0)
-                return root;
+            {
+                root = ChangeToNextPlayer(root.BoardState);
+                Console.WriteLine(String.Format("Player switched to {0}", root.BoardState.player.playerNumber));
+                root = MakeSelection(root);
+            }
+
+            //
 
             var node = UCT.SelectNodeBasedOnUcb(root);
-            
+
             if (node.VisitsNum == 0)
             {
+
+                node.Depth = root.Depth + 1;
+                Console.WriteLine("Current node depth {0}. Children index {1} ", node.Depth, root.Children.IndexOf(node));
+
+
                 var score = MakeRollout(node);
                 node.RolloutScore = score;
                 node.WinsNum += score;
                 node.VisitsNum += 1;
             }
-            // +  Children -> null
             else
             {
                 MakeExpantion(node);
@@ -59,7 +72,15 @@ namespace SettlersOfCatan.MCTS.Algorithm
                 root.VisitsNum += 1;
                 root.WinsNum += node.RolloutScore;
             }
+            Console.WriteLine("Return one node above. Player {0}", root.BoardState.player.playerNumber);
             return root;
+        }
+
+        Node ChangeToNextPlayer(BoardState state)
+        {
+            var changedState = state.ChangeToNextPlayer();
+            BoardState.RollDice(ref changedState);
+            return tree.CreateRoot(changedState);
         }
 
         void MakeExpantion(Node node)
@@ -67,18 +88,12 @@ namespace SettlersOfCatan.MCTS.Algorithm
             node = tree.ExtendChildrenNode(node.BoardState, node);
         }
 
-        void MakeBackPropagation(Node node)
-        {
-
-        }
      
         int MakeRollout(Node node)
         {
-            var winner = node.BoardState.GetWinnerOfRandomGame();
-            return winner.playerNumber == CurrentPlayerNum ? 1 : 0;
-
-            //var r = new Random().Next(0, 2);
-            //return r;
+            var winer = node.BoardState.GetWinnerOfRandomGame();
+            Console.WriteLine("Roolout winner is {0}", winer.playerNumber);
+            return (winer.playerNumber == CurrentPlayerNum) ? 1 : 0;
         }
     }
 }

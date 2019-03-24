@@ -24,5 +24,8 @@ namespace SettlersOfCatan.MCTS.Models
         public Move Move { get; set; }
         public BoardState BoardState { get; set; }
         public List<Node> Children { get; set; }
+
+        //tymczasowe - do wyświetlania poziomu 
+        public int Depth { get; set; }
     }
 }

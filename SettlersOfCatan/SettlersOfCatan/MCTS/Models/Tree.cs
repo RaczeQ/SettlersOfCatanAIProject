@@ -75,8 +75,6 @@ namespace SettlersOfCatan.MCTS.Models
                     });
                 }
             }
-
-            Console.WriteLine(String.Format("Node children amount:  " + node.Children.Count()));
             return node;
         }
 
