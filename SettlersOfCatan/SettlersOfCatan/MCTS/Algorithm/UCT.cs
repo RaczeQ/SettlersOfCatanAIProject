@@ -14,14 +14,14 @@ namespace SettlersOfCatan.MCTS.Algorithm
         public static double UtcValue(int winsNum, int visitsNum, int totalVisitsNum)
         {
             if (visitsNum == 0)
-                return int.MinValue;
+                return int.MaxValue;
             else
                 return (winsNum / visitsNum) + EXPLORATION * Math.Sqrt(Math.Log(totalVisitsNum) / visitsNum);
         }
 
         public static Node SelectNodeBasedOnUcb(Node parent)
         {
-            return parent.Children.OrderBy(x => UCT.UtcValue(x.WinsNum, x.VisitsNum, parent.VisitsNum)).FirstOrDefault();
+            return parent.Children.OrderByDescending(x => UCT.UtcValue(x.WinsNum, x.VisitsNum, parent.VisitsNum)).FirstOrDefault();
         }
     }
 }

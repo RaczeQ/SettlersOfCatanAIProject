@@ -20,7 +20,6 @@ namespace SettlersOfCatan.MCTS.Models
                 BoardState = state,
                 Children = new List<Node>()
             };
-
             return ExtendChildrenNode(state, Root);
         }
 
@@ -75,6 +74,11 @@ namespace SettlersOfCatan.MCTS.Models
                     });
                 }
             }
+            //node.Children.Add(new Node()
+            //{
+            //    BoardState = node.BoardState,
+            //    Move = new EndMove()
+            //});
             return node;
         }
 

@@ -15,11 +15,18 @@ namespace SettlersOfCatan.AI.Agents
     public class MctsAgent : IAgent
     {
         private Random _r = new Random();
-
-
+        private List<Move> nextMoves = new List<Move>();
+        
         MonteCarloTreeSearch mcts = new MonteCarloTreeSearch();
         public Move makeMove(BoardState state)
         {
+            if (nextMoves.Count > 0)
+            {
+                var move = nextMoves[0];
+                nextMoves.Remove(move);
+                return move;
+            }
+
             var newState = Mapper.Map<BoardState>(state);
 
             Tree tree = new Tree();
@@ -29,10 +36,19 @@ namespace SettlersOfCatan.AI.Agents
                 Console.WriteLine("No possible moves. Player ended his turn.");
                 return new EndMove();
             }
-
             var result = mcts.GetNextMove(root);
-            return result.Move ?? new EndMove();
-           
+            nextMoves = ExpandMovesFromWinnerNode(result, new List<Move>() );
+            return result.Move;
+        }
+
+        private List<Move> ExpandMovesFromWinnerNode(Node node, List<Move> moves)
+        {
+            if (node==null || node.Children==null || node.Children.Count == 0 || node.Children.Any(x => x.VisitsNum == 0))
+                return moves;
+            
+            var nextNode = node.Children.OrderByDescending(x => (x.TotalScore)).FirstOrDefault();
+            moves.Add(nextNode.Move);
+            return ExpandMovesFromWinnerNode(nextNode, moves);       
         }
 
         public Road placeFreeRoad(BoardState state)

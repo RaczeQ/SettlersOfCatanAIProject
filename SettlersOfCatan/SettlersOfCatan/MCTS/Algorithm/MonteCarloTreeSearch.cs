@@ -1,6 +1,7 @@
 ﻿using SettlersOfCatan.AI;
 using SettlersOfCatan.MCTS.Interfaces;
 using SettlersOfCatan.MCTS.Models;
+using SettlersOfCatan.Moves;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
 {
     public class MonteCarloTreeSearch : IMonteCarloTreeSearch
     {
-        readonly int MAX_TIME = 10;
+        readonly int MAX_TIME = 30;
         Tree tree = new Tree();
         int CurrentPlayerNum { get; set; }
 
@@ -33,13 +34,11 @@ namespace SettlersOfCatan.MCTS.Algorithm
         private async Task<Node> MakeSelectionStarter(Node root)
         {
             CancellationTokenSource tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(MAX_TIME));
-            int i = 0;
             while (true)
             {
                 try
                 {
                     root = await MakeSelection(root, tokenSource.Token);
-                    i++;
                 } catch (OperationCanceledException)
                 {
                     return root;
@@ -67,9 +66,13 @@ namespace SettlersOfCatan.MCTS.Algorithm
             {
                 var node = UCT.SelectNodeBasedOnUcb(root);
 
+                //if(node.Move.GetType() == typeof(EndMove))
+                //{
+
+                //}
+
                 if (node.VisitsNum == 0)
                 {
-
                     node.Depth = root.Depth + 1;
                     Console.WriteLine("Current node depth {0}. Children index {1} ", node.Depth, root.Children.IndexOf(node));
                     var score = MakeRollout(node);
