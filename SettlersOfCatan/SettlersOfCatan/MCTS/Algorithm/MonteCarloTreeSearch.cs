@@ -17,6 +17,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
         Tree tree = new Tree();
         int CurrentPlayerNum { get; set; }
 
+
         public Node GetNextMove(Node root)
         {
             CurrentPlayerNum = root.BoardState.player.playerNumber;
@@ -63,8 +64,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
             if ((root.Children == null || root.Children.Count == 0) || (root.Move != null && root.Move.GetType() == typeof(EndMove)))
             {
                 if(root.Move != null && root.Move.GetType() == typeof(EndMove))
-                    Console.WriteLine(String.Format("MOVE -> END MOVE"));
-
+                    Console.WriteLine(String.Format("End move"));
 
                 var rootVisits = root.VisitsNum; 
                 var rootWins = root.WinsNum;
@@ -74,16 +74,14 @@ namespace SettlersOfCatan.MCTS.Algorithm
 
                 root.VisitsNum = rootVisits + 1;
                 root.WinsNum = rootWins + rootWithChangesPlayer.RolloutScore;
-                Console.WriteLine("ENDED switch. Wins {0}", (root!=null ? root.WinsNum.ToString() : "not known"));
+                Console.WriteLine("Ended switch. Wins {0}", (root!=null ? root.WinsNum.ToString() : "not known"));
             }
             else
             {
                 var node = UCT.SelectNodeBasedOnUcb(root);
 
                 if (node.VisitsNum == 0)
-                {
-                    node.Depth = root.Depth + 1;
-                    Console.WriteLine("Current node depth {0}. Children index {1} ", node.Depth, root.Children.IndexOf(node));
+                {  
                     var score = MakeRollout(node);
                     node.RolloutScore = score;
                     node.WinsNum += score;
@@ -105,14 +103,13 @@ namespace SettlersOfCatan.MCTS.Algorithm
                 }
             }
             Console.WriteLine("Return from node. Player {0}. Wins: {1}. Visits {2}", root.BoardState.player.playerNumber, root.WinsNum, root.VisitsNum);
-            Console.WriteLine(" ======================> KONIEC ITERACJ ===================> " + iter);
+            Console.WriteLine(" ======================> END ON TREE DEPTH => " + iter);
 
             return root;
         }
 
         Node ChangeToNextPlayer(BoardState state)
         {
-            Console.WriteLine(" ZMIENIAM GRACZA???? czy nie . OBCNY GRACZ TO {0}" + state.player.playerNumber);
             var changedState = state.ChangeToNextPlayer();
             BoardState.RollDice(ref changedState);
             return tree.CreateRoot(changedState);
