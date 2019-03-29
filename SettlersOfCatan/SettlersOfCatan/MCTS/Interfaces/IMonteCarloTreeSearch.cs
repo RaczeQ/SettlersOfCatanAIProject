@@ -9,7 +9,7 @@ namespace SettlersOfCatan.MCTS.Interfaces
 {
     public interface IMonteCarloTreeSearch
     {
-        Node GetNextMove(Node root);
+        Node GetNextMove(ref Node root);
      
     }
 }

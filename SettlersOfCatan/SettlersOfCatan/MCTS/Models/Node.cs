@@ -53,5 +53,36 @@ namespace SettlersOfCatan.MCTS.Models
 
             return obj.GetType() == GetType() && Equals((Node)obj);
         }
+
+        public void PrintPretty(string indent, bool last)
+        {
+            Console.Write(indent);
+            if (last)
+            {
+                Console.Write("\\-");
+                indent += "  ";
+            }
+            else
+            {
+                Console.Write("|-");
+                indent += "| ";
+            }
+            var moveName = 
+                Move == null ? 
+                    "Root" : 
+                    (VisitsNum == 0 ? $"({Move.GetType().Name})" : $"{Move.GetType().Name}");
+            Console.WriteLine($"[{GameObjects.Player.playerColorNames[BoardState.player.playerNumber]}] {moveName}");
+
+            if (Children != null)
+            {
+                for (int i = 0; i < Children.Count; i++)
+                    Children[i].PrintPretty(indent, i == Children.Count - 1);
+            }
+            if (NodesAfterRandomRollDice != null)
+            {
+                for (int i = 0; i < NodesAfterRandomRollDice.Count; i++)
+                    NodesAfterRandomRollDice[i].PrintPretty(indent, i == NodesAfterRandomRollDice.Count - 1);
+            }
+        }
     }
 }

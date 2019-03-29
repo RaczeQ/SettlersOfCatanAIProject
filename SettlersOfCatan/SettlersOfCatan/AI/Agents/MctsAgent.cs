@@ -36,7 +36,10 @@ namespace SettlersOfCatan.AI.Agents
                 Console.WriteLine("No possible moves. Player ended his turn.");
                 return new EndMove();
             }
-            var result = mcts.GetNextMove(root);
+            var result = mcts.GetNextMove(ref root);
+            root.PrintPretty("", true);
+            Console.WriteLine();
+            result.PrintPretty("", true);
             nextMoves = ExpandMovesFromWinnerNode(result, new List<Move>() );
             return result.Move;
         }

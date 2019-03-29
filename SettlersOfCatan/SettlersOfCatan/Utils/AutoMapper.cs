@@ -80,6 +80,8 @@ namespace SettlersOfCatan.Utils
                         .IncludeBase<Control, Control>()
                         .ForMember(dest => dest.playerNumber,
                             src => src.MapFrom(s => s.playerNumber))
+                        .ForMember(dest => dest.Name,
+                            src => src.MapFrom(s => s.Name))
                         .ForMember(dest => dest.resources,
                             src => src.MapFrom(s => Mapper.Map<List<ResourceCard>>(s.resources)))
                         .ForMember(dest => dest.onHandDevelopmentCards,

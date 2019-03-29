@@ -11,7 +11,7 @@ namespace SettlersOfCatan.MCTS.Models
     public class Tree
     {
         public Node Root { get; set; }
-
+        private Random _r = new Random();
 
         public Node CreateRoot(BoardState state)
         {
@@ -25,55 +25,77 @@ namespace SettlersOfCatan.MCTS.Models
 
         public Node ExtendChildrenNode(BoardState state, Node node)
         {
-            node.Children = new List<Node>();    
-            foreach (var item in state.canBuildRoad.ToList())
-            {
-                var copy = state;
-                var move = new BuildRoadMove(item);
-                node.Children.Add(new Node()
-                {
-                    Move = move,
-                    BoardState = copy.MakeMove(move),
- 
-                 });
-               
-            }
-            foreach (var item in state.canBuildNewSettlements.ToList())
-            {
-                var copy = state;
-                var move = new BuildSettlementMove(item);
-                node.Children.Add(new Node()
-                {
-                    Move = move,
-                    BoardState = copy.MakeMove(move)
-                });
+            node.Children = new List<Node>();
 
-            }
-            foreach (var item in state.canUpgradeSettlement.ToList())
+            if (state.canBuildNewSettlements.Any())
             {
-                var copy = state;
-                var move = new BuildCityMove(item);
+                var sortedSettlements = state.canBuildNewSettlements
+                .OrderByDescending(
+                    s => s.adjacentTiles
+                        .Sum(t => t.getResourceType() != Board.ResourceType.Desert
+                            ? BoardState.CHIP_MULTIPLIERS[t.numberChip.numberValue]
+                            : 0)
+                );
+                var move = new BuildSettlementMove(sortedSettlements.First());
                 node.Children.Add(new Node()
                 {
                     Move = move,
-                    BoardState = copy.MakeMove(move)
+                    BoardState = state.MakeMove(move),
                 });
-
             }
-            foreach (var toBuy in state.resourcesAvailableToBuy.ToList().Where(x=> x.Value))
+
+            if (state.canUpgradeSettlement.Any())
+            {
+                var sortedCities = state.canUpgradeSettlement
+                .OrderByDescending(
+                    s => s.adjacentTiles
+                        .Sum(t => t.getResourceType() != Board.ResourceType.Desert
+                            ? BoardState.CHIP_MULTIPLIERS[t.numberChip.numberValue]
+                            : 0)
+                );
+                var move = new BuildCityMove(sortedCities.First());
+                node.Children.Add(new Node()
+                {
+                    Move = move,
+                    BoardState = state.MakeMove(move),
+                });
+            }
+
+            if (state.canBuildRoad.Any())
+            {
+                var move = new BuildRoadMove(state.canBuildRoad.ElementAt(_r.Next(0, state.canBuildRoad.Count())));
+                node.Children.Add(new Node()
+                {
+                    Move = move,
+                    BoardState = state.MakeMove(move),
+                });
+            }
+
+            if (state.resourcesAvailableToSell.Values.Any(x => x) &&
+                state.resourcesAvailableToBuy.Values.Any(x => x))
             {
                 var copy = state;
-                foreach(var toSell in state.resourcesAvailableToSell.ToList().Where(x=> x.Value))
+                var amountLeft = state.playerResourcesAmounts
+                    .Where(x => state.resourcesAvailableToSell[x.Key])
+                    .ToDictionary(k => k.Key, v => v.Value - state.bankTradePrices[v.Key]);
+                var boughtResource = state.playerResourcesAcquiredPerResource
+                    .Where(x => state.resourcesAvailableToBuy[x.Key])
+                    .OrderBy(kv => kv.Value).Select(kv => kv.Key).ToList()[0];
+                var selledResource = amountLeft.OrderBy(kv => -kv.Value).Select(kv => kv.Key).ToList()[0];
+                if (boughtResource != selledResource)
                 {
-                    var copy2 = copy;
-                    var move= new BankTradeMove(toBuy.Key, toSell.Key, 1);
-                    node.Children.Add(new Node()
+                    var move = new BankTradeMove(boughtResource, selledResource, 1);
+                    if (move.CanMakeMove(copy))
                     {
-                        Move = move,
-                        BoardState = copy2.MakeMove(move)
-                    });
+                        node.Children.Add(new Node()
+                        {
+                            Move = move,
+                            BoardState = copy.MakeMove(move)
+                        });
+                    }
                 }
             }
+
             var copyState = state;
             node.Children.Add(new Node()
             {  
