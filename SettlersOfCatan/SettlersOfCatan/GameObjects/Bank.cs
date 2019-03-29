@@ -58,33 +58,35 @@ namespace SettlersOfCatan.GameObjects
         public Deck developmentCards;
         public List<ResourceCard> resources;
 
-        public Bank()
+        public Bank(bool initialize = true)
         {
-            resources = new List<ResourceCard>();
-            
-            //Load the development card images.
-            for (int i = 0; i < 6; i++)
+            if (initialize)
             {
-                devCardImages[i] = new Bitmap(devCardImageNames[i]);
-            }
+                resources = new List<ResourceCard>();
+                //Load the development card images.
+                for (int i = 0; i < 6; i++)
+                {
+                    devCardImages[i] = new Bitmap(devCardImageNames[i]);
+                }
 
-            developmentCards = new Deck(25);
-            //Create the development cards
-            foreach (DevelopmentCard.DevCardType dct in fourPlayerDevCards)
-            {
-                DevelopmentCard dc = new DevelopmentCard();
-                dc.setType(dct);
-                developmentCards.putCard(dc);
-            }
-            developmentCards.shuffleDeck();
+                developmentCards = new Deck(25);
+                //Create the development cards
+                foreach (DevelopmentCard.DevCardType dct in fourPlayerDevCards)
+                {
+                    DevelopmentCard dc = new DevelopmentCard();
+                    dc.setType(dct);
+                    developmentCards.putCard(dc);
+                }
+                developmentCards.shuffleDeck();
 
-            for (int i = 0; i < 19; i ++)
-            {
-                resources.Add(new ResourceCard(Board.ResourceType.Brick));
-                resources.Add(new ResourceCard(Board.ResourceType.Ore));
-                resources.Add(new ResourceCard(Board.ResourceType.Sheep));
-                resources.Add(new ResourceCard(Board.ResourceType.Wheat));
-                resources.Add(new ResourceCard(Board.ResourceType.Wood));
+                for (int i = 0; i < 19; i++)
+                {
+                    resources.Add(new ResourceCard(Board.ResourceType.Brick));
+                    resources.Add(new ResourceCard(Board.ResourceType.Ore));
+                    resources.Add(new ResourceCard(Board.ResourceType.Sheep));
+                    resources.Add(new ResourceCard(Board.ResourceType.Wheat));
+                    resources.Add(new ResourceCard(Board.ResourceType.Wood));
+                }
             }
         }
 

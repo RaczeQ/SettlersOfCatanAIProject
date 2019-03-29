@@ -8,10 +8,11 @@ using System.Windows.Forms;
 
 namespace SettlersOfCatan.GameObjects
 {
+    //public static 
     public abstract class Tile : PictureBox, Card
     {
         public int index = -1;
-        private Guid randomGuid = Guid.NewGuid();
+        private Guid guid = Guid.NewGuid();
 
         private Point position;
 
@@ -53,7 +54,7 @@ namespace SettlersOfCatan.GameObjects
             Tile t = (Tile)obj;
             if (this.index == -1 && t.index == -1)
             {
-                return this.randomGuid == t.randomGuid;
+                return this.guid == t.guid;
             }
             return this.index == t.index;
         }

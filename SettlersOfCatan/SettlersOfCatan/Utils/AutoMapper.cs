@@ -31,6 +31,7 @@ namespace SettlersOfCatan.Utils
 
                     cfg.CreateMap<NumberChip, NumberChip>()
                         .IncludeBase<Control, Control>()
+                        .ForCtorParam("initialize", opt => opt.MapFrom(src => false))
                         .ForCtorParam("numberValue", opt => opt.MapFrom(src => src.numberValue));
 
                     cfg.CreateMap<Control.ControlCollection, Control.ControlCollection>()
@@ -56,6 +57,7 @@ namespace SettlersOfCatan.Utils
 
                     cfg.CreateMap<Settlement, Settlement>()
                         .IncludeBase<Control, Control>()
+                        .ForCtorParam("initialize", opt => opt.MapFrom(src => false))
                         .ForCtorParam("position", opt => opt.MapFrom(src => src.position))
                         .ForMember(dest => dest.connectedRoads, opt => opt.Ignore())
                         .ForMember(dest => dest.adjacentTiles, opt => opt.Ignore())
@@ -68,6 +70,7 @@ namespace SettlersOfCatan.Utils
                         .ForMember(dest => dest.owningPlayer, opt => opt.Ignore());
 
                     cfg.CreateMap<Bank, Bank>()
+                        .ForCtorParam("initialize", opt => opt.MapFrom(src => false))
                         .ForMember(dest => dest.developmentCards,
                             src => src.MapFrom(s => s.developmentCards.CopyDeck()))
                         .ForMember(dest => dest.resources,

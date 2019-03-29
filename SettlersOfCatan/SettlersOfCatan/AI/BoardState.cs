@@ -163,7 +163,7 @@ namespace SettlersOfCatan.AI
 
         public static void RollDice(ref BoardState state)
         {
-            var dice = new Dice()
+            var dice = new Dice(false)
             {
                 diceRandomizer = new Random()
             };

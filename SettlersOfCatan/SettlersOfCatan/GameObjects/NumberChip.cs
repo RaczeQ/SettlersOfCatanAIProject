@@ -8,19 +8,30 @@ using System.Windows.Forms;
 
 namespace SettlersOfCatan.GameObjects
 {
+    
     [Serializable]
     public class NumberChip : PictureBox, Card
     {
+        private static int[] chipNumbers = { 0, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12 };
+        private static IDictionary<int, Bitmap> bitmaps;
         public int numberValue { get; private set; } = 0;
 
         public bool blocked { get; private set; } = false;
 
-        public NumberChip(int numberValue)
+        public NumberChip(int numberValue, bool initialize = true)
         {
+            if (initialize)
+            {
+                bitmaps = new Dictionary<int, Bitmap>();
+                foreach (int i in chipNumbers)
+                {
+                    bitmaps.Add(i, new Bitmap("Resources/" + i + "_Chip.png"));
+                }
+            }
             this.numberValue = numberValue;
             if (numberValue != 0)
             {
-                this.BackgroundImage = new Bitmap("Resources/" + numberValue + "_Chip.png");
+                this.BackgroundImage = bitmaps[numberValue];
             }
         }
 

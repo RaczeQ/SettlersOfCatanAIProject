@@ -15,7 +15,7 @@ namespace SettlersOfCatan.AI.Agents
     public class MctsAgent : IAgent
     {
         private Random _r = new Random();
-        private List<Move> nextMoves = new List<Move>();
+        private static List<Move> nextMoves = new List<Move>();
         
         MonteCarloTreeSearch mcts = new MonteCarloTreeSearch();
         public Move makeMove(BoardState state)

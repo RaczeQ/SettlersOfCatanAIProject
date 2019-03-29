@@ -20,10 +20,12 @@ namespace SettlersOfCatan.GameObjects
         private Bitmap[] yellowDiceFaces = new Bitmap[6];
         private Bitmap[] redDiceFaces = new Bitmap[6];
 
-        public Dice()
+        public Dice(bool initialize = true)
         {
-            InitializeComponent();
-
+            if (initialize)
+            {
+                InitializeComponent();
+            }
         }
 
         private int diceValue1 = 0;
