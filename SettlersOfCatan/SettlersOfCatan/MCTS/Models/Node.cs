@@ -26,6 +26,5 @@ namespace SettlersOfCatan.MCTS.Models
         public List<Node> Children { get; set; }
 
 
-
     }
 }

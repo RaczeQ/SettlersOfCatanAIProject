@@ -56,8 +56,8 @@ namespace SettlersOfCatan.MCTS.Algorithm
 
             try
             {
-                Console.WriteLine("Start execute node. Current player: {0}. Available children: {1}. Depth: {2}. Wins: {3}. Visits {4}",
-                    root.BoardState.player.playerNumber, root.Children.Count(), root.Depth, root.WinsNum, root.VisitsNum);
+                Console.WriteLine("Start execute node. Current player: {0}. Available children: {1}. Wins: {3}. Visits {4}",
+                    root.BoardState.player.playerNumber, root.Children.Count(), root.WinsNum, root.VisitsNum);
             }
             catch (Exception) { }
 
@@ -102,8 +102,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
                     root.RolloutScore = node.RolloutScore;
                 }
             }
-            Console.WriteLine("Return from node. Player {0}. Wins: {1}. Visits {2}", root.BoardState.player.playerNumber, root.WinsNum, root.VisitsNum);
-            Console.WriteLine(" ======================> END ON TREE DEPTH => " + iter);
+            Console.WriteLine(" ======================> END ON TREE DEPTH => {0}, Wins {1}, visits {2}" + iter, root.WinsNum, root.VisitsNum);
 
             return root;
         }
