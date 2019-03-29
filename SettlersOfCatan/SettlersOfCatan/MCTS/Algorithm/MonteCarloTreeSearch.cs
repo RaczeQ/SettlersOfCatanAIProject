@@ -13,7 +13,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
 {
     public class MonteCarloTreeSearch : IMonteCarloTreeSearch
     {
-        readonly int MAX_TIME = 100;
+        readonly int MAX_TIME = 20;
         Tree tree = new Tree();
         int CurrentPlayerNum { get; set; }
 
@@ -56,11 +56,11 @@ namespace SettlersOfCatan.MCTS.Algorithm
 
             try
             {
-                Console.WriteLine("Start execute node. Current player: {0}. Available children: {1}. Wins: {3}. Visits {4}",
-                    root.BoardState.player.playerNumber, root.Children.Count(), root.WinsNum, root.VisitsNum);
+                Console.WriteLine("Start execute node. Current player: {0} Available children: {1} Wins {2} Visits {3}",
+                    root.BoardState.player.playerNumber, root.Children.Count, root.WinsNum, root.VisitsNum);
             }
-            catch (Exception) { }
-
+            catch(Exception) { }
+          
             if ((root.Children == null || root.Children.Count == 0) || (root.Move != null && root.Move.GetType() == typeof(EndMove)))
             {
                 if(root.Move != null && root.Move.GetType() == typeof(EndMove))
@@ -70,10 +70,23 @@ namespace SettlersOfCatan.MCTS.Algorithm
                 var rootWins = root.WinsNum;
 
                 var rootWithChangesPlayer = ChangeToNextPlayer(root.BoardState);
-                rootWithChangesPlayer = await MakeSelection(rootWithChangesPlayer, cancellationToken, iter);
+
+                if (root.NodesAfterRandomRollDice.Any(x => x.BoardState.RollDiceToCurentState == rootWithChangesPlayer.BoardState.RollDiceToCurentState))
+                {
+                    var node = root.NodesAfterRandomRollDice.Where(x => x.BoardState.RollDiceToCurentState == rootWithChangesPlayer.BoardState.RollDiceToCurentState).FirstOrDefault();
+                    Console.WriteLine("Node was copied from previous round");
+                    rootWithChangesPlayer = await MakeSelection(node, cancellationToken, iter);
+                }
+                else
+                {
+                    root.NodesAfterRandomRollDice.Add(rootWithChangesPlayer);
+                    rootWithChangesPlayer = await MakeSelection(rootWithChangesPlayer, cancellationToken, iter);
+
+                }
 
                 root.VisitsNum = rootVisits + 1;
                 root.WinsNum = rootWins + rootWithChangesPlayer.RolloutScore;
+                root.RolloutScore = rootWithChangesPlayer.RolloutScore;
                 Console.WriteLine("Ended switch. Wins {0}", (root!=null ? root.WinsNum.ToString() : "not known"));
             }
             else
