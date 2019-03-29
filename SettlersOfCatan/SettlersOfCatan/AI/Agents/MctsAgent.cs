@@ -31,7 +31,7 @@ namespace SettlersOfCatan.AI.Agents
 
             Tree tree = new Tree();
             var root = tree.CreateRoot(newState);
-            if (root.Children.Count == 0)
+            if (root.Children.Count == 0 || root.Children.Count == 1 && root.Children.FirstOrDefault().Move.GetType() == typeof(EndMove) )
             {
                 Console.WriteLine("No possible moves. Player ended his turn.");
                 return new EndMove();

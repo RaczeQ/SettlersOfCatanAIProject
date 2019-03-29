@@ -13,7 +13,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
 {
     public class MonteCarloTreeSearch : IMonteCarloTreeSearch
     {
-        readonly int MAX_TIME = 30;
+        readonly int MAX_TIME = 100;
         Tree tree = new Tree();
         int CurrentPlayerNum { get; set; }
 
@@ -38,7 +38,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
             {
                 try
                 {
-                    root = await MakeSelection(root, tokenSource.Token);
+                    root = await MakeSelection(root, tokenSource.Token, 0);
                 } catch (OperationCanceledException)
                 {
                     return root;
@@ -47,29 +47,35 @@ namespace SettlersOfCatan.MCTS.Algorithm
         }
 
 
-        async Task<Node> MakeSelection(Node root, CancellationToken cancellationToken)
+        async Task<Node> MakeSelection(Node root, CancellationToken cancellationToken, int iter)
         {
+            iter++;
             if (cancellationToken.IsCancellationRequested)
                 throw new TaskCanceledException();
 
-            Console.WriteLine("Start execute node. Current player: {0}. Available children: {1}. Depth: {2}. Wins: {3}. Visits {4}",
-                root.BoardState.player.playerNumber, root.Children.Count(), root.Depth, root.WinsNum, root.VisitsNum);
-
-            if (root.Children.Count == 0)
+            try
             {
+                Console.WriteLine("Start execute node. Current player: {0}. Available children: {1}. Depth: {2}. Wins: {3}. Visits {4}",
+                    root.BoardState.player.playerNumber, root.Children.Count(), root.Depth, root.WinsNum, root.VisitsNum);
+            }
+            catch (Exception) { }
+
+            if ((root.Children == null || root.Children.Count == 0) || (root.Move != null && root.Move.GetType() == typeof(EndMove)))
+            {
+                if(root.Move != null && root.Move.GetType() == typeof(EndMove))
+                    Console.WriteLine(String.Format("MOVE -> END MOVE"));
+
+
+                var visitsBeforeChange = root.VisitsNum;
                 root = ChangeToNextPlayer(root.BoardState);
                 Console.WriteLine(String.Format("Player switched to {0}", root.BoardState.player.playerNumber));
-                root = await MakeSelection(root, cancellationToken);
-                Console.WriteLine("Swich ended. Wins {0}", (root!=null ? root.WinsNum.ToString() : "not known"));
+                root = await MakeSelection(root, cancellationToken, iter);
+                root.VisitsNum = visitsBeforeChange + 1;
+                Console.WriteLine("ENDED switch. Wins {0}", (root!=null ? root.WinsNum.ToString() : "not known"));
             }
             else
             {
                 var node = UCT.SelectNodeBasedOnUcb(root);
-
-                //if(node.Move.GetType() == typeof(EndMove))
-                //{
-
-                //}
 
                 if (node.VisitsNum == 0)
                 {
@@ -83,7 +89,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
                 else
                 {
                     MakeExpansion(node);
-                    node = await MakeSelection(node, cancellationToken);
+                    node = await MakeSelection(node, cancellationToken, iter);
                 }
                 if (node.VisitsNum != 0)
                 {
@@ -93,11 +99,14 @@ namespace SettlersOfCatan.MCTS.Algorithm
                 }
             }
             Console.WriteLine("Return from node. Player {0}. Wins: {1}. Visits {2}", root.BoardState.player.playerNumber, root.WinsNum, root.VisitsNum);
+            Console.WriteLine(" ======================> KONIEC ITERACJ ===================> " + iter);
+
             return root;
         }
 
         Node ChangeToNextPlayer(BoardState state)
         {
+            Console.WriteLine(" ZMIENIAM GRACZA???? czy nie . oBCNY GRACZ TO {0}" + state.player.playerNumber);
             var changedState = state.ChangeToNextPlayer();
             BoardState.RollDice(ref changedState);
             return tree.CreateRoot(changedState);

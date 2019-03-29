@@ -74,11 +74,13 @@ namespace SettlersOfCatan.MCTS.Models
                     });
                 }
             }
-            //node.Children.Add(new Node()
-            //{
-            //    BoardState = node.BoardState,
-            //    Move = new EndMove()
-            //});
+            var copyState = state;
+            node.Children.Add(new Node()
+            {  
+                Move = new EndMove(),
+                Children = new List<Node>(),
+                BoardState = copyState.MakeMove(new EndMove())
+            });
             return node;
         }
 
