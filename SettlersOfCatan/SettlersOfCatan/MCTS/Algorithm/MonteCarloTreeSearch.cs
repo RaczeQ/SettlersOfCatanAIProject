@@ -13,7 +13,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
 {
     public class MonteCarloTreeSearch : IMonteCarloTreeSearch
     {
-        readonly int MAX_TIME = 20;
+        readonly int MAX_TIME = 100;
         Tree tree = new Tree();
         int CurrentPlayerNum { get; set; }
 
@@ -89,11 +89,11 @@ namespace SettlersOfCatan.MCTS.Algorithm
                 }
                 else
                 {
-                    if (node.Move.GetType() != typeof(EndMove))
-                    {
+                  //  if (node.Move.GetType() != typeof(EndMove))
+                  //  {
                         MakeExpansion(node);
                         node = await MakeSelection(node, cancellationToken, iter);
-                    }
+                   // }
                 }
                 if (node.VisitsNum != 0)
                 {
@@ -102,7 +102,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
                     root.RolloutScore = node.RolloutScore;
                 }
             }
-            Console.WriteLine(" ======================> END ON TREE DEPTH => {0}, Wins {1}, visits {2}" + iter, root.WinsNum, root.VisitsNum);
+            Console.WriteLine(" ======================> END ON TREE DEPTH => {0}, Wins {1}, visits {2}" , iter, root.WinsNum, root.VisitsNum);
 
             return root;
         }

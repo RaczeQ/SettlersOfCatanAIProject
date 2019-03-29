@@ -39,7 +39,7 @@ namespace SettlersOfCatan.AI
 
         public Bank bank { get; set; }
         public Player player { get; set; }
-
+        public int RollDiceToCurentState { get; set; }
         private void CopyGameState(List<Road> roads, List<Settlement> settlements, List<Harbor> harbors,
             List<TerrainTile> terrainTiles, List<Player> players, Player currentPlayer)
         {
@@ -168,6 +168,7 @@ namespace SettlersOfCatan.AI
                 diceRandomizer = new Random()
             };
             var rollValue = dice.roll();
+            state.RollDiceToCurentState = rollValue;
             if (rollValue != 7)
             {
                 foreach (TerrainTile tt in state.terrainTiles)
