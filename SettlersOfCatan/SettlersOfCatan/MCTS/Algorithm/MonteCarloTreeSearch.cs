@@ -21,7 +21,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
         public Node GetNextMove(Node root)
         {
             CurrentPlayerNum = root.BoardState.player.playerNumber;
-            root.Depth = 0;
+ 
             Console.WriteLine(String.Format("Start MCTS. Current player number: {0}", CurrentPlayerNum));
 
             root = MakeSelectionStarter(root).Result;
