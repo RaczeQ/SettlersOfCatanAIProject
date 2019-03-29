@@ -13,7 +13,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
 {
     public class MonteCarloTreeSearch : IMonteCarloTreeSearch
     {
-        readonly int MAX_TIME = 100;
+        readonly int MAX_TIME = 20;
         Tree tree = new Tree();
         int CurrentPlayerNum { get; set; }
 
@@ -66,11 +66,14 @@ namespace SettlersOfCatan.MCTS.Algorithm
                     Console.WriteLine(String.Format("MOVE -> END MOVE"));
 
 
-                var visitsBeforeChange = root.VisitsNum;
-                root = ChangeToNextPlayer(root.BoardState);
-                Console.WriteLine(String.Format("Player switched to {0}", root.BoardState.player.playerNumber));
-                root = await MakeSelection(root, cancellationToken, iter);
-                root.VisitsNum = visitsBeforeChange + 1;
+                var rootVisits = root.VisitsNum; 
+                var rootWins = root.WinsNum;
+
+                var rootWithChangesPlayer = ChangeToNextPlayer(root.BoardState);
+                rootWithChangesPlayer = await MakeSelection(rootWithChangesPlayer, cancellationToken, iter);
+
+                root.VisitsNum = rootVisits + 1;
+                root.WinsNum = rootWins + rootWithChangesPlayer.RolloutScore;
                 Console.WriteLine("ENDED switch. Wins {0}", (root!=null ? root.WinsNum.ToString() : "not known"));
             }
             else
@@ -88,8 +91,11 @@ namespace SettlersOfCatan.MCTS.Algorithm
                 }
                 else
                 {
-                    MakeExpansion(node);
-                    node = await MakeSelection(node, cancellationToken, iter);
+                    if (node.Move.GetType() != typeof(EndMove))
+                    {
+                        MakeExpansion(node);
+                        node = await MakeSelection(node, cancellationToken, iter);
+                    }
                 }
                 if (node.VisitsNum != 0)
                 {
@@ -106,7 +112,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
 
         Node ChangeToNextPlayer(BoardState state)
         {
-            Console.WriteLine(" ZMIENIAM GRACZA???? czy nie . oBCNY GRACZ TO {0}" + state.player.playerNumber);
+            Console.WriteLine(" ZMIENIAM GRACZA???? czy nie . OBCNY GRACZ TO {0}" + state.player.playerNumber);
             var changedState = state.ChangeToNextPlayer();
             BoardState.RollDice(ref changedState);
             return tree.CreateRoot(changedState);
@@ -117,7 +123,6 @@ namespace SettlersOfCatan.MCTS.Algorithm
             node = tree.ExtendChildrenNode(node.BoardState, node);
         }
 
-     
         int MakeRollout(Node node)
         {
             var winer = node.BoardState.GetWinnerOfRandomGame();
