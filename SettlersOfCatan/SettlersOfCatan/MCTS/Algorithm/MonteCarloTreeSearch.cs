@@ -18,13 +18,13 @@ namespace SettlersOfCatan.MCTS.Algorithm
         int CurrentPlayerNum { get; set; }
 
 
-        public Node GetNextMove(ref Node root)
+        public Node GetNextMove(Node root)
         {
             CurrentPlayerNum = root.BoardState.player.playerNumber;
  
             Console.WriteLine(String.Format("Start MCTS. Current player number: {0}", CurrentPlayerNum));
 
-            MakeSelectionStarter(ref root);
+            root = MakeSelectionStarter(root);
 
             var nextMove = root.Children.OrderByDescending(x => (x.TotalScore)).FirstOrDefault();
             Console.WriteLine("MCTS: visits number: {0}, wins number {1}, next move: {2}", root.VisitsNum, root.WinsNum, nextMove.Move == null ? "no available moves" : nextMove.Move.ToString());
@@ -32,24 +32,24 @@ namespace SettlersOfCatan.MCTS.Algorithm
             return nextMove;
         }
 
-        private void MakeSelectionStarter(ref Node root)
+        private Node MakeSelectionStarter(Node root)
         {
             CancellationTokenSource tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(MAX_TIME));
             while (true)
             {
                 try
                 {
-                    MakeSelection(ref root, tokenSource.Token, 0);
+                    root = MakeSelection(root, tokenSource.Token, 0);
                     root.PrintPretty("", true);
                 } catch (OperationCanceledException)
                 {
-                    break;
+                    return root;
                 }
             }
         }
 
 
-        private void MakeSelection(ref Node root, CancellationToken cancellationToken, int iter)
+        private Node MakeSelection(Node root, CancellationToken cancellationToken, int iter)
         {
             iter++;
             if (cancellationToken.IsCancellationRequested)
@@ -76,12 +76,12 @@ namespace SettlersOfCatan.MCTS.Algorithm
                 {
                     var node = root.NodesAfterRandomRollDice.Where(x => x.BoardState.RollDiceToCurentState == rootWithChangesPlayer.BoardState.RollDiceToCurentState).FirstOrDefault();
                     Console.WriteLine("Node was copied from previous round");
-                    MakeSelection(ref node, cancellationToken, iter);
+                    rootWithChangesPlayer = MakeSelection(node, cancellationToken, iter);
                 }
                 else
                 {
                     root.NodesAfterRandomRollDice.Add(rootWithChangesPlayer);
-                    MakeSelection(ref rootWithChangesPlayer, cancellationToken, iter);
+                    rootWithChangesPlayer = MakeSelection(rootWithChangesPlayer, cancellationToken, iter);
                 }
 
                 root.VisitsNum = rootVisits + 1;
@@ -102,8 +102,8 @@ namespace SettlersOfCatan.MCTS.Algorithm
                 }
                 else if (node.Move.GetType() != typeof(EndMove))
                 {
-                    MakeExpansion(ref node);
-                    MakeSelection(ref node, cancellationToken, iter);
+                    node = MakeExpansion(node);
+                    node = MakeSelection(node, cancellationToken, iter);
                 }
                 if (node.VisitsNum != 0)
                 {
@@ -113,6 +113,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
                 }
             }
             Console.WriteLine(" ======================> END ON TREE DEPTH => {0}, Wins {1}, visits {2}" , iter, root.WinsNum, root.VisitsNum);
+            return root;
         }
 
         private Node ChangeToNextPlayer(BoardState state)
@@ -122,9 +123,9 @@ namespace SettlersOfCatan.MCTS.Algorithm
             return tree.CreateRoot(changedState);
         }
 
-        void MakeExpansion(ref Node node)
+        private Node MakeExpansion(Node node)
         {
-            node = tree.ExtendChildrenNode(node.BoardState, node);
+            return tree.ExtendChildrenNode(node.BoardState, node);
         }
 
         int MakeRollout(Node node)
