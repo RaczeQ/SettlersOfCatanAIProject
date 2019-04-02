@@ -17,6 +17,7 @@ using SettlersOfCatan.AI;
 using SettlersOfCatan.Eventss;
 using SettlersOfCatan.GameObjects;
 using SettlersOfCatan.Utils;
+using SettlersOfCatan.Results;
 
 namespace SettlersOfCatan
 {
@@ -734,9 +735,9 @@ namespace SettlersOfCatan
                 this.Refresh();
                 endGame = true;
                 Console.WriteLine(winningPlayer.getName() + " has won!");
+                FileWriter.SaveResultToFile(winningPlayer.getName());
                 this.Close();
             }
-
             return endGame;
         }
 

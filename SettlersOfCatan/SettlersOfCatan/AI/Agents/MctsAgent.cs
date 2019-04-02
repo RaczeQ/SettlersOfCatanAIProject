@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using SettlersOfCatan.GameObjects;
 using SettlersOfCatan.MCTS.Algorithm;
 using SettlersOfCatan.MCTS.Models;
 using SettlersOfCatan.Moves;
+using SettlersOfCatan.Results;
 
 namespace SettlersOfCatan.AI.Agents
 {
@@ -41,7 +43,9 @@ namespace SettlersOfCatan.AI.Agents
             root.PrintPretty("", true);
             Console.WriteLine();
             result.PrintPretty("", true);
-            nextMoves = ExpandMovesFromWinnerNode(result, new List<Move>() );
+            nextMoves = ExpandMovesFromWinnerNode(result, new List<Move>());
+
+            SaveResult(root, result);
             return result.Move;
         }
 
@@ -55,6 +59,14 @@ namespace SettlersOfCatan.AI.Agents
             return ExpandMovesFromWinnerNode(nextNode, moves);       
         }
 
+        private void SaveResult(Node root, Node nextMove)
+        {
+            var deepestNodeValue = root.GetTheDeepestNodeValue(root, 0);
+            var result = String.Format("{0}, {1}, {2}", root.WinsNum.ToString(), root.VisitsNum.ToString(), deepestNodeValue);
+            FileWriter.SaveResultToFile(result);
+        }
+
+    
         public Road placeFreeRoad(BoardState state)
         { 
             return state.AvailableRoads.ElementAt(_r.Next(0, state.AvailableRoads.Count()));

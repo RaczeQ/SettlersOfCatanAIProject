@@ -10,6 +10,8 @@ namespace SettlersOfCatan
 {
     static class Program
     {
+        public static int executeGameNumber = 1;
+       
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -19,17 +21,20 @@ namespace SettlersOfCatan
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             AutoMapperRegister.RegisterMapping();
-            var numberOfSimulations = 10;
+            var numberOfSimulations = 4;
 
-            Parallel.For(0, numberOfSimulations, 
-                new ParallelOptions { MaxDegreeOfParallelism = Convert.ToInt32(Math.Ceiling((Environment.ProcessorCount * 0.75) * 2.0)) },
-                sim =>
-                {
-                    Console.WriteLine("{0}, Thread Id={1} START", sim, Thread.CurrentThread.ManagedThreadId);
-                    RunBoard(new String[] {"MCTS", "Aggressive"});
-                    Console.WriteLine("{0}, Thread Id={1} FINISH", sim, Thread.CurrentThread.ManagedThreadId);
-                }
-            );
+           // while (executeGameNumber < 3)
+          //  {
+            Parallel.For(0, numberOfSimulations,
+            new ParallelOptions { MaxDegreeOfParallelism = Convert.ToInt32(Math.Ceiling((Environment.ProcessorCount * 0.75) * 2.0)) },
+            sim =>
+            {
+                Console.WriteLine("{0}, Thread Id={1} START", sim, Thread.CurrentThread.ManagedThreadId);
+                RunBoard(new String[] { "MCTS", "Aggressive" });
+                Console.WriteLine("{0}, Thread Id={1} FINISH", sim, Thread.CurrentThread.ManagedThreadId);
+            });
+         //       executeGameNumber++;
+         //   }
         }
 
         [STAThread]

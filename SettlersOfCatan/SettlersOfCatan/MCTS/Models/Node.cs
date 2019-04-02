@@ -62,9 +62,9 @@ namespace SettlersOfCatan.MCTS.Models
                 Console.Write("|-");
                 indent += "| ";
             }
-            var moveName = 
-                Move == null ? 
-                    $"Root[{BoardState.RollDiceToCurentState}][{BoardState.CurrentStateHashCode}]" : 
+            var moveName =
+                Move == null ?
+                    $"Root[{BoardState.RollDiceToCurentState}][{BoardState.CurrentStateHashCode}]" :
                     (VisitsNum == 0 ? $"({Move.GetType().Name})" : $"{Move.GetType().Name}");
             Console.WriteLine($"[{GameObjects.Player.playerColorNames[BoardState.player.playerNumber]}] {moveName} {Depth} ({WinsNum}/{VisitsNum})");
 
@@ -79,5 +79,18 @@ namespace SettlersOfCatan.MCTS.Models
                     NodesAfterRandomRollDice[i].PrintPretty(indent, i == NodesAfterRandomRollDice.Count - 1);
             }
         }
+
+        public int GetTheDeepestNodeValue(Node node, int max)
+        {
+            if (node.Children == null || node.Children.Count == 0)
+                return max;
+            foreach (var item in node.Children)
+            {
+                if (item.Depth > max)
+                    max = item.Depth;
+                max =  GetTheDeepestNodeValue(item, max);     
+            }
+            return max;
+        }
     }
-}
+} 
