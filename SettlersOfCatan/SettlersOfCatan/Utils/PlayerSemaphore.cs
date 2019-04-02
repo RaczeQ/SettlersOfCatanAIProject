@@ -9,20 +9,20 @@ namespace SettlersOfCatan.Utils
 {
     public static class PlayerSemaphore
     {
-        public static bool isLocked { get; private set; } = false;
+        public static bool IsLocked { get; private set; } = false;
         public static void lockGame()
         {
-            isLocked = true;
+            IsLocked = true;
         }
 
         public static void unlockGame()
         {
-            isLocked = false;
+            IsLocked = false;
         }
 
         public static async Task waitForEventEnd()
         {
-            while (isLocked) await Task.Delay(100);
+            while (IsLocked) await Task.Delay(100);
         }
     }
 }

@@ -21,7 +21,9 @@ namespace SettlersOfCatan.GameObjects
 
         public Player owningPlayer { get; set; }
         public bool isCity { get; private set; } = false;
+        [ThreadStatic]
         private static Bitmap settlementBitmap;
+        [ThreadStatic]
         private static Bitmap cityBitmap;
         private Bitmap image;
         

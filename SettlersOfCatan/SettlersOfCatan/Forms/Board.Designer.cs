@@ -1,4 +1,6 @@
-﻿namespace SettlersOfCatan
+﻿using System.Windows.Forms;
+
+namespace SettlersOfCatan
 {
     partial class Board
     {
@@ -599,6 +601,7 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1268, 735);
+            this.WindowState = FormWindowState.Maximized;
             this.Controls.Add(this.lstGameEvents);
             this.Controls.Add(this.pnlPlayerInfo);
             this.Controls.Add(this.pnlDevelopmentCardToolTip);

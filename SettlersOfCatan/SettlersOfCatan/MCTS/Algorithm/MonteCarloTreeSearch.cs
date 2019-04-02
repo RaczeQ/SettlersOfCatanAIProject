@@ -13,7 +13,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
 {
     public class MonteCarloTreeSearch : IMonteCarloTreeSearch
     {
-        readonly int MAX_TIME = 20;
+        private readonly int MAX_TIME = 10;
         Tree tree = new Tree();
         int CurrentPlayerNum { get; set; }
 

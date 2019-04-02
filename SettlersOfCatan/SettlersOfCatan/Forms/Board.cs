@@ -22,6 +22,7 @@ namespace SettlersOfCatan
 {
     public partial class Board : Form, EvtOwnr
     {
+        [ThreadStatic]
         public static Bank TheBank = new Bank();
 
         public const int AITurnDelayMilliseconds = 10;
@@ -93,6 +94,7 @@ namespace SettlersOfCatan
         }
 
         public enum GameState { Setup, FirstPlayer, FirstDiceRoll, FirstSettlement, FirstResources, DiceRoll, PlayerTurn, End };
+        [ThreadStatic]
         public static Event currentGameEvent;
         public GameState currentGameState;
 
@@ -111,6 +113,7 @@ namespace SettlersOfCatan
         public Board(bool generateOnStart)
         {
             InitializeComponent();
+            TheBank = new Bank();
 
             this.pnlBoardArea.BackColor = Color.Transparent; //Set the color to transparent. The color is white by default so it is visible in the editor.
 
@@ -129,6 +132,30 @@ namespace SettlersOfCatan
             {
                 addEventText("Welcome to catan. When you are ready, click on Set Up Board to begin.");
             }
+        }
+
+        public Board(String[] agents, bool start) : this(true)
+        {
+            var numOfPlayers = agents.Length;
+            this.numberOfPlayers.Value = numOfPlayers;
+            generatePlayers();
+            for (int i = 0; i < numOfPlayers; i++)
+            {
+                playerPanels[i].SelectAgent(agents[i]);
+            }
+
+            if (start)
+            {
+//                _startGame();
+                this.Shown += AfterLoading;
+            }
+            
+        }
+
+        private void AfterLoading(object sender, EventArgs e)
+        {
+            this.Activated -= AfterLoading;
+            _startGame();
         }
 
         private void numberOfPlayersChanged(object sender, EventArgs e)
@@ -500,7 +527,7 @@ namespace SettlersOfCatan
                 set.adjacentTiles.AddRange(adjTiles);
             }
 
-            debugSaveBoardData();
+//            debugSaveBoardData();
         }
 
         public void debugSaveBoardData()
@@ -706,6 +733,8 @@ namespace SettlersOfCatan
                 addEventText(winningPlayer.getName() + " has won!");
                 this.Refresh();
                 endGame = true;
+                Console.WriteLine(winningPlayer.getName() + " has won!");
+                this.Close();
             }
 
             return endGame;
@@ -728,7 +757,7 @@ namespace SettlersOfCatan
         private void _setupBoard()
         {
             distributeTiles();
-            debugSaveBoardData();
+//            debugSaveBoardData();
             this.btnSetupBoard.Hide();
             this.btnStartGame.Show();
         }

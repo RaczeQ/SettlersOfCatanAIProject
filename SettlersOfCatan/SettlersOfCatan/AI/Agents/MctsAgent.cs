@@ -15,12 +15,13 @@ namespace SettlersOfCatan.AI.Agents
     public class MctsAgent : IAgent
     {
         private Random _r = new Random();
+        [ThreadStatic]
         private static List<Move> nextMoves = new List<Move>();
         
         MonteCarloTreeSearch mcts = new MonteCarloTreeSearch();
         public Move makeMove(BoardState state)
         {
-            if (nextMoves.Count > 0)
+            if (nextMoves != null && nextMoves.Count > 0)
             {
                 var move = nextMoves[0];
                 nextMoves.Remove(move);

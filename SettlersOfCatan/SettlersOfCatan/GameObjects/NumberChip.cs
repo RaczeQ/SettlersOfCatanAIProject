@@ -13,6 +13,7 @@ namespace SettlersOfCatan.GameObjects
     public class NumberChip : PictureBox, Card
     {
         private static int[] chipNumbers = { 0, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12 };
+        [ThreadStatic]
         private static IDictionary<int, Bitmap> bitmaps;
         public int numberValue { get; private set; } = 0;
 

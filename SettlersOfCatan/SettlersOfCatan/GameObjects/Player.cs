@@ -99,6 +99,11 @@ namespace SettlersOfCatan.GameObjects
             }
         }
 
+        public void SelectAgent(string agent)
+        {
+            playerComboBox.SelectedItem = agent;
+        }
+
         public void updateScore()
         {
             score = Player.calculateVictoryPoints(!Current, this);

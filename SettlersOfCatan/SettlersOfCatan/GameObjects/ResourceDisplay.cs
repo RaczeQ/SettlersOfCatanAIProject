@@ -12,6 +12,7 @@ namespace SettlersOfCatan.GameObjects
 {
     public partial class ResourceDisplay : UserControl
     {
+        [ThreadStatic]
         private static IDictionary<Board.ResourceType, Bitmap> bitmaps;
         public Board.ResourceType type = Board.ResourceType.Desert;
         public int count = 0;

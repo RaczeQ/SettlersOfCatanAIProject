@@ -35,7 +35,7 @@ namespace SettlersOfCatan.Eventss
             }
             else
             {
-                while (PlayerSemaphore.isLocked)
+                while (PlayerSemaphore.IsLocked)
                 {
                     var move = theBoard.currentPlayer.agent.makeMove(theBoard.getBoardState());
                     executeUpdate(move, null);
