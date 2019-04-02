@@ -37,7 +37,7 @@ namespace SettlersOfCatan.Moves
         {
             if (CanMakeMove(target))
             {
-                var originalRoad = target.roads.ToList().Find(r => Equals(r, road));
+                var originalRoad = target.Roads.ToList().Find(r => Equals(r, road));
                 originalRoad.buildRoad(target.player, true);
                 target.bank.takePayment(target.player, Bank.ROAD_COST);
             }
@@ -60,8 +60,18 @@ namespace SettlersOfCatan.Moves
 
         public bool CanMakeMove(BoardState target)
         {
-            var originalRoad = target.roads.ToList().Find(r => Equals(r, road));
+            var originalRoad = target.Roads.ToList().Find(r => Equals(r, road));
             return _canMakeMove(originalRoad, target.player, target.bank);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            if (this.GetType() != obj.GetType()) return false;
+
+            BuildRoadMove move = (BuildRoadMove)obj;
+            return this.road == move.road;
         }
     }
 }

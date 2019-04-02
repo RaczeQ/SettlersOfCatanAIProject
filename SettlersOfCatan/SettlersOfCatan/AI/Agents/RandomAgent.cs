@@ -16,28 +16,28 @@ namespace SettlersOfCatan.AI.Agents
 
         public Move makeMove(BoardState state)
         {
-            if (state.canBuildNewSettlements.Any())
+            if (state.CanBuildNewSettlements.Any())
             {
                 return new BuildSettlementMove(
-                    state.canBuildNewSettlements.ElementAt(_r.Next(0, state.canBuildNewSettlements.Count())));
+                    state.CanBuildNewSettlements.ElementAt(_r.Next(0, state.CanBuildNewSettlements.Count())));
             }
-            else if (state.canUpgradeSettlement.Any())
+            else if (state.CanUpgradeSettlement.Any())
             {
                 return new BuildCityMove(
-                    state.canUpgradeSettlement.ElementAt(_r.Next(0, state.canUpgradeSettlement.Count())));
+                    state.CanUpgradeSettlement.ElementAt(_r.Next(0, state.CanUpgradeSettlement.Count())));
             }
-            else if (state.canBuildRoad.Any())
+            else if (state.CanBuildRoad.Any())
             {
-                return new BuildRoadMove(state.canBuildRoad.ElementAt(_r.Next(0, state.canBuildRoad.Count())));
+                return new BuildRoadMove(state.CanBuildRoad.ElementAt(_r.Next(0, state.CanBuildRoad.Count())));
             }
-            else if (state.resourcesAvailableToSell.Values.Any(x => x) &&
-                     state.resourcesAvailableToBuy.Values.Any(x => x))
+            else if (state.ResourcesAvailableToSell.Values.Any(x => x) &&
+                     state.ResourcesAvailableToBuy.Values.Any(x => x))
             {
-                var amountLeft = state.playerResourcesAmounts
-                    .Where(x => state.resourcesAvailableToSell[x.Key])
-                    .ToDictionary(k => k.Key, v => v.Value - state.bankTradePrices[v.Key]);
-                var boughtResource = state.playerResourcesAcquiredPerResource
-                    .Where(x => state.resourcesAvailableToBuy[x.Key])
+                var amountLeft = state.PlayerResourcesAmounts
+                    .Where(x => state.ResourcesAvailableToSell[x.Key])
+                    .ToDictionary(k => k.Key, v => v.Value - state.BankTradePrices[v.Key]);
+                var boughtResource = state.PlayerResourcesAcquiredPerResource
+                    .Where(x => state.ResourcesAvailableToBuy[x.Key])
                     .OrderBy(kv => kv.Value).Select(kv => kv.Key).ToList()[0];
                 var selledResource = amountLeft.OrderBy(kv => -kv.Value).Select(kv => kv.Key).ToList()[0];
                 if (boughtResource != selledResource)
@@ -55,12 +55,12 @@ namespace SettlersOfCatan.AI.Agents
 
         public Road placeFreeRoad(BoardState state)
         {
-            return state.availableRoads.ElementAt(_r.Next(0, state.availableRoads.Count()));
+            return state.AvailableRoads.ElementAt(_r.Next(0, state.AvailableRoads.Count()));
         }
 
         public Settlement placeFreeSettlement(BoardState state)
         {
-            return state.availableSettlements.ElementAt(_r.Next(0, state.availableSettlements.Count()));
+            return state.AvailableSettlements.ElementAt(_r.Next(0, state.AvailableSettlements.Count()));
         }
     }
 }

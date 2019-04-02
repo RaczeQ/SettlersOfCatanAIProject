@@ -12,13 +12,21 @@ namespace SettlersOfCatan.GameObjects
 {
     public partial class ResourceDisplay : UserControl
     {
-
+        private static IDictionary<Board.ResourceType, Bitmap> bitmaps;
         public Board.ResourceType type = Board.ResourceType.Desert;
         public int count = 0;
         public bool hidden = false;
 
-        public ResourceDisplay()
+        public ResourceDisplay(bool initialize = true)
         {
+            if (initialize)
+            {
+                bitmaps = new Dictionary<Board.ResourceType, Bitmap>();
+                foreach (Board.ResourceType rt in Enum.GetValues(typeof(Board.ResourceType)))
+                {
+                    bitmaps.Add(rt, new Bitmap("Resources/" + Board.iconImageResourceNames[(int)rt]));
+                }
+            }
             InitializeComponent();
         }
 
@@ -26,7 +34,7 @@ namespace SettlersOfCatan.GameObjects
         {
             type = rType;
             //Set the icon.
-            pbIcon.BackgroundImage = new Bitmap("Resources/" + Board.iconImageResourceNames[(int)type]);
+            pbIcon.BackgroundImage = bitmaps[rType];
         }
 
         public void setCount(int rCount)

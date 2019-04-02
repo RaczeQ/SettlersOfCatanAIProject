@@ -13,7 +13,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
 {
     public class MonteCarloTreeSearch : IMonteCarloTreeSearch
     {
-        readonly int MAX_TIME = 100;
+        readonly int MAX_TIME = 20;
         Tree tree = new Tree();
         int CurrentPlayerNum { get; set; }
 
@@ -62,7 +62,11 @@ namespace SettlersOfCatan.MCTS.Algorithm
             }
             catch(Exception) { }
           
-            if ((root.Children == null || root.Children.Count == 0) || (root.Move != null && root.Move.GetType() == typeof(EndMove)))
+            if (
+                (root.Children == null || root.Children.Count == 0) || 
+                (root.Move != null && root.Move.GetType() == typeof(EndMove) && 
+                 (root.NodesAfterRandomRollDice == null || root.NodesAfterRandomRollDice.Count == 0))
+                )
             {
                 if(root.Move != null && root.Move.GetType() == typeof(EndMove))
                     Console.WriteLine(String.Format("End move"));
@@ -70,11 +74,11 @@ namespace SettlersOfCatan.MCTS.Algorithm
                 var rootVisits = root.VisitsNum; 
                 var rootWins = root.WinsNum;
 
-                var rootWithChangesPlayer = ChangeToNextPlayer(root.BoardState);
+                var rootWithChangesPlayer = ChangeToNextPlayer(root);
 
-                if (root.NodesAfterRandomRollDice.Any(x => x.BoardState.RollDiceToCurentState == rootWithChangesPlayer.BoardState.RollDiceToCurentState))
+                if (root.NodesAfterRandomRollDice.Any(x => x.BoardState.CurrentStateHashCode == rootWithChangesPlayer.BoardState.CurrentStateHashCode))
                 {
-                    var node = root.NodesAfterRandomRollDice.Where(x => x.BoardState.RollDiceToCurentState == rootWithChangesPlayer.BoardState.RollDiceToCurentState).FirstOrDefault();
+                    var node = root.NodesAfterRandomRollDice.FirstOrDefault(x => x.BoardState.CurrentStateHashCode == rootWithChangesPlayer.BoardState.CurrentStateHashCode);
                     Console.WriteLine("Node was copied from previous round");
                     rootWithChangesPlayer = MakeSelection(node, cancellationToken, iter);
                 }
@@ -102,7 +106,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
                 }
                 else 
                 {
-                    if(node.Move.GetType() != typeof(EndMove))
+                    if(node.Move != null && node.Move.GetType() != typeof(EndMove) && (node.Children == null || node.Children.Count == 0))
                         node = MakeExpansion(node);
                     node = MakeSelection(node, cancellationToken, iter);
                 }
@@ -117,11 +121,11 @@ namespace SettlersOfCatan.MCTS.Algorithm
             return root;
         }
 
-        private Node ChangeToNextPlayer(BoardState state)
+        private Node ChangeToNextPlayer(Node node)
         {
-            var changedState = state.ChangeToNextPlayer();
+            var changedState = node.BoardState.ChangeToNextPlayer();
             BoardState.RollDice(ref changedState);
-            return tree.CreateRoot(changedState);
+            return tree.CreateRoot(changedState, node.Depth);
         }
 
         private Node MakeExpansion(Node node)

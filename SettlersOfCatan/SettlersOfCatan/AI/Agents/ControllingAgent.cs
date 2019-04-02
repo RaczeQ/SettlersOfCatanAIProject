@@ -15,34 +15,34 @@ namespace SettlersOfCatan.AI.Agents
 
         public Move makeMove(BoardState state)
         {
-            if (state.canBuildNewSettlements.Any())
+            if (state.CanBuildNewSettlements.Any())
             {
                 return new BuildSettlementMove(
-                    state.canBuildNewSettlements.ElementAt(_r.Next(0, state.canBuildNewSettlements.Count())));
+                    state.CanBuildNewSettlements.ElementAt(_r.Next(0, state.CanBuildNewSettlements.Count())));
             }
-            else if (state.canUpgradeSettlement.Any())
+            else if (state.CanUpgradeSettlement.Any())
             {
                 return new BuildCityMove(
-                    state.canUpgradeSettlement.ElementAt(_r.Next(0, state.canUpgradeSettlement.Count())));
+                    state.CanUpgradeSettlement.ElementAt(_r.Next(0, state.CanUpgradeSettlement.Count())));
             }
-            else if (state.canBuildRoad.Any())
+            else if (state.CanBuildRoad.Any())
             {
                 var roadId = getTheBestRoadId(state);
-                var road = state.canBuildRoad.ElementAt(roadId == null
-                    ? _r.Next(0, state.canBuildRoad.Count())
-                    : state.canBuildRoad.ToList().IndexOf(state.canBuildRoad.FirstOrDefault(x => x.id == roadId)));
+                var road = state.CanBuildRoad.ElementAt(roadId == null
+                    ? _r.Next(0, state.CanBuildRoad.Count())
+                    : state.CanBuildRoad.ToList().IndexOf(state.CanBuildRoad.FirstOrDefault(x => x.id == roadId)));
                 return new BuildRoadMove(road);
             }
-            else if (state.resourcesAvailableToSell.Values.Any(x => x) &&
-                     state.resourcesAvailableToBuy.Values.Any(x => x))
+            else if (state.ResourcesAvailableToSell.Values.Any(x => x) &&
+                     state.ResourcesAvailableToBuy.Values.Any(x => x))
             {
                 // Buy resource with lowest amount for resource with highest amount left after buy
-                var amountLeft = state.playerResourcesAmounts
-                    .Where(x => state.resourcesAvailableToSell[x.Key])
-                    .ToDictionary(k => k.Key, v => v.Value - state.bankTradePrices[v.Key]);
+                var amountLeft = state.PlayerResourcesAmounts
+                    .Where(x => state.ResourcesAvailableToSell[x.Key])
+                    .ToDictionary(k => k.Key, v => v.Value - state.BankTradePrices[v.Key]);
                 //var boughtResource = state.playerResourcesAmounts.OrderBy(kv => kv.Value).Select(kv => kv.Key).ToList()[0];
-                var boughtResource = state.playerResourcesAcquiredPerResource
-                    .Where(x => state.resourcesAvailableToBuy[x.Key])
+                var boughtResource = state.PlayerResourcesAcquiredPerResource
+                    .Where(x => state.ResourcesAvailableToBuy[x.Key])
                     .OrderBy(kv => kv.Value).Select(kv => kv.Key).ToList()[0];
                 var selledResource = amountLeft.OrderBy(kv => -kv.Value).Select(kv => kv.Key).ToList()[0];
                 if (boughtResource != selledResource)
@@ -60,7 +60,7 @@ namespace SettlersOfCatan.AI.Agents
 
         public Road placeFreeRoad(BoardState state)
         {
-            return state.availableRoads.ElementAt(_r.Next(0, state.availableRoads.Count()));
+            return state.AvailableRoads.ElementAt(_r.Next(0, state.AvailableRoads.Count()));
             //var roadId = getTheBestRoadId(state);
             //return state.canBuildRoad.ElementAt(state.canBuildRoad.ToList().IndexOf(state.canBuildRoad.Where(x => x.id == roadId).FirstOrDefault()));
         }
@@ -68,22 +68,22 @@ namespace SettlersOfCatan.AI.Agents
         public Settlement placeFreeSettlement(BoardState state)
         {
             int indexId = 0;
-            var possible_settlements = state.availableSettlements
+            var possible_settlements = state.AvailableSettlements
                 .Select(x => Mapper.Map<SimplifiedSettlement>(x))
                 .ToList();
             var rarestTitle = getOponentTheRarestResources(state);
             if (rarestTitle != null && rarestTitle?.FirstOrDefault().Key != Board.ResourceType.Desert)
-                indexId = state.availableSettlements.ToList().IndexOf(state.availableSettlements
+                indexId = state.AvailableSettlements.ToList().IndexOf(state.AvailableSettlements
                     .Where(x => x.adjacentTiles.Any(y => y.tileType == rarestTitle.FirstOrDefault().Key))
                     .FirstOrDefault());
             else
-                indexId = _r.Next(0, state.availableSettlements.Count());
-            return state.availableSettlements.ElementAt(indexId);
+                indexId = _r.Next(0, state.AvailableSettlements.Count());
+            return state.AvailableSettlements.ElementAt(indexId);
         }
 
         private List<KeyValuePair<Board.ResourceType, int>> getOponentTheRarestResources(BoardState state)
         {
-            var oponentResources = state.settlements
+            var oponentResources = state.Settlements
                 .Where(x => x.owningPlayer != null
                             && x.owningPlayer != state.player)
                 .Select(y => new
@@ -112,7 +112,7 @@ namespace SettlersOfCatan.AI.Agents
         private int? getTheBestRoadId(BoardState state)
         {
             var rarestResources = getOponentTheRarestResources(state).FirstOrDefault().Key;
-            var availableRoads = state.canBuildRoad;
+            var availableRoads = state.CanBuildRoad;
 
 
             Dictionary<int, int> roadCosts = new Dictionary<int, int>();

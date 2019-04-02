@@ -10,7 +10,7 @@ using SettlersOfCatan.Moves;
 
 namespace SettlersOfCatan.AI.Agents
 {
-    public class AggressiveAgent : IAgent
+    public class BoostedAggressiveAgent : IAgent
     {
         SimplifiedSettlementBuildAssesmentFunction settlementBuildAssesmentFunction =
             new SimplifiedSettlementBuildAssesmentFunction();
@@ -20,33 +20,56 @@ namespace SettlersOfCatan.AI.Agents
 
         public Move makeMove(BoardState state)
         {
+            var moves = new List<Tuple<double, Move>>();
+            var currentScore = state.Score;
+
             if (state.CanBuildNewSettlements.Any())
             {
+                var newState = new BoardState(state);
                 var index = settlementBuildAssesmentFunction.getNewSettlementIndex(state);
                 var settlement = state.CanBuildNewSettlements.ElementAt(index == null
                     ? _r.Next(0, state.CanBuildNewSettlements.Count())
                     : state.CanBuildNewSettlements.ToList()
                         .IndexOf(state.CanBuildNewSettlements.FirstOrDefault(x => x.id == index)));
-                return new BuildSettlementMove(settlement);
-            }
-            else if (state.CanUpgradeSettlement.Any())
-            {
-                //TODO
-                return new BuildCityMove(
-                    state.CanUpgradeSettlement.ElementAt(_r.Next(0, state.CanUpgradeSettlement.Count())));
+                var move = new BuildSettlementMove(settlement);
+                move.MakeMove(ref newState);
+                var score = newState.Score;
+                moves.Add(new Tuple<double, Move>(score - currentScore, move));
             }
 
-            else if (state.CanBuildRoad.Any())
+            if (state.CanUpgradeSettlement.Any())
             {
+                var newState = new BoardState(state);
+                var settlement = state.CanUpgradeSettlement
+                    .OrderByDescending(
+                        s => s.adjacentTiles
+                            .Sum(t => t.getResourceType() != Board.ResourceType.Desert
+                                ? BoardState.CHIP_MULTIPLIERS[t.numberChip.numberValue]
+                                : 0)
+                    );
+                var move = new BuildCityMove(settlement.First());
+                move.MakeMove(ref newState);
+                var score = newState.Score;
+                moves.Add(new Tuple<double, Move>(score - currentScore, move));
+            }
+
+            if (state.CanBuildRoad.Any())
+            {
+                var newState = new BoardState(state);
                 var index = settlementBuildAssesmentFunction.getNewRoadIndex(state);
                 var road = state.CanBuildRoad.ElementAt(index == null
                     ? _r.Next(0, state.CanBuildRoad.Count())
                     : state.CanBuildRoad.ToList().IndexOf(state.CanBuildRoad.FirstOrDefault(x => x.id == index)));
-                return new BuildRoadMove(road);
+                var move = new BuildRoadMove(road);
+                move.MakeMove(ref newState);
+                var score = newState.Score;
+                moves.Add(new Tuple<double, Move>(score - currentScore, move));
             }
-            else if (state.ResourcesAvailableToSell.Values.Any(x => x) &&
+
+            if (state.ResourcesAvailableToSell.Values.Any(x => x) &&
                      state.ResourcesAvailableToBuy.Values.Any(x => x))
             {
+                var newState = new BoardState(state);
                 var amountLeft = state.PlayerResourcesAmounts
                     .Where(x => state.ResourcesAvailableToSell[x.Key])
                     .ToDictionary(k => k.Key, v => v.Value - state.BankTradePrices[v.Key]);
@@ -59,14 +82,17 @@ namespace SettlersOfCatan.AI.Agents
                     var move = new BankTradeMove(boughtResource, selledResource, 1);
                     if (move.CanMakeMove(state))
                     {
-                        return new BankTradeMove(boughtResource, selledResource, 1);
+                        move.MakeMove(ref newState);
+                        var score = newState.Score;
+                        moves.Add(new Tuple<double, Move>(score - currentScore, move));
                     }
                 }
             }
 
-            return new EndMove();
-        }
+            moves.Add(new Tuple<double, Move>(0, new EndMove()));
 
+            return moves.OrderByDescending(t => t.Item1).First().Item2;
+        }
 
         public Road placeFreeRoad(BoardState state)
         {

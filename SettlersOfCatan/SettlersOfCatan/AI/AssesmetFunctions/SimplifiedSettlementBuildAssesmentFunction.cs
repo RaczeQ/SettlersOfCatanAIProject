@@ -24,7 +24,7 @@ namespace SettlersOfCatan.AI.AssesmetFunctions
         int? findTheBestSettlementIndex(BoardState state)
         {
             var player = state.player;
-            var potentialSettlements = state.canBuildNewSettlements
+            var potentialSettlements = state.CanBuildNewSettlements
                        .Where(x => x.owningPlayer == null
                        && x.connectedRoads.Any(y => y.owningPlayer != null && y.owningPlayer != player))
                        .Select(x => new SimplifiedSettlement
@@ -49,7 +49,7 @@ namespace SettlersOfCatan.AI.AssesmetFunctions
 
         public int? findTheBestRoadIndex(BoardState state)
         {
-            var availableRoads = state.canBuildRoad;
+            var availableRoads = state.CanBuildRoad;
             Dictionary<int, int> roadCosts = new Dictionary<int, int>();
 
             foreach (var item in availableRoads)

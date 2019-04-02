@@ -37,7 +37,7 @@ namespace SettlersOfCatan.Moves
         {
             if (CanMakeMove(target))
             {
-                var originalSettlement = target.settlements.ToList().Find(s => Equals(s, settlement));
+                var originalSettlement = target.Settlements.ToList().Find(s => Equals(s, settlement));
                 originalSettlement.buildSettlement(target.player, true, true);
                 target.bank.takePayment(target.player, Bank.SETTLEMENT_COST);
             }
@@ -61,8 +61,18 @@ namespace SettlersOfCatan.Moves
 
         public bool CanMakeMove(BoardState target)
         {
-            var originalSettlement = target.settlements.ToList().Find(s => Equals(s, settlement));
+            var originalSettlement = target.Settlements.ToList().Find(s => Equals(s, settlement));
             return _canMakeMove(originalSettlement, target.player);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            if (this.GetType() != obj.GetType()) return false;
+
+            BuildSettlementMove move = (BuildSettlementMove)obj;
+            return this.settlement == move.settlement;
         }
     }
 }

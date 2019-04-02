@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AI\AgentManager.cs" />
+    <Compile Include="AI\Agents\BoostedAggressiveAgent.cs" />
     <Compile Include="AI\Agents\AggressiveAgent.cs" />
     <Compile Include="AI\Agents\ControllingAgent.cs" />
     <Compile Include="AI\Agents\MctsAgent.cs" />

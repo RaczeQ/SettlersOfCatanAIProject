@@ -71,7 +71,7 @@ namespace SettlersOfCatan.GameObjects
             }
         }
 
-        public Player()
+        public Player(bool initialize=true)
         {
             InitializeComponent();
             resources = new List<ResourceCard>();
@@ -88,7 +88,7 @@ namespace SettlersOfCatan.GameObjects
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    ResourceDisplay resDisp = new ResourceDisplay();
+                    ResourceDisplay resDisp = new ResourceDisplay(initialize);
                     resourceDisplays.Add(resDisp);
                     resDisp.setType((Board.ResourceType)i);
                     resDisp.setCount(0);

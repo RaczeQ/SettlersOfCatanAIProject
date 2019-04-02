@@ -56,13 +56,13 @@ namespace SettlersOfCatan.AI.Agents
 
         public Road placeFreeRoad(BoardState state)
         { 
-            return state.availableRoads.ElementAt(_r.Next(0, state.availableRoads.Count()));
+            return state.AvailableRoads.ElementAt(_r.Next(0, state.AvailableRoads.Count()));
         }
 
         public Settlement placeFreeSettlement(BoardState state)
         {
             
-            var sortedSettlements = state.availableSettlements
+            var sortedSettlements = state.AvailableSettlements
                .OrderByDescending(
                    s => s.adjacentTiles
                        .Sum(t => t.getResourceType() != Board.ResourceType.Desert

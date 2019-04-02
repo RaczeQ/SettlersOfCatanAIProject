@@ -46,7 +46,7 @@ namespace SettlersOfCatan.Moves
         {
             if (CanMakeMove(target))
             {
-                var costs = BoardFunctions.GetPlayerBankCosts(target.player, target.harbors);
+                var costs = BoardFunctions.GetPlayerBankCosts(target.player, target.Harbors);
                 var proposition = new TradeProposition
                 {
                     boughtResource = boughtResource,
@@ -76,7 +76,19 @@ namespace SettlersOfCatan.Moves
 
         public bool CanMakeMove(BoardState target)
         {
-            return _canMakeMove(target.bank, target.player, target.harbors);
+            return _canMakeMove(target.bank, target.player, target.Harbors);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            if (this.GetType() != obj.GetType()) return false;
+
+            BankTradeMove move = (BankTradeMove)obj;
+            return this.boughtResource == move.boughtResource &&
+                   this.selledResource == move.selledResource &&
+                   this.boughtResourceAmount == move.boughtResourceAmount;
         }
     }
 }

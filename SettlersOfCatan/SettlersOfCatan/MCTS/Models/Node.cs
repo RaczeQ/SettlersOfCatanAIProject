@@ -13,17 +13,12 @@ namespace SettlersOfCatan.MCTS.Models
         public int RolloutScore { get; set; } = 0;
         public int WinsNum { get; set; } = 0;
         public int VisitsNum { get; set; } = 0;
-        public double TotalScore
-        {
-            get
-            {
-                return VisitsNum != 0 ? (WinsNum / VisitsNum) : 0;
-            }
-        }
+        public double TotalScore => VisitsNum != 0 ? ((double)WinsNum / VisitsNum) : 0;
 
         public Move Move { get; set; }
         public BoardState BoardState { get; set; }
         public List<Node> Children { get; set; }
+        public int Depth { get; set; } = 0;
 
         public List<Node> NodesAfterRandomRollDice { get; set; } = new List<Node>();
         public bool Equals(Node other)
@@ -37,7 +32,7 @@ namespace SettlersOfCatan.MCTS.Models
                 return true;
             }
 
-            return BoardState.RollDiceToCurentState == other.BoardState.RollDiceToCurentState;
+            return BoardState.CurrentStateHashCode == other.BoardState.CurrentStateHashCode;
         }
 
         public override bool Equals(object obj)
@@ -69,9 +64,9 @@ namespace SettlersOfCatan.MCTS.Models
             }
             var moveName = 
                 Move == null ? 
-                    "Root" : 
+                    $"Root[{BoardState.RollDiceToCurentState}][{BoardState.CurrentStateHashCode}]" : 
                     (VisitsNum == 0 ? $"({Move.GetType().Name})" : $"{Move.GetType().Name}");
-            Console.WriteLine($"[{GameObjects.Player.playerColorNames[BoardState.player.playerNumber]}] {moveName}");
+            Console.WriteLine($"[{GameObjects.Player.playerColorNames[BoardState.player.playerNumber]}] {moveName} {Depth} ({WinsNum}/{VisitsNum})");
 
             if (Children != null)
             {

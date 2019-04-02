@@ -21,13 +21,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
 
         public static Node SelectNodeBasedOnUcb(Node parent)
         {
-            //var endMove = parent.Children.Where(c => c.Move.GetType() == typeof(Moves.EndMove));
             return parent.Children.OrderByDescending(x => UCT.UtcValue(x.WinsNum, x.VisitsNum, parent.VisitsNum)).FirstOrDefault();
-            //return parent.Children
-            //    .Where(c => c.Move.GetType() != typeof(Moves.EndMove))
-            //    .OrderByDescending(x => UCT.UtcValue(x.WinsNum, x.VisitsNum, parent.VisitsNum))
-            //    .Concat(endMove)
-            //    .FirstOrDefault();
         }
     }
 }

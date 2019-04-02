@@ -78,6 +78,7 @@ namespace SettlersOfCatan.Utils
 
                     cfg.CreateMap<Player, Player>()
                         .IncludeBase<Control, Control>()
+                        .ForCtorParam("initialize", opt => opt.MapFrom(src => false))
                         .ForMember(dest => dest.playerNumber,
                             src => src.MapFrom(s => s.playerNumber))
                         .ForMember(dest => dest.Name,

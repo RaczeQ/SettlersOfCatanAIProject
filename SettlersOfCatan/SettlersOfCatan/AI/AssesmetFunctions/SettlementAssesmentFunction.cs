@@ -16,7 +16,7 @@ namespace SettlersOfCatan.AI.AssesmetFunctions
 
         public int? getNewSettlementIndex(BoardState state)
         {
-            var availableSettlements = state.availableSettlements;
+            var availableSettlements = state.AvailableSettlements;
             return 0;
         }
 

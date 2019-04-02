@@ -13,12 +13,13 @@ namespace SettlersOfCatan.MCTS.Models
         public Node Root { get; set; }
         private Random _r = new Random();
 
-        public Node CreateRoot(BoardState state)
+        public Node CreateRoot(BoardState state, int depth = 0)
         {
             Root = new Node()
             {
                 BoardState = state,
-                Children = new List<Node>()
+                Children = new List<Node>(),
+                Depth = depth
             };
             return ExtendChildrenNode(state, Root);
         }
@@ -27,9 +28,9 @@ namespace SettlersOfCatan.MCTS.Models
         {
             node.Children = new List<Node>();
 
-            if (state.canBuildNewSettlements.Any())
+            if (state.CanBuildNewSettlements.Any())
             {
-                var sortedSettlements = state.canBuildNewSettlements
+                var sortedSettlements = state.CanBuildNewSettlements
                 .OrderByDescending(
                     s => s.adjacentTiles
                         .Sum(t => t.getResourceType() != Board.ResourceType.Desert
@@ -41,12 +42,13 @@ namespace SettlersOfCatan.MCTS.Models
                 {
                     Move = move,
                     BoardState = state.MakeMove(move),
+                    Depth = node.Depth + 1
                 });
             }
 
-            if (state.canUpgradeSettlement.Any())
+            if (state.CanUpgradeSettlement.Any())
             {
-                var sortedCities = state.canUpgradeSettlement
+                var sortedCities = state.CanUpgradeSettlement
                 .OrderByDescending(
                     s => s.adjacentTiles
                         .Sum(t => t.getResourceType() != Board.ResourceType.Desert
@@ -58,28 +60,49 @@ namespace SettlersOfCatan.MCTS.Models
                 {
                     Move = move,
                     BoardState = state.MakeMove(move),
+                    Depth = node.Depth + 1
                 });
             }
 
-            if (state.canBuildRoad.Any())
+//            var endSettlements = state.Settlements.Where(s => s.owningPlayer == state.player || s.checkForOtherSettlement())
+//                .Where(s =>
+//                    s.connectedRoads.Count(
+//                        r => r.owningPlayer == state.player) == 1).ToList();
+            var endRoads = state.CanBuildRoad
+                .Where(r => r.connectedSettlements
+                    .Any(s => s.connectedRoads.Count(cr => cr.owningPlayer != null) == 1))
+                .ToList();
+            if (endRoads.Any())
             {
-                var move = new BuildRoadMove(state.canBuildRoad.ElementAt(_r.Next(0, state.canBuildRoad.Count())));
+                
+                var move = new BuildRoadMove(endRoads.ElementAt(_r.Next(0, endRoads.Count())));
                 node.Children.Add(new Node()
                 {
                     Move = move,
                     BoardState = state.MakeMove(move),
+                    Depth = node.Depth + 1
+                });
+            }
+            else if (state.CanBuildRoad.Any())
+            {
+                var move = new BuildRoadMove(state.CanBuildRoad.ElementAt(_r.Next(0, state.CanBuildRoad.Count())));
+                node.Children.Add(new Node()
+                {
+                    Move = move,
+                    BoardState = state.MakeMove(move),
+                    Depth = node.Depth + 1
                 });
             }
 
-            if (state.resourcesAvailableToSell.Values.Any(x => x) &&
-                state.resourcesAvailableToBuy.Values.Any(x => x))
+            if (state.ResourcesAvailableToSell.Values.Any(x => x) &&
+                state.ResourcesAvailableToBuy.Values.Any(x => x))
             {
                 var copy = state;
-                var amountLeft = state.playerResourcesAmounts
-                    .Where(x => state.resourcesAvailableToSell[x.Key])
-                    .ToDictionary(k => k.Key, v => v.Value - state.bankTradePrices[v.Key]);
-                var boughtResource = state.playerResourcesAcquiredPerResource
-                    .Where(x => state.resourcesAvailableToBuy[x.Key])
+                var amountLeft = state.PlayerResourcesAmounts
+                    .Where(x => state.ResourcesAvailableToSell[x.Key])
+                    .ToDictionary(k => k.Key, v => v.Value - state.BankTradePrices[v.Key]);
+                var boughtResource = state.PlayerResourcesAcquiredPerResource
+                    .Where(x => state.ResourcesAvailableToBuy[x.Key])
                     .OrderBy(kv => kv.Value).Select(kv => kv.Key).ToList()[0];
                 var selledResource = amountLeft.OrderBy(kv => -kv.Value).Select(kv => kv.Key).ToList()[0];
                 if (boughtResource != selledResource)
@@ -90,7 +113,8 @@ namespace SettlersOfCatan.MCTS.Models
                         node.Children.Add(new Node()
                         {
                             Move = move,
-                            BoardState = copy.MakeMove(move)
+                            BoardState = copy.MakeMove(move),
+                            Depth = node.Depth + 1
                         });
                     }
                 }
@@ -98,67 +122,12 @@ namespace SettlersOfCatan.MCTS.Models
 
             var copyState = state;
             node.Children.Add(new Node()
-            {  
+            {
                 Move = new EndMove(),
                 Children = new List<Node>(),
-                BoardState = copyState.MakeMove(new EndMove())
+                BoardState = copyState.MakeMove(new EndMove()),
+                Depth = node.Depth + 1
             });
-            return node;
-        }
-
-
-        public Node CreateRootToPlaceFreeRoad(BoardState state)
-        {
-            Root = new Node()
-            {
-                BoardState = state,
-                Children = new List<Node>()
-            };
-
-            return ExtendRoadChildrenNode(state, Root);
-        }
-        public Node ExtendRoadChildrenNode(BoardState state, Node node)
-        {
-
-            node.Children = new List<Node>();
-            var roads = state.availableRoads.ToList();        
-            foreach (var item in roads)
-            {
-                var copy = state;
-                var roadMove = new BuildRoadMove(item);
-                node.Children.Add(new Node()
-                {
-                    BoardState = copy.MakeMove(roadMove)
-                });
-            }
-            return node;
-        }
-
-
-        public Node CreateRootToPlaceFreeSettlement(BoardState state)
-        {
-            Root = new Node()
-            {
-                BoardState = state,
-                Children = new List<Node>()
-            };
-
-            return ExtendSettlementChildrenNode(state, Root);
-        }
-        public Node ExtendSettlementChildrenNode(BoardState state, Node node)
-        {
-
-            node.Children = new List<Node>();
-            var settlements = state.availableSettlements.ToList();
-            foreach (var item in settlements)
-            {
-                var copy = state;
-                var settlementMove = new BuildSettlementMove(item);
-                node.Children.Add(new Node()
-                {
-                    BoardState = copy.MakeMove(settlementMove)
-                });
-            }
             return node;
         }
     }

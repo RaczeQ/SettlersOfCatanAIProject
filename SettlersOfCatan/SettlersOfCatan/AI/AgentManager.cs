@@ -14,6 +14,7 @@ namespace SettlersOfCatan.AI
             { "Player", null },
             { "Random", new RandomAgent() },
             { "Aggressive", new AggressiveAgent() },
+            { "BoostedAggressive", new BoostedAggressiveAgent() },
             { "Controlling", new ControllingAgent() },
             { "MCTS", new MctsAgent() }
         };

@@ -40,6 +40,25 @@ namespace SettlersOfCatan.AI
         public Bank bank { get; set; }
         public Player player { get; set; }
         public int RollDiceToCurentState { get; set; }
+
+        public int CurrentStateHashCode
+        {
+            get
+            {
+                var result = "";
+                result += bank.ResourcesList();
+                foreach (var p in _players)
+                {
+                    foreach (Board.ResourceType rt in Enum.GetValues(typeof(Board.ResourceType)))
+                    {
+                        result += p.getResourceCount(rt);
+                    }
+                }
+
+                return result.GetHashCode();
+            }
+        }
+
         private void CopyGameState(List<Road> roads, List<Settlement> settlements, List<Harbor> harbors,
             List<TerrainTile> terrainTiles, List<Player> players, Player currentPlayer)
         {
@@ -139,12 +158,39 @@ namespace SettlersOfCatan.AI
             bank = Mapper.Map<Bank>(Board.TheBank);
             CopyGameState(b.roadLocations, b.settlementLocations, b.harbors,
                 b.boardTiles.OfType<TerrainTile>().ToList(), b.playerOrder.ToList(), b.currentPlayer);
+            GenerateDictionaries();
         }
 
         public BoardState(BoardState b)
         {
             bank = Mapper.Map<Bank>(b.bank);
             CopyGameState(b._roads, b._settlements, b._harbors, b._terrainTiles, b._players, b.player);
+            GenerateDictionaries();
+        }
+
+        private void GenerateDictionaries()
+        {
+            PlayerResourcesAcquiredPerResource = Enum.GetValues(typeof(Board.ResourceType))
+                .Cast<Board.ResourceType>()
+                .ToDictionary(k => k, v => 0);
+            foreach (Settlement s in player.settlements)
+            {
+                foreach (TerrainTile tt in s.adjacentTiles)
+                {
+                    PlayerResourcesAcquiredPerResource[tt.getResourceType()] += s.isCity ? 2 : 1;
+                }
+            }
+
+            PlayerResourcesAmounts = Enum.GetValues(typeof(Board.ResourceType))
+                .Cast<Board.ResourceType>()
+                .ToDictionary(k => k, v => player.getResourceCount(v));
+            BankTradePrices = BoardFunctions.GetPlayerBankCosts(player, _harbors);
+
+            ResourcesAvailableToSell = PlayerResourcesAmounts
+                .ToDictionary(k => k.Key, v => v.Value >= BankTradePrices[v.Key]);
+
+            ResourcesAvailableToBuy = PlayerResourcesAmounts
+                .ToDictionary(k => k.Key, v => Board.TheBank.canGiveOutResource(v.Key, 1));
         }
 
         public BoardState MakeMove(Move m)
@@ -157,7 +203,9 @@ namespace SettlersOfCatan.AI
         public static void ChangeToNextPlayer(ref BoardState state)
         {
             var currentPlayerIndex = state._players.IndexOf(state.player);
-            var index = (currentPlayerIndex == state._players.Count() - 1) ? 0 : state._players.IndexOf(state.player) + 1;
+            var index = (currentPlayerIndex == state._players.Count() - 1)
+                ? 0
+                : state._players.IndexOf(state.player) + 1;
             state.player = state._players.ElementAt(index);
         }
 
@@ -171,7 +219,7 @@ namespace SettlersOfCatan.AI
             state.RollDiceToCurentState = rollValue;
             if (rollValue != 7)
             {
-                foreach (TerrainTile tt in state.terrainTiles)
+                foreach (TerrainTile tt in state.TerrainTiles)
                 {
                     if (tt.getGatherChance() != rollValue || tt.isGatherBlocked()) continue;
                     foreach (Settlement set in tt.adjascentSettlements)
@@ -222,7 +270,7 @@ namespace SettlersOfCatan.AI
             return state.Winner;
         }
 
-        public double GetScore
+        public double Score
         {
             get
             {
@@ -247,10 +295,11 @@ namespace SettlersOfCatan.AI
                         }
                     }
                 }
-                foreach (Board.ResourceType type in playerResourcesAmounts.Keys)
+
+                foreach (Board.ResourceType type in PlayerResourcesAmounts.Keys)
                 {
                     var resource_value = RESOURCE_TYPE_VALUE;
-                    for (int i = 0; i < playerResourcesAmounts[type]; i++)
+                    for (int i = 0; i < PlayerResourcesAmounts[type]; i++)
                     {
                         resources_score += resource_value;
                         resource_value /= RESOURCE_RATIO_VALUE_LOSS;
@@ -266,33 +315,33 @@ namespace SettlersOfCatan.AI
             get { return BoardFunctions.GetWinner(_players, bank); }
         }
 
-        public IEnumerable<TerrainTile> terrainTiles
+        public IList<TerrainTile> TerrainTiles
         {
             get { return _terrainTiles; }
         }
 
-        public IEnumerable<Harbor> harbors
+        public IList<Harbor> Harbors
         {
             get { return _harbors; }
         }
 
-        public IEnumerable<TerrainTile> playerAdjacentTerrainTiles
+        public IEnumerable<TerrainTile> PlayerAdjacentTerrainTiles
         {
             get
             {
-                return terrainTiles
+                return TerrainTiles
                     .Where(t => t.adjascentSettlements
                         .Any(s => s.owningPlayer == player)
                     );
             }
         }
 
-        public IDictionary<TerrainTile, int> playerResourceAcqirementPerTile
+        public IDictionary<TerrainTile, int> PlayerResourceAcqirementPerTile
         {
             get
             {
                 var result = new Dictionary<TerrainTile, int>();
-                foreach (TerrainTile tt in playerAdjacentTerrainTiles)
+                foreach (TerrainTile tt in PlayerAdjacentTerrainTiles)
                 {
                     result.Add(tt, 0);
                     foreach (Settlement s in tt.adjascentSettlements
@@ -306,30 +355,30 @@ namespace SettlersOfCatan.AI
             }
         }
 
-        public IEnumerable<Settlement> settlements
+        public IList<Settlement> Settlements
         {
             get { return _settlements; }
         }
 
-        public IEnumerable<Settlement> availableSettlements
+        public IEnumerable<Settlement> AvailableSettlements
         {
             get
             {
-                return settlements
+                return Settlements
                     .Where(s => s.owningPlayer == null && s.checkForOtherSettlement());
             }
         }
 
-        public IEnumerable<Settlement> canBuildNewSettlements
+        public IEnumerable<Settlement> CanBuildNewSettlements
         {
             get
             {
-                return availableSettlements
+                return AvailableSettlements
                     .Where(s => s.checkForConnection(player) && Bank.hasPayment(player, Bank.SETTLEMENT_COST));
             }
         }
 
-        public IEnumerable<Settlement> canUpgradeSettlement
+        public IEnumerable<Settlement> CanUpgradeSettlement
         {
             get
             {
@@ -338,90 +387,50 @@ namespace SettlersOfCatan.AI
             }
         }
 
-        public IEnumerable<Road> roads
+        public IList<Road> Roads
         {
             get { return _roads; }
         }
 
-        public IEnumerable<Road> availableRoads
+        public IEnumerable<Road> AvailableRoads
         {
             get
             {
-                return roads
+                return Roads
                     .Where(r => r.owningPlayer == null && r.checkForConnection(player));
             }
         }
 
-        public IEnumerable<Road> canBuildRoad
+        public IEnumerable<Road> CanBuildRoad
         {
             get
             {
-                return availableRoads
+                return AvailableRoads
                     .Where(r => Bank.hasPayment(player, Bank.ROAD_COST));
             }
         }
 
-        public IDictionary<Board.ResourceType, int> playerResourcesAmounts
-        {
-            get
-            {
-                return Enum.GetValues(typeof(Board.ResourceType))
-                    .Cast<Board.ResourceType>()
-                    .ToDictionary(k => k, v => player.getResourceCount(v));
-            }
-        }
+        public IDictionary<Board.ResourceType, int> PlayerResourcesAmounts { get; set; }
 
-        public IDictionary<Board.ResourceType, int> bankTradePrices =>
-            BoardFunctions.GetPlayerBankCosts(player, _harbors);
+        public IDictionary<Board.ResourceType, int> BankTradePrices { get; set; }
 
-        public IDictionary<Board.ResourceType, bool> resourcesAvailableToSell
-        {
-            get
-            {
-                return playerResourcesAmounts
-                    .ToDictionary(k => k.Key, v => v.Value >= bankTradePrices[v.Key]);
-            }
-        }
+        public IDictionary<Board.ResourceType, bool> ResourcesAvailableToSell { get; set; }
 
-        public IDictionary<Board.ResourceType, bool> resourcesAvailableToBuy
-        {
-            get
-            {
-                return playerResourcesAmounts
-                    .ToDictionary(k => k.Key, v => Board.TheBank.canGiveOutResource(v.Key, 1));
-            }
-        }
+        public IDictionary<Board.ResourceType, bool> ResourcesAvailableToBuy { get; set; }
 
-        public IDictionary<Board.ResourceType, int> playerResourcesAcquiredPerResource
-        {
-            get
-            {
-                var result = Enum.GetValues(typeof(Board.ResourceType))
-                    .Cast<Board.ResourceType>()
-                    .ToDictionary(k => k, v => 0);
-                foreach (Settlement s in player.settlements)
-                {
-                    foreach (TerrainTile tt in s.adjacentTiles)
-                    {
-                        result[tt.getResourceType()] += s.isCity ? 2 : 1;
-                    }
-                }
+        public IDictionary<Board.ResourceType, int> PlayerResourcesAcquiredPerResource { get; set; }
 
-                return result;
-            }
-        }
-
-        public IEnumerable<DevelopmentCard> playerCards
+        public IEnumerable<DevelopmentCard> PlayerCards
         {
             get { return player.onHandDevelopmentCards; }
         }
 
-        public IEnumerable<DevelopmentCard> playerPlayableCards
+        public IEnumerable<DevelopmentCard> PlayerPlayableCards
         {
-            get { return playerCards.Where(c => c.isPlayable()); }
+            get { return PlayerCards.Where(c => c.isPlayable()); }
         }
 
-        public bool canBuyDevelopmentCard
+        public bool CanBuyDevelopmentCard
         {
             get
             {
