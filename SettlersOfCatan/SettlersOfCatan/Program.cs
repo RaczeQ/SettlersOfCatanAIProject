@@ -23,14 +23,21 @@ namespace SettlersOfCatan
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             AutoMapperRegister.RegisterMapping();
-            var numberOfSimulations = 2;
+            var numberOfSimulations = 10;
 
-            
+
+            string directory = DateTime.Now.ToString("yyyyMMddTHHmmssfff");
+            FileWriter.SetDirectory(directory);
+
             Parallel.For(0, numberOfSimulations,
             new ParallelOptions { MaxDegreeOfParallelism = Convert.ToInt32(Math.Ceiling((Environment.ProcessorCount * 0.75) * 2.0)) },
             sim =>
             {
                 Console.WriteLine("{0}, Thread Id={1} START", sim, Thread.CurrentThread.ManagedThreadId);
+                var result = String.Format("{0},{1},{2},{3},{4},{5}",
+                    "Wins", "Playouts", "MeanDepth", "MedianDepth", "MaxDepth", "ExplorationFactor"
+                );
+                FileWriter.SaveResultToFile(result);
                 Stopwatch stopWatch = new Stopwatch();
                 stopWatch.Start();
                 RunBoard(new String[] { "MCTS", "Aggressive" });

@@ -17,8 +17,9 @@ namespace SettlersOfCatan.MCTS.Models
 
         public Move Move { get; set; }
         public BoardState BoardState { get; set; }
-        public List<Node> Children { get; set; }
+        public List<Node> Children { get; set; } = new List<Node>();
         public int Depth { get; set; } = 0;
+        public int Playouts { get; set; } = 0;
 
         public List<Node> NodesAfterRandomRollDice { get; set; } = new List<Node>();
         public bool Equals(Node other)
@@ -80,17 +81,70 @@ namespace SettlersOfCatan.MCTS.Models
             }
         }
 
-        public int GetTheDeepestNodeValue(Node node, int max)
+        public static Tuple<double, double, int> GetDepthMeasures(Node node)
         {
-            if (node.Children == null || node.Children.Count == 0)
-                return max;
-            foreach (var item in node.Children)
+            var depths = GetDepthsList(node);
+            double mean = depths.Average();
+            int numberCount = depths.Count();
+            int halfIndex = depths.Count() / 2;
+            var sortedNumbers = depths.OrderBy(n => n);
+            double median;
+            if ((numberCount % 2) == 0)
             {
-                if (item.Depth > max)
-                    max = item.Depth;
-                max =  GetTheDeepestNodeValue(item, max);     
+                median = (double)(sortedNumbers.ElementAt(halfIndex) + sortedNumbers.ElementAt(halfIndex - 1)) / 2;
             }
-            return max;
+            else
+            {
+                median = sortedNumbers.ElementAt(halfIndex);
+            }
+
+            var max = depths.Max();
+            return new Tuple<double, double, int>(mean, median, max);
+        }
+
+//        public static int GetTheDeepestNodeValue(Node node, int max)
+//        {
+//            if (node.Children == null || node.Children.Count == 0)
+//                return max;
+//            foreach (var item in node.Children)
+//            {
+//                if (item.Depth > max)
+//                    max = item.Depth;
+//                max =  GetTheDeepestNodeValue(item, max);     
+//            }
+//            return max;
+//        }
+
+        public static IList<int> GetDepthsList(Node node)
+        {
+            var result = new List<int> { node.Depth };
+            foreach (var c in node.Children.Concat(node.NodesAfterRandomRollDice))
+            {
+                result.AddRange(GetDepthsList(c));
+            }
+
+            return result;
+        }
+
+        private static Tuple<int, int> ChildrenAmount(Node node)
+        {
+            var children = node.Children?.Count ?? 0;
+            children += node.NodesAfterRandomRollDice?.Count ?? 0;
+            var visited = node.Children?.Where(c => c.VisitsNum > 0).Count() ?? 0;
+            visited += node.NodesAfterRandomRollDice?.Where(c => c.VisitsNum > 0).Count() ?? 0;
+            foreach (var c in node.Children.Concat(node.NodesAfterRandomRollDice))
+            {
+                var result = ChildrenAmount(c);
+                children += result.Item1;
+                visited += result.Item2;
+            }
+            return new Tuple<int, int>(children, visited);
+        }
+
+        public static double ChildrenExploredFactor(Node node)
+        {
+            var tuple = ChildrenAmount(node);
+            return  (double)(tuple.Item2  + 1) / (tuple.Item1 + 1);
         }
     }
 } 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -61,8 +62,20 @@ namespace SettlersOfCatan.AI.Agents
 
         private void SaveResult(Node root, Node nextMove)
         {
-            var deepestNodeValue = root.GetTheDeepestNodeValue(root, 0);
-            var result = String.Format("{0}, {1}, {2}", root.WinsNum.ToString(), root.VisitsNum.ToString(), deepestNodeValue);
+            var depthMeasures = Node.GetDepthMeasures(root);
+            var meanDepthValue = depthMeasures.Item1;
+            var medianDepthValue = depthMeasures.Item2;
+            var deepestNodeValue = depthMeasures.Item3;
+            var exploreFactor = Node.ChildrenExploredFactor(root);
+            var nfi = new NumberFormatInfo() {NumberDecimalSeparator = "."};
+            var result = String.Format("{0},{1},{2},{3},{4},{5}", 
+                root.WinsNum.ToString(), // Number of wins
+                root.VisitsNum.ToString(), // Number of visits / playouts
+                meanDepthValue.ToString(nfi), // Mean depth
+                medianDepthValue.ToString(nfi), // Median depth
+                deepestNodeValue.ToString(), // Max depth
+                exploreFactor.ToString(nfi) // Factor of exploration
+            );
             FileWriter.SaveResultToFile(result);
         }
 

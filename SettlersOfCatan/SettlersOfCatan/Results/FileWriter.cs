@@ -11,15 +11,19 @@ namespace SettlersOfCatan.Results
     public  class FileWriter
     {
         static ReaderWriterLock locker = new ReaderWriterLock();
-
+        private static String directory = "default";
         public static void SaveResultToFile(string output)
         {
              
             try
             {
                 locker.AcquireWriterLock(int.MaxValue);
-                var file = String.Format("D:/Inne/inf/WDSI/Results/{0}.txt", (Thread.CurrentThread.ManagedThreadId*Program.executeGameNumber));  
-
+                var path = AppDomain.CurrentDomain.BaseDirectory + "/Results/" + directory;
+                var file = String.Format(path +  "/{0}.txt", (Thread.CurrentThread.ManagedThreadId*Program.executeGameNumber));
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
                 using (StreamWriter sw = File.AppendText(file))
                 {
                     sw.WriteLine(output);
@@ -34,6 +38,11 @@ namespace SettlersOfCatan.Results
             {
                 locker.ReleaseReaderLock();
             }
+        }
+
+        public static void SetDirectory(string dir)
+        {
+            directory = dir;
         }
     }
 }

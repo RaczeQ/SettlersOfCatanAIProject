@@ -13,7 +13,7 @@ namespace SettlersOfCatan.MCTS.Algorithm
 {
     public class MonteCarloTreeSearch : IMonteCarloTreeSearch
     {
-        private readonly int MAX_TIME = 10;
+        private readonly int MAX_TIME = 5;
         Tree tree = new Tree();
         int CurrentPlayerNum { get; set; }
 
@@ -135,9 +135,10 @@ namespace SettlersOfCatan.MCTS.Algorithm
 
         int MakeRollout(Node node)
         {
-            var winer = node.BoardState.GetWinnerOfRandomGame();
-            Console.WriteLine("Roolout winner is {0}", winer.playerNumber);
-            return (winer.playerNumber == CurrentPlayerNum) ? 1 : 0;
+            var winner = node.BoardState.GetWinnerOfRandomGame();
+            node.Playouts += 1;
+            Console.WriteLine("Roolout winner is {0}", winner.playerNumber);
+            return (winner.playerNumber == CurrentPlayerNum) ? 1 : 0;
         }
     }
 }
